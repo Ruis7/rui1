@@ -6,15 +6,13 @@
    3. manualDatabase: 所有的说明书链接
    ------------------------------------------------------- */
 
-/* 1️⃣ 菜单结构配置 (Menu Structure) 
-   这里定义了网页顶部菜单里显示哪些产品分类和具体型号
-*/
+/* 1️⃣ 菜单结构配置 (Menu Structure) */
 const menuConfig = [
     {
         categoryId: 'gnss',
         labelKey: 'menu_gnss',
         type: 'hardware',
-        items: ['i100', 'i93', 'i89', 'i85', 'i83', 'i76', 'i73','ibase','p5u','p5e']
+        items: ['i100', 'i93', 'i89', 'i85', 'i83', 'i76', 'i73', 'ibase', 'p5u', 'p5e']
     },
     {
         categoryId: 'mobile',
@@ -102,14 +100,17 @@ const firmwareDatabase = {
         { version: 'OEM Board Firmware', date: '#', url: 'https://chcnavigation.jianguoyun.com/p/DQ-nkoQQtq_UCxiv-8sFIAA' },
         { version: 'Radio Firmware', date: '#', url: 'https://chcnavigation.jianguoyun.com/p/DeLyyCUQtq_UCxihx5UGIAA' }
     ],
-    'ibase':[
+    'ibase': [
         { version: 'V2.4.4.2', date: '2025-05-21', url: 'https://chcnavigation.jianguoyun.com/p/DVrwOREQtq_UCxjfnoEGIAA' },
         { version: 'V2.4.4', date: '2024-06-06', url: 'https://chcnavigation.jianguoyun.com/p/DVAyuNYQtq_UCxiwtdAFIAA' },
         { version: 'V2.3.7', date: '2023-11-10', url: 'https://chcnavigation.jianguoyun.com/p/DVW3cOQQtq_UCxjnr8wFIAA' },
         { version: 'V2.2.1', date: '2023-02-04', url: 'https://chcnavigation.jianguoyun.com/p/DQZZSnIQtq_UCxjj1JUGIAA' },
         { version: 'OEM Board Firmware', date: '#', url: 'https://chcnavigation.jianguoyun.com/p/DQ4tSEUQtq_UCxjvhdMFIAA' },
         { version: 'Radio Firmware', date: '#', url: 'https://chcnavigation.jianguoyun.com/p/Dct7QgoQtq_UCxier-kFIAA' }
-    ]
+    ], 
+    // ✅ 修复1: ibase 后面加了逗号，并且补上了菜单里有的 p5u 和 p5e
+    'p5u': [],
+    'p5e': [],
 
     // --- 移动测绘 (Mobile Mapping) ---
     'lt60h': [
@@ -144,7 +145,7 @@ const firmwareDatabase = {
     // --- 无人机 (UAV) ---
     'x500': [],
 
-    // --- 软件 (Software) - 预留位置 ---
+    // --- 软件 (Software) ---
     'cgo': [],
     'mapcloud': [],
     'gnsstool': [],
@@ -185,7 +186,8 @@ const manualDatabase = {
     ],
     'ibase': [
         { title: 'Ibase user manual', date: '', url: 'https://chcnavigation.jianguoyun.com/p/DSkCFSoQtq_UCxiKtdAFIAA' }
-    ]
+    ], 
+    // ✅ 修复2: ibase 后面加了逗号
 
     // --- Mobile Mapping ---
     'lt60h': [
@@ -218,5 +220,4 @@ const manualDatabase = {
 
     // --- Software ---
     'cgo': [], 'mapcloud': [], 'gnsstool': [], 'sharelocation': [], 'rinex': [], 'cgbas': []
-
 };
