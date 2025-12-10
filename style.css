@@ -7,7 +7,7 @@
     --tech-blue: #0056b3;       /* 科技蓝 */
     
     --text-main: #333333;       /* 主文字 (深色) */
-    --text-light: #ffffff;      /* 浅色文字 (用于Hero) */
+    --text-light: #ffffff;      /* 浅色文字 (用于Hero/Dark Modal) */
     --text-gray: #666666;       /* 辅助灰 */
     
     --bg-page: #ffffff;         /* 页面背景：纯白 */
@@ -37,7 +37,7 @@ button { outline: none; }
 .bg-decorations {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    /* 🔴 关键修复：z-index 设为 0，位于背景色之上，内容之下 */
+    /* 关键：z-index 设为 0，位于背景色之上，内容之下 */
     z-index: 0; 
     pointer-events: none;
     overflow: hidden;
@@ -84,7 +84,7 @@ button { outline: none; }
 }
 
 /* 2.5 漂浮图标 (低透明度) */
-.deco-item { position: absolute; opacity: 0.05; filter: grayscale(1); z-index: -1; }
+.deco-item { position: absolute; opacity: 0.05; filter: grayscale(1); z-index: -1; pointer-events: none; }
 .deco-satellite { top: 12%; right: 15%; font-size: 50px; animation: float 10s ease-in-out infinite; }
 .deco-uav { top: 35%; left: -80px; font-size: 36px; animation: flyPass 40s linear infinite; }
 .deco-total-station { bottom: 15%; right: 20%; font-size: 42px; }
@@ -97,7 +97,7 @@ button { outline: none; }
     animation: blink 3s infinite;
 }
 
-/* 2.7 🆕 左下角自传线框地球 (高可见度版) */
+/* 2.7 左下角自传线框地球 (高可见度版) */
 .deco-earth-wireframe {
     position: absolute;
     bottom: 40px; left: 40px;
@@ -131,24 +131,18 @@ button { outline: none; }
 @keyframes blink { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.5; } }
 
 /* =========================================
-   3. 头部导航 (Header & Menu) - 修复美化版
+   3. 顶部导航 (Header & Menu)
    ========================================= */
-
-/* 3.1 语言栏 */
 .top-bar {
     background-color: #2c3e50;
     color: #ccc;
-    padding: 8px 40px; /* 稍微增加左右内边距 */
+    padding: 8px 40px;
     text-align: right;
     font-size: 12px;
     position: relative;
     z-index: 1002;
 }
-.lang-selector { 
-    position: relative; display: inline-block; cursor: pointer; 
-    padding: 4px 12px; border-radius: 4px; user-select: none;
-    transition: all 0.3s;
-}
+.lang-selector { position: relative; display: inline-block; cursor: pointer; padding: 4px 10px; border-radius: 4px; user-select: none; }
 .lang-selector:hover { background-color: rgba(255,255,255,0.1); color: #fff; }
 
 .lang-dropdown {
@@ -161,286 +155,118 @@ button { outline: none; }
 .lang-dropdown.show { display: block; animation: fadeIn 0.2s; }
 .lang-dropdown li { padding: 8px 20px; border-bottom: 1px solid #f5f5f5; color: var(--text-main); font-size: 13px; transition: 0.2s; }
 .lang-dropdown li:last-child { border-bottom: none; }
-.lang-dropdown li:hover { background-color: var(--bg-section); color: var(--primary-color); padding-left: 25px; /* 悬停微动特效 */ }
+.lang-dropdown li:hover { background-color: var(--bg-section); color: var(--primary-color); padding-left: 25px; }
 
-/* 3.2 主导航栏容器 */
 .main-header {
-    background-color: rgba(255, 255, 255, 0.98); /* 极高透明度的白，保持质感 */
-    backdrop-filter: blur(10px); /* 背景模糊，增加科技感 */
+    background-color: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
     padding: 0 50px;
     height: 80px;
     display: flex; align-items: center; justify-content: space-between;
     position: relative; z-index: 1001;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.03); /* 极淡的投影 */
-    border-bottom: 1px solid rgba(0,0,0,0.03);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03); border-bottom: 1px solid rgba(0,0,0,0.03);
 }
-
-.logo { 
-    font-size: 28px; font-weight: 900; color: #1a1a1a; letter-spacing: 1px; 
-    font-family: 'Arial Black', sans-serif; /* 更硬朗的字体 */
-}
+.logo { font-size: 28px; font-weight: 900; color: #1a1a1a; letter-spacing: 1px; font-family: 'Arial Black', sans-serif; }
 .logo span { color: var(--primary-color); }
 
 /* --- 💻 桌面端菜单 (PC) --- */
 @media screen and (min-width: 769px) {
-    .mobile-menu-toggle { display: none; }
-
-    /* 菜单居中布局 */
     .nav-menu {
         position: absolute; left: 50%; transform: translateX(-50%);
-        display: flex; height: 100%; align-items: center; 
-        gap: 50px; /* 增加间距，更大气 */
+        display: flex; height: 100%; align-items: center; gap: 50px;
     }
-
     .nav-item { position: relative; height: 100%; display: flex; align-items: center; cursor: pointer; }
-
-    /* 一级菜单文字 */
     .nav-link { 
         font-size: 15px; font-weight: 700; color: #444; 
-        position: relative; padding: 5px 0;
-        text-transform: uppercase; /* 大写英文更显专业 */
+        position: relative; padding: 5px 0; text-transform: uppercase;
     }
     
-    /* 悬停时的底部光条动画 */
+    /* 悬停光条 */
     .nav-link::after {
         content: ''; position: absolute; width: 0; height: 3px;
-        bottom: -24px; /* 放在 Header 底部边缘 */
-        left: 50%; transform: translateX(-50%);
+        bottom: -24px; left: 50%; transform: translateX(-50%);
         background-color: var(--primary-color);
-        transition: width 0.3s ease;
-        box-shadow: 0 -2px 10px rgba(243, 112, 33, 0.5); /* 橙色发光 */
+        transition: width 0.3s ease; box-shadow: 0 -2px 10px rgba(243, 112, 33, 0.5);
     }
     .nav-item:hover .nav-link { color: var(--primary-color); }
     .nav-item:hover .nav-link::after { width: 100%; }
 
-    /* 下拉菜单 (Dropdown) - 科技感修复 */
+    /* 下拉菜单 */
     .dropdown-menu {
-        display: none; 
-        position: absolute; 
-        top: 80px; /* 紧贴 Header 底部 */
-        left: 50%; transform: translateX(-50%);
-        
-        background-color: #fff; 
-        min-width: 320px; /* 🔴 加宽：防止内容拥挤 */
-        
+        display: none; position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+        background-color: #fff; min-width: 320px;
         box-shadow: 0 15px 40px rgba(0,0,0,0.1);
-        border-top: 3px solid var(--primary-color); /* 顶部橙色亮条 */
-        z-index: 1002; padding: 10px 0;
-        border-radius: 0 0 8px 8px;
+        border-top: 3px solid var(--primary-color);
+        z-index: 1002; padding: 10px 0; border-radius: 0 0 8px 8px;
         animation: slideDown 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .nav-item:hover .dropdown-menu { display: block; }
-
-    /* 下拉里的产品行 */
-    .product-group {
-        padding: 15px 30px; /* 更大的内边距 */
-        border-bottom: 1px solid #f0f0f0;
-        transition: background 0.2s;
-        display: flex;
-        justify-content: space-between; /* 左右对齐 */
-        align-items: center;
-    }
-    .product-group:last-child { border-bottom: none; }
-    
-    /* 悬停某一行时，背景变灰，且有左侧指示条 */
-    .product-group:hover {
-        background-color: #f9fbfc;
-        border-left: 3px solid var(--primary-color);
-        padding-left: 27px; /* 补偿边框宽度，保持文字位置 */
-    }
-
-    .product-title {
-        font-weight: 800; font-size: 15px; color: #333;
-        min-width: 80px; /* 保证标题对齐 */
-    }
-
-    .product-links { font-size: 13px; color: #888; }
-    .product-links a { 
-        margin: 0 5px; color: #666; transition: color 0.2s;
-        font-weight: 500;
-    }
-    .product-links a:hover { color: var(--primary-color); text-decoration: none; }
-    /* 给分隔符 | 颜色变浅 */
-    .product-links { color: #ddd; } 
+    .mobile-menu-toggle { display: none; }
 }
 
-/* --- 📱 移动端菜单 (Mobile) --- */
+/* --- 📱 移动端菜单 (Mobile Tech Style) --- */
 @media screen and (max-width: 768px) {
     .main-header { padding: 0 20px; height: 70px; }
-    .mobile-menu-toggle { display: block; font-size: 24px; color: var(--text-dark); cursor: pointer; }
     
+    .mobile-menu-toggle {
+        display: block; font-size: 20px; color: var(--text-main); cursor: pointer;
+        padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px;
+        background: rgba(255,255,255,0.5); transition: all 0.3s ease;
+    }
+    .mobile-menu-toggle:hover { border-color: var(--primary-color); color: var(--primary-color); }
+
     .nav-menu {
         display: none; position: absolute; top: 70px; left: 0; width: 100%;
-        background-color: #fff; flex-direction: column;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 99;
-        border-top: 1px solid #eee;
+        background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px);
+        border-bottom: 2px solid var(--primary-color);
+        flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.15); z-index: 99;
+        animation: slideDown 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .nav-menu.active { display: flex; animation: slideDown 0.3s; }
+    .nav-menu.active { display: flex; }
     
-    .nav-item { width: 100%; text-align: left; border-bottom: 1px solid #f5f5f5; }
+    .nav-item { width: 100%; text-align: left; border-bottom: 1px solid rgba(0,0,0,0.05); }
     
     .nav-link { 
-        display: block; padding: 18px 25px; 
-        color: #333; font-weight: 600;
-        /* 移动端点击高亮 */
-        border-left: 4px solid transparent; 
+        display: block; padding: 18px 25px; color: var(--text-main); 
+        font-weight: 600; font-size: 16px; text-transform: uppercase;
+        border-left: 4px solid transparent; transition: all 0.3s;
     }
-    .nav-link:active { background: #f9f9f9; border-left-color: var(--primary-color); color: var(--primary-color); }
+    .nav-link:active, .nav-link[style*="color: rgb(243, 112, 33)"] { 
+        background: linear-gradient(90deg, rgba(243, 112, 33, 0.08) 0%, transparent 100%);
+        border-left-color: var(--primary-color); color: var(--primary-color) !important; padding-left: 35px;
+    }
 
     .dropdown-menu { 
-        display: none; /* JS 点击展开 */
-        position: static; 
-        box-shadow: inset 0 5px 10px rgba(0,0,0,0.03); 
-        background: #fcfcfc; padding: 0; 
+        display: none; position: static; background: #f0f2f5; 
+        box-shadow: inset 0 5px 10px rgba(0,0,0,0.05), inset 0 -5px 10px rgba(0,0,0,0.05);
+        padding: 10px 0; border-left: 4px solid #ddd;
     }
     
-    .product-group {
-        padding: 15px 30px;
-        border-bottom: 1px solid #eee;
-        display: block; /* 移动端垂直排列 */
-    }
-    .product-title { display: block; margin-bottom: 8px; color: #000; font-size: 14px; }
-    .product-links { font-size: 13px; color: #999; }
-    .product-links a { color: #666; margin-right: 10px; display: inline-block; padding: 5px 0; }
+    .product-group { display: block; padding: 12px 30px; border-bottom: 1px solid rgba(0,0,0,0.03); }
+    .product-title { display: flex; align-items: center; margin-bottom: 8px; color: #888; font-size: 14px; }
+    .product-title::before { content: ''; display: inline-block; width: 6px; height: 6px; background: var(--tech-blue); border-radius: 50%; margin-right: 8px; }
+    
+    .product-links { font-size: 13px; color: #555; padding-left: 15px; display: flex; gap: 15px; }
+    .product-links a { position: relative; padding-bottom: 2px; }
+    .product-links a:hover { color: var(--primary-color); border-bottom: 1px solid var(--primary-color); }
 }
+
+/* 下拉菜单内部通用样式 */
+.product-group { 
+    padding: 15px 30px; border-bottom: 1px solid #f0f0f0; transition: background 0.2s;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.product-group:last-child { border-bottom: none; }
+@media screen and (min-width: 769px) {
+    .product-group:hover { background-color: #f9fbfc; border-left: 3px solid var(--primary-color); padding-left: 27px; }
+}
+.product-title { font-weight: 800; font-size: 15px; color: #333; min-width: 80px; }
+.product-links { font-size: 13px; color: #ddd; }
+.product-links a { margin: 0 5px; color: #666; font-weight: 500; transition: color 0.2s; }
+.product-links a:hover { color: var(--primary-color); text-decoration: none; }
 
 /* =========================================
-   📱 移动端菜单专属样式 (Mobile Tech Style)
-   ========================================= */
-@media screen and (max-width: 768px) {
-    
-    /* 1. 汉堡按钮优化：科技按钮风格 */
-    .mobile-menu-toggle {
-        display: block;
-        font-size: 20px;
-        color: var(--text-dark);
-        cursor: pointer;
-        padding: 8px 12px;
-        border: 1px solid rgba(0,0,0,0.1);
-        border-radius: 6px;
-        background: rgba(255,255,255,0.5);
-        transition: all 0.3s ease;
-    }
-    
-    /* 点击/悬停时光效 */
-    .mobile-menu-toggle:hover,
-    .mobile-menu-toggle:active {
-        border-color: var(--primary-color);
-        color: var(--primary-color);
-        box-shadow: 0 0 10px rgba(243, 112, 33, 0.2);
-    }
-
-    /* 2. 菜单容器：磨砂玻璃面板 */
-    .nav-menu {
-        display: none; /* JS控制切换 active 类 */
-        position: absolute;
-        top: 80px; /* 紧贴 Header */
-        left: 0;
-        width: 100%;
-        background: rgba(255, 255, 255, 0.95); /* 高透明度白底 */
-        backdrop-filter: blur(15px); /* 强力磨砂 */
-        border-bottom: 2px solid var(--primary-color); /* 底部橙色封边 */
-        flex-direction: column;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        z-index: 99;
-        
-        /* 下拉动画 */
-        transform-origin: top;
-        animation: slideDownMobile 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    
-    .nav-menu.active {
-        display: flex;
-    }
-
-    /* 3. 一级菜单项：侧边光带设计 */
-    .nav-item {
-        width: 100%;
-        text-align: left;
-        border-bottom: 1px solid rgba(0,0,0,0.05);
-        position: relative;
-    }
-
-    .nav-link {
-        display: block;
-        padding: 18px 25px; /* 加大点击区域 */
-        color: var(--text-dark);
-        font-weight: 600;
-        font-size: 16px;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        transition: all 0.3s;
-        
-        /* 默认左侧透明边框 */
-        border-left: 4px solid transparent; 
-    }
-
-    /* 选中/点击状态：激活橙色光带 + 渐变背景 */
-    .nav-link:active, /* 触摸时 */
-    .nav-link[style*="color: rgb(243, 112, 33)"] { /* JS 赋予颜色时 */
-        background: linear-gradient(90deg, rgba(243, 112, 33, 0.08) 0%, transparent 100%);
-        border-left-color: var(--primary-color);
-        color: var(--primary-color) !important;
-        padding-left: 35px; /* 文字向右微动，增加动感 */
-    }
-
-    /* 4. 二级下拉菜单：内凹“卡槽”风格 */
-    .dropdown-menu {
-        display: none; /* JS控制 */
-        position: static; /* 撑开文档流 */
-        background: #f0f2f5; /* 深一点的灰色，形成凹槽感 */
-        box-shadow: inset 0 5px 10px rgba(0,0,0,0.05), inset 0 -5px 10px rgba(0,0,0,0.05); /* 内阴影 */
-        padding: 10px 0;
-        border-left: 4px solid #ddd; /* 左侧灰色提示线 */
-    }
-
-    /* 产品组标题 */
-    .product-group {
-        padding: 12px 30px;
-        border-bottom: 1px solid rgba(0,0,0,0.03);
-    }
-    
-    .product-title {
-        font-size: 14px;
-        color: #888;
-        margin-bottom: 8px;
-        display: flex;
-        align-items: center;
-    }
-    /* 标题前加个小圆点装饰 */
-    .product-title::before {
-        content: ''; display: inline-block; width: 6px; height: 6px;
-        background: var(--tech-blue); border-radius: 50%; margin-right: 8px;
-    }
-
-    /* 产品链接 */
-    .product-links {
-        font-size: 13px;
-        color: #555;
-        padding-left: 15px; /* 缩进 */
-        display: flex;
-        gap: 15px; /* 链接间距 */
-    }
-    
-    .product-links a {
-        position: relative;
-        padding-bottom: 2px;
-    }
-    
-    .product-links a:hover {
-        color: var(--primary-color);
-        border-bottom: 1px solid var(--primary-color);
-    }
-}
-
-/* 补充动画 */
-@keyframes slideDownMobile {
-    from { opacity: 0; transform: scaleY(0.9); }
-    to { opacity: 1; transform: scaleY(1); }
-}
-
-/* =========================================
-   4. Hero Section (深色科技感 - 修复版)
+   4. Hero Section (深色科技感 + 修复版)
    ========================================= */
 .hero-section {
     position: relative;
@@ -448,7 +274,7 @@ button { outline: none; }
     padding: 140px 20px 160px;
     text-align: center;
     color: var(--text-light); /* 强制白色文字 */
-    z-index: 1; /* 高于装饰层(0) */
+    z-index: 1; 
     overflow: hidden;
 }
 
@@ -476,6 +302,10 @@ button { outline: none; }
 
 .hero-section h1 { margin: 0 0 20px; font-size: 3.5em; font-weight: 800; color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,0.5); letter-spacing: 1px; }
 .hero-section h1 span { color: var(--primary-color); position: relative; display: inline-block; }
+.hero-section h1 span::after {
+    content: ''; position: absolute; bottom: 5px; left: 0; width: 100%; height: 4px;
+    background-color: var(--primary-color); opacity: 0.3; border-radius: 2px;
+}
 .hero-section p { color: rgba(255,255,255,0.8); font-size: 1.25em; margin-bottom: 50px; font-weight: 400; max-width: 600px; margin-left: auto; margin-right: auto; }
 
 /* --- 搜索框 (深色磨砂风格) --- */
@@ -509,7 +339,7 @@ button { outline: none; }
    ========================================= */
 .content-container {
     display: flex; justify-content: center; flex-wrap: wrap; gap: 30px;
-    padding: 60px 20px; max-width: 1200px; margin: -50px auto 0; /* 向上浮动，盖住Hero底部 */
+    padding: 60px 20px; max-width: 1200px; margin: -50px auto 0; /* 向上浮动 */
     position: relative; z-index: 10;
 }
 .card {
@@ -519,7 +349,6 @@ button { outline: none; }
     text-align: left; transition: 0.4s; position: relative; overflow: hidden;
 }
 .card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.12); }
-/* 卡片顶部彩条 */
 .card::after {
     content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
     background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
@@ -553,7 +382,6 @@ button { outline: none; }
 .close-btn:hover { color: var(--primary-color); transform: rotate(90deg); }
 .modal-body { padding: 30px; max-height: 500px; overflow-y: auto; }
 
-/* 列表项样式 */
 .firmware-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-radius: 8px; background: #f8f9fa; border: 1px solid var(--border-line); margin-bottom: 10px; transition: 0.2s; }
 .firmware-item:hover { background: #fff; border-color: var(--primary-color); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
 .fw-version { color: var(--text-main); font-size: 15px; font-weight: 600; }
@@ -581,50 +409,70 @@ button { outline: none; }
 #searchChoiceModal .close-btn:hover { color: var(--primary-color); text-shadow: 0 0 10px var(--primary-color); }
 #searchChoiceModal .modal-body p { color: #aaa; margin-bottom: 25px; }
 
-/* 搜索结果按钮 */
 #searchResultBtns { display: flex; flex-direction: column; gap: 15px; }
 #searchResultBtns .search-btn {
     width: 100%; padding: 16px; border-radius: 50px; font-size: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
     display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0;
 }
-/* 按钮A: 蓝色 */
 #searchResultBtns button:nth-child(1) { background: linear-gradient(90deg, rgba(0,86,179,0.2), rgba(0,86,179,0.4)); border: 1px solid rgba(0,86,179,0.6); color: #6ec0ff; box-shadow: 0 0 20px rgba(0,86,179,0.1); }
 #searchResultBtns button:nth-child(1):hover { background: #0056b3; border-color: #0056b3; color: #fff; box-shadow: 0 0 30px rgba(0,86,179,0.5); transform: translateY(-3px) scale(1.02); }
-/* 按钮B: 橙色 */
 #searchResultBtns button:nth-child(2) { background: linear-gradient(90deg, rgba(243,112,33,0.2), rgba(243,112,33,0.4)); border: 1px solid rgba(243,112,33,0.6); color: #ffad76; box-shadow: 0 0 20px rgba(243,112,33,0.1); }
 #searchResultBtns button:nth-child(2):hover { background: #F37021; border-color: #F37021; color: #fff; box-shadow: 0 0 30px rgba(243,112,33,0.5); transform: translateY(-3px) scale(1.02); }
 
-/* --- 6.3 Contact Modal (卡片式布局) --- */
+/* --- 6.3 🆕 Contact Modal (绝对居中控制台) --- */
 #contactModal .modal-content {
-    background: #fff; width: 90%; max-width: 600px; border-radius: 16px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.2);
-    animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0;
+    width: 90%; max-width: 700px;
+    border-radius: 24px; overflow: hidden;
+    background: rgba(18, 22, 28, 0.95); backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    color: #fff;
+    animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-#contactModal .modal-body { padding: 40px 30px; }
-.modal-subtitle { text-align: center; color: var(--text-gray); margin-bottom: 30px; }
+#contactModal .modal-content::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--tech-blue), var(--primary-color), transparent);
+}
+#contactModal .modal-header { background: transparent; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding: 25px 40px; }
+#contactModal h3 { margin: 0; color: #fff; font-size: 24px; letter-spacing: 1px; font-weight: 700; text-shadow: 0 0 20px rgba(255, 255, 255, 0.2); }
+#contactModal .close-btn { color: rgba(255, 255, 255, 0.3); transition: 0.3s; }
+#contactModal .close-btn:hover { color: var(--primary-color); text-shadow: 0 0 15px var(--primary-color); transform: rotate(90deg); }
+#contactModal .modal-body { padding: 40px; }
+#contactModal .modal-subtitle { text-align: center; color: #8899a6; margin-bottom: 35px; font-size: 15px; font-weight: 400; }
 
-/* 卡片网格 */
-.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-@media screen and (max-width: 600px) { .contact-grid { grid-template-columns: 1fr; } }
-
+.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
 .contact-card {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    padding: 25px 15px; border: 1px solid #e0e0e0; border-radius: 12px;
-    background: #fff; text-decoration: none; color: var(--text-main);
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    padding: 35px 20px;
+    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px;
+    text-decoration: none; color: #ccc; transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1); position: relative;
 }
-.contact-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: transparent; }
-.contact-card .icon { font-size: 32px; margin-bottom: 15px; transition: 0.3s; }
-.contact-card strong { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
-.contact-card span { font-size: 12px; color: #888; text-align: center; word-break: break-all; }
+.contact-card .icon { font-size: 42px; margin-bottom: 15px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); transition: 0.4s; }
+.contact-card strong { display: block; font-size: 16px; font-weight: 600; margin-bottom: 5px; color: #fff; }
+.contact-card span { font-size: 13px; color: #666; transition: 0.3s; }
 
-/* 交互色 */
-.contact-card.telegram:hover { background: linear-gradient(145deg, #fff, #f0f8ff); border-top: 3px solid #229ED9; }
-.contact-card.telegram:hover .icon { transform: scale(1.1); filter: drop-shadow(0 5px 10px rgba(34, 158, 217, 0.3)); }
-.contact-card.whatsapp:hover { background: linear-gradient(145deg, #fff, #f0fff4); border-top: 3px solid #25D366; }
-.contact-card.whatsapp:hover .icon { transform: scale(1.1); filter: drop-shadow(0 5px 10px rgba(37, 211, 102, 0.3)); }
-.contact-card.email:hover { background: linear-gradient(145deg, #fff, #fff8f0); border-top: 3px solid var(--primary-color); }
-.contact-card.email:hover .icon { transform: scale(1.1); filter: drop-shadow(0 5px 10px rgba(243, 112, 33, 0.3)); }
+.contact-card:hover { transform: translateY(-8px); background: rgba(255, 255, 255, 0.06); }
+.contact-card:hover span { color: #aaa; }
+
+.contact-card.telegram:hover { border-color: #229ED9; box-shadow: 0 15px 40px rgba(34, 158, 217, 0.2), inset 0 0 20px rgba(34, 158, 217, 0.1); }
+.contact-card.telegram:hover .icon { transform: scale(1.15) rotate(-5deg); filter: drop-shadow(0 0 15px #229ED9); }
+.contact-card.telegram:hover strong { color: #229ED9; }
+
+.contact-card.whatsapp:hover { border-color: #25D366; box-shadow: 0 15px 40px rgba(37, 211, 102, 0.2), inset 0 0 20px rgba(37, 211, 102, 0.1); }
+.contact-card.whatsapp:hover .icon { transform: scale(1.15) rotate(5deg); filter: drop-shadow(0 0 15px #25D366); }
+.contact-card.whatsapp:hover strong { color: #25D366; }
+
+.contact-card.email:hover { border-color: var(--primary-color); box-shadow: 0 15px 40px rgba(243, 112, 33, 0.2), inset 0 0 20px rgba(243, 112, 33, 0.1); }
+.contact-card.email:hover .icon { transform: scale(1.15) translateY(-2px); filter: drop-shadow(0 0 15px var(--primary-color)); }
+.contact-card.email:hover strong { color: var(--primary-color); }
+
+@media screen and (max-width: 700px) {
+    .contact-grid { grid-template-columns: 1fr; gap: 15px; }
+    .contact-card { flex-direction: row; justify-content: flex-start; padding: 20px; text-align: left; }
+    .contact-card .icon { margin-bottom: 0; margin-right: 20px; font-size: 32px; }
+    .contact-card div { display: flex; flex-direction: column; }
+}
 
 /* =========================================
    7. 页脚 & 动画
