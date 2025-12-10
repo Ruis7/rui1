@@ -14,7 +14,7 @@ const menuConfig = [
         categoryId: 'gnss',
         labelKey: 'menu_gnss',
         type: 'hardware',
-        items: ['i100', 'i93', 'i89', 'i85', 'i83', 'i76', 'i73']
+        items: ['i100', 'i93', 'i89', 'i85', 'i83', 'i76', 'i73','ibase','p5u','p5e']
     },
     {
         categoryId: 'mobile',
@@ -102,6 +102,14 @@ const firmwareDatabase = {
         { version: 'OEM Board Firmware', date: '#', url: 'https://chcnavigation.jianguoyun.com/p/DQ-nkoQQtq_UCxiv-8sFIAA' },
         { version: 'Radio Firmware', date: '#', url: 'https://chcnavigation.jianguoyun.com/p/DeLyyCUQtq_UCxihx5UGIAA' }
     ],
+    'ibase':[
+        { version: 'V2.4.4.2', date: '2025-05-21', url: 'https://chcnavigation.jianguoyun.com/p/DVrwOREQtq_UCxjfnoEGIAA' },
+        { version: 'V2.4.4', date: '2024-06-06', url: 'https://chcnavigation.jianguoyun.com/p/DVAyuNYQtq_UCxiwtdAFIAA' },
+        { version: 'V2.3.7', date: '2023-11-10', url: 'https://chcnavigation.jianguoyun.com/p/DVW3cOQQtq_UCxjnr8wFIAA' },
+        { version: 'V2.2.1', date: '2023-02-04', url: 'https://chcnavigation.jianguoyun.com/p/DQZZSnIQtq_UCxjj1JUGIAA' },
+        { version: 'OEM Board Firmware', date: '#', url: 'https://chcnavigation.jianguoyun.com/p/DQ4tSEUQtq_UCxjvhdMFIAA' },
+        { version: 'Radio Firmware', date: '#', url: 'https://chcnavigation.jianguoyun.com/p/Dct7QgoQtq_UCxier-kFIAA' }
+    ]
 
     // --- 移动测绘 (Mobile Mapping) ---
     'lt60h': [
@@ -175,6 +183,9 @@ const manualDatabase = {
     'p5e': [
         { title: 'P5E user manual', date: '', url: 'https://chcnavigation.jianguoyun.com/p/DT5cHrMQtq_UCxjCpN8FIAA' }
     ],
+    'ibase': [
+        { title: 'Ibase user manual', date: '', url: 'https://chcnavigation.jianguoyun.com/p/DSkCFSoQtq_UCxiKtdAFIAA' }
+    ]
 
     // --- Mobile Mapping ---
     'lt60h': [
@@ -207,4 +218,5 @@ const manualDatabase = {
 
     // --- Software ---
     'cgo': [], 'mapcloud': [], 'gnsstool': [], 'sharelocation': [], 'rinex': [], 'cgbas': []
+
 };
