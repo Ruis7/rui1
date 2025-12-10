@@ -1,0 +1,532 @@
+/* =========================================
+   1. 全局配置 & 变量
+   ========================================= */
+:root {
+    --primary-color: #F37021;   /* 品牌橙色 */
+    --primary-hover: #d95e16;   /* 深橙色 */
+    --tech-blue: #0056b3;       /* 科技蓝 */
+    
+    --text-main: #333333;       /* 主文字 (深色) */
+    --text-light: #ffffff;      /* 浅色文字 (用于Hero) */
+    --text-gray: #666666;       /* 辅助灰 */
+    
+    --bg-page: #ffffff;         /* 页面背景：纯白 */
+    --bg-section: #f8f9fa;      /* 分区背景：浅灰 */
+    --border-line: #e9ecef;     /* 边框线 */
+    
+    /* 深色 Hero 背景渐变 */
+    --hero-bg: radial-gradient(circle at 50% 30%, #232d38 0%, #0b1015 100%);
+}
+
+body {
+    font-family: 'Segoe UI', 'Roboto', Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--text-main);
+    background-color: var(--bg-page);
+    overflow-x: hidden; /* 防止装饰元素撑开滚动条 */
+}
+
+a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+ul { list-style: none; padding: 0; margin: 0; }
+button { outline: none; }
+
+/* =========================================
+   2. 🛠️ 背景装饰 (测绘/三维扫描风格 - 适配白底)
+   ========================================= */
+.bg-decorations {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    /* 🔴 关键修复：z-index 设为 0，位于背景色之上，内容之下 */
+    z-index: 0; 
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* 2.1 等高线地形 (浅灰色) */
+.deco-contour-map {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        radial-gradient(circle at 10% 20%, transparent 0%, transparent 90%, rgba(0,0,0,0.03) 91%, transparent 92%),
+        radial-gradient(ellipse at 80% 80%, transparent 0%, transparent 85%, rgba(0,0,0,0.02) 86%, transparent 87%);
+    opacity: 0.6;
+}
+
+/* 2.2 3D透视网格 (增强空间感) */
+.deco-grid-plane {
+    position: absolute; bottom: -10%; left: -10%; width: 120%; height: 50%;
+    background-image:
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: perspective(1000px) rotateX(60deg);
+    opacity: 0.5;
+}
+
+/* 2.3 网络连接点 */
+.deco-network {
+    position: absolute; top: 20%; left: 5%; width: 180px; height: 180px;
+    border: 1px dashed rgba(0, 86, 179, 0.15); border-radius: 50%;
+    animation: pulseNetwork 6s infinite;
+}
+.deco-network::after {
+    content: ''; position: absolute; top: 50%; left: 50%; width: 6px; height: 6px;
+    background: var(--tech-blue); border-radius: 50%; transform: translate(-50%, -50%);
+}
+
+/* 2.4 LiDAR 扫描线 */
+.deco-lidar-sweep {
+    position: absolute; top: 50%; right: -120px; width: 500px; height: 500px;
+    border: 2px dotted rgba(0, 86, 179, 0.1); 
+    border-radius: 50%;
+    transform: rotateX(60deg);
+    animation: sweep 20s linear infinite;
+}
+
+/* 2.5 漂浮图标 (低透明度) */
+.deco-item { position: absolute; opacity: 0.05; filter: grayscale(1); z-index: -1; }
+.deco-satellite { top: 12%; right: 15%; font-size: 50px; animation: float 10s ease-in-out infinite; }
+.deco-uav { top: 35%; left: -80px; font-size: 36px; animation: flyPass 40s linear infinite; }
+.deco-total-station { bottom: 15%; right: 20%; font-size: 42px; }
+
+/* 2.6 随机数据点 */
+.deco-point {
+    position: absolute; width: 6px; height: 6px;
+    background-color: var(--primary-color);
+    border-radius: 50%; opacity: 0.2;
+    animation: blink 3s infinite;
+}
+
+/* 2.7 🆕 左下角自传线框地球 (高可见度版) */
+.deco-earth-wireframe {
+    position: absolute;
+    bottom: 40px; left: 40px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    /* 加深边框颜色，确保在白底上清晰可见 */
+    border: 2px solid rgba(0, 86, 179, 0.6); 
+    background: radial-gradient(circle at 30% 30%, rgba(0, 86, 179, 0.1), rgba(0, 86, 179, 0.05) 60%);
+    box-shadow: 0 0 25px rgba(0, 86, 179, 0.2), inset 0 0 20px rgba(0, 86, 179, 0.1);
+    animation: rotateGlobe 20s linear infinite;
+    z-index: 10;
+}
+.deco-earth-wireframe::before {
+    content: ''; position: absolute; top: 50%; left: 50%; width: 90%; height: 35%;
+    border: 2px solid rgba(0, 86, 179, 0.4); border-radius: 50%;
+    transform: translate(-50%, -50%) rotate(-35deg);
+}
+.deco-earth-wireframe::after {
+    content: ''; position: absolute; top: 50%; left: 50%; width: 35%; height: 90%;
+    border: 2px solid rgba(0, 86, 179, 0.4); border-radius: 50%;
+    transform: translate(-50%, -50%) rotate(55deg);
+}
+
+/* 动画关键帧 */
+@keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes rotateGlobe { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(10deg); } 50% { transform: translateY(-20px) rotate(5deg); } }
+@keyframes flyPass { 0% { left: -10%; transform: translateY(0); } 100% { left: 110%; transform: translateY(-40px); } }
+@keyframes sweep { from { transform: rotateX(60deg) rotateZ(0deg); } to { transform: rotateX(60deg) rotateZ(360deg); } }
+@keyframes pulseNetwork { 0% { transform: scale(0.9); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 0.1; } 100% { transform: scale(0.9); opacity: 0.5; } }
+@keyframes blink { 0%, 100% { opacity: 0.1; } 50% { opacity: 0.5; } }
+
+/* =========================================
+   3. 顶部导航 (Header & Menu)
+   ========================================= */
+.top-bar {
+    background-color: #2c3e50;
+    color: #ccc;
+    padding: 8px 30px;
+    text-align: right;
+    font-size: 12px;
+    position: relative;
+    z-index: 1002;
+}
+.lang-selector { position: relative; display: inline-block; cursor: pointer; padding: 4px 10px; border-radius: 4px; user-select: none; }
+.lang-selector:hover { background-color: rgba(255,255,255,0.1); color: #fff; }
+
+.lang-dropdown {
+    display: none; position: absolute; right: 0; top: 120%; 
+    background: #fff; border: 1px solid var(--border-line);
+    z-index: 1000; min-width: 140px; box-shadow: 0 5px 15px rgba(0,0,0,0.15); border-radius: 4px; text-align: left;
+}
+.lang-dropdown.show { display: block; animation: fadeIn 0.2s; }
+.lang-dropdown li { padding: 10px 15px; border-bottom: 1px solid var(--border-line); color: var(--text-main); }
+.lang-dropdown li:hover { background-color: var(--bg-section); color: var(--primary-color); }
+
+.main-header {
+    background-color: #fff;
+    padding: 0 40px;
+    height: 80px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative; z-index: 1001;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.05);
+}
+.logo { font-size: 26px; font-weight: 800; color: var(--text-main); letter-spacing: 1px; }
+.logo span { color: var(--primary-color); }
+
+/* --- 桌面端菜单 (绝对居中) --- */
+@media screen and (min-width: 769px) {
+    .nav-menu {
+        position: absolute; left: 50%; transform: translateX(-50%);
+        display: flex; height: 100%; align-items: center; gap: 40px;
+    }
+    .nav-item { position: relative; height: 100%; display: flex; align-items: center; cursor: pointer; }
+    .nav-link { font-size: 15px; font-weight: 600; color: #555; position: relative; }
+    
+    .nav-link::after {
+        content: ''; position: absolute; width: 0; height: 3px;
+        bottom: -5px; left: 0; background-color: var(--primary-color);
+        transition: width 0.3s;
+    }
+    .nav-item:hover .nav-link { color: var(--primary-color); }
+    .nav-item:hover .nav-link::after { width: 100%; }
+
+    .dropdown-menu {
+        display: none; position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+        background-color: #fff; min-width: 240px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        border-top: 4px solid var(--primary-color);
+        z-index: 1002; padding: 10px 0; border-radius: 0 0 8px 8px;
+        animation: slideDown 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .nav-item:hover .dropdown-menu { display: block; }
+    .mobile-menu-toggle { display: none; }
+}
+
+/* =========================================
+   📱 移动端菜单专属样式 (Mobile Tech Style)
+   ========================================= */
+@media screen and (max-width: 768px) {
+    
+    /* 1. 汉堡按钮优化：科技按钮风格 */
+    .mobile-menu-toggle {
+        display: block;
+        font-size: 20px;
+        color: var(--text-dark);
+        cursor: pointer;
+        padding: 8px 12px;
+        border: 1px solid rgba(0,0,0,0.1);
+        border-radius: 6px;
+        background: rgba(255,255,255,0.5);
+        transition: all 0.3s ease;
+    }
+    
+    /* 点击/悬停时光效 */
+    .mobile-menu-toggle:hover,
+    .mobile-menu-toggle:active {
+        border-color: var(--primary-color);
+        color: var(--primary-color);
+        box-shadow: 0 0 10px rgba(243, 112, 33, 0.2);
+    }
+
+    /* 2. 菜单容器：磨砂玻璃面板 */
+    .nav-menu {
+        display: none; /* JS控制切换 active 类 */
+        position: absolute;
+        top: 80px; /* 紧贴 Header */
+        left: 0;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.95); /* 高透明度白底 */
+        backdrop-filter: blur(15px); /* 强力磨砂 */
+        border-bottom: 2px solid var(--primary-color); /* 底部橙色封边 */
+        flex-direction: column;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        z-index: 99;
+        
+        /* 下拉动画 */
+        transform-origin: top;
+        animation: slideDownMobile 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .nav-menu.active {
+        display: flex;
+    }
+
+    /* 3. 一级菜单项：侧边光带设计 */
+    .nav-item {
+        width: 100%;
+        text-align: left;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        position: relative;
+    }
+
+    .nav-link {
+        display: block;
+        padding: 18px 25px; /* 加大点击区域 */
+        color: var(--text-dark);
+        font-weight: 600;
+        font-size: 16px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        transition: all 0.3s;
+        
+        /* 默认左侧透明边框 */
+        border-left: 4px solid transparent; 
+    }
+
+    /* 选中/点击状态：激活橙色光带 + 渐变背景 */
+    .nav-link:active, /* 触摸时 */
+    .nav-link[style*="color: rgb(243, 112, 33)"] { /* JS 赋予颜色时 */
+        background: linear-gradient(90deg, rgba(243, 112, 33, 0.08) 0%, transparent 100%);
+        border-left-color: var(--primary-color);
+        color: var(--primary-color) !important;
+        padding-left: 35px; /* 文字向右微动，增加动感 */
+    }
+
+    /* 4. 二级下拉菜单：内凹“卡槽”风格 */
+    .dropdown-menu {
+        display: none; /* JS控制 */
+        position: static; /* 撑开文档流 */
+        background: #f0f2f5; /* 深一点的灰色，形成凹槽感 */
+        box-shadow: inset 0 5px 10px rgba(0,0,0,0.05), inset 0 -5px 10px rgba(0,0,0,0.05); /* 内阴影 */
+        padding: 10px 0;
+        border-left: 4px solid #ddd; /* 左侧灰色提示线 */
+    }
+
+    /* 产品组标题 */
+    .product-group {
+        padding: 12px 30px;
+        border-bottom: 1px solid rgba(0,0,0,0.03);
+    }
+    
+    .product-title {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+    }
+    /* 标题前加个小圆点装饰 */
+    .product-title::before {
+        content: ''; display: inline-block; width: 6px; height: 6px;
+        background: var(--tech-blue); border-radius: 50%; margin-right: 8px;
+    }
+
+    /* 产品链接 */
+    .product-links {
+        font-size: 13px;
+        color: #555;
+        padding-left: 15px; /* 缩进 */
+        display: flex;
+        gap: 15px; /* 链接间距 */
+    }
+    
+    .product-links a {
+        position: relative;
+        padding-bottom: 2px;
+    }
+    
+    .product-links a:hover {
+        color: var(--primary-color);
+        border-bottom: 1px solid var(--primary-color);
+    }
+}
+
+/* 补充动画 */
+@keyframes slideDownMobile {
+    from { opacity: 0; transform: scaleY(0.9); }
+    to { opacity: 1; transform: scaleY(1); }
+}
+
+/* =========================================
+   4. Hero Section (深色科技感 - 修复版)
+   ========================================= */
+.hero-section {
+    position: relative;
+    background: var(--hero-bg); /* 深色背景 */
+    padding: 140px 20px 160px;
+    text-align: center;
+    color: var(--text-light); /* 强制白色文字 */
+    z-index: 1; /* 高于装饰层(0) */
+    overflow: hidden;
+}
+
+/* 顶部微光 */
+.hero-section::before {
+    content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 60%); pointer-events: none;
+}
+
+/* 底部融合特效 (深色过渡到白色) */
+.hero-section::after {
+    content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100px;
+    background: linear-gradient(to bottom, transparent, var(--bg-page)); 
+    z-index: 3; pointer-events: none;
+}
+
+/* 粒子画布 */
+#particleCanvas {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 1; pointer-events: none;
+}
+
+/* 内容层级提升 */
+.hero-section h1, .hero-section p, .search-container { position: relative; z-index: 10; }
+
+.hero-section h1 { margin: 0 0 20px; font-size: 3.5em; font-weight: 800; color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,0.5); letter-spacing: 1px; }
+.hero-section h1 span { color: var(--primary-color); position: relative; display: inline-block; }
+.hero-section p { color: rgba(255,255,255,0.8); font-size: 1.25em; margin-bottom: 50px; font-weight: 400; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+/* --- 搜索框 (深色磨砂风格) --- */
+.search-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 35px; }
+
+.search-input {
+    width: 100%; max-width: 450px; padding: 15px 30px;
+    border-radius: 50px; 
+    background: rgba(255, 255, 255, 0.1); 
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff; font-size: 16px; outline: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease;
+}
+.search-input::placeholder { color: rgba(255, 255, 255, 0.6); }
+.search-input:focus {
+    background: rgba(255, 255, 255, 0.15); border-color: var(--primary-color);
+    box-shadow: 0 0 20px rgba(243, 112, 33, 0.3); width: 480px;
+}
+
+.search-btn {
+    padding: 15px 35px; border-radius: 50px; border: none;
+    background: linear-gradient(135deg, #F37021 0%, #ff9a44 100%);
+    color: white; font-size: 16px; font-weight: bold; cursor: pointer;
+    box-shadow: 0 4px 15px rgba(243, 112, 33, 0.4); transition: all 0.3s ease;
+}
+.search-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(243, 112, 33, 0.6); background: linear-gradient(135deg, #ff8038 0%, #ffad66 100%); }
+
+/* =========================================
+   5. 内容卡片 (白底悬浮)
+   ========================================= */
+.content-container {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 30px;
+    padding: 60px 20px; max-width: 1200px; margin: -50px auto 0; /* 向上浮动，盖住Hero底部 */
+    position: relative; z-index: 10;
+}
+.card {
+    background: #fff; width: 320px; padding: 40px; border-radius: 16px;
+    border: 1px solid var(--border-line);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    text-align: left; transition: 0.4s; position: relative; overflow: hidden;
+}
+.card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.12); }
+/* 卡片顶部彩条 */
+.card::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    transform: scaleX(0); transition: 0.4s;
+}
+.card:hover::after { transform: scaleX(1); }
+
+.card h3 { color: #2c3e50; margin-top: 0; font-size: 1.5em; letter-spacing: 0.5px; }
+.card p { color: var(--text-gray); font-size: 14px; line-height: 1.6; margin-bottom: 30px; min-height: 45px; }
+.card a { color: var(--primary-color); font-weight: bold; letter-spacing: 1px; font-size: 14px; }
+.card a:hover { letter-spacing: 2px; }
+
+/* =========================================
+   6. 弹窗 (Modals)
+   ========================================= */
+.modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); }
+
+/* --- 6.1 通用下载弹窗 (白底) --- */
+#firmwareModal .modal-content, 
+#manualModal .modal-content {
+    background: #fff; margin: 8% auto; padding: 0; width: 90%; max-width: 500px;
+    border-radius: 16px; box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; overflow: hidden;
+}
+.modal-header {
+    padding: 20px 30px; display: flex; justify-content: space-between; align-items: center;
+    border-bottom: 1px solid var(--border-line); background: #fbfbfc;
+}
+.modal-header h3 { margin: 0; color: #2c3e50; font-size: 18px; font-weight: 700; }
+.close-btn { color: #999; font-size: 28px; cursor: pointer; transition: 0.3s; }
+.close-btn:hover { color: var(--primary-color); transform: rotate(90deg); }
+.modal-body { padding: 30px; max-height: 500px; overflow-y: auto; }
+
+/* 列表项样式 */
+.firmware-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-radius: 8px; background: #f8f9fa; border: 1px solid var(--border-line); margin-bottom: 10px; transition: 0.2s; }
+.firmware-item:hover { background: #fff; border-color: var(--primary-color); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+.fw-version { color: var(--text-main); font-size: 15px; font-weight: 600; }
+.fw-date { color: #999; font-size: 12px; }
+.fw-download-btn { background: var(--tech-blue); border: none; color: #fff; padding: 6px 18px; border-radius: 20px; font-size: 12px; font-weight: 600; transition: 0.3s; }
+.fw-download-btn:hover { background: #004494; transform: translateY(-2px); }
+
+/* --- 6.2 搜索结果弹窗 (暗黑科技风格) --- */
+#searchChoiceModal .modal-content {
+    background: rgba(18, 22, 28, 0.95); 
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+    border-radius: 20px; color: #fff; overflow: hidden;
+    margin: 10% auto; width: 90%; max-width: 420px;
+    animation: modalPop 0.3s ease;
+}
+#searchChoiceModal .modal-content::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), var(--tech-blue), transparent);
+}
+#searchChoiceModal .modal-header { background: transparent; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding: 25px 30px; }
+#searchChoiceModal .modal-header h3 { color: #fff; font-size: 22px; letter-spacing: 1px; text-shadow: 0 0 15px rgba(255, 255, 255, 0.2); }
+#searchChoiceModal .close-btn { color: rgba(255, 255, 255, 0.4); }
+#searchChoiceModal .close-btn:hover { color: var(--primary-color); text-shadow: 0 0 10px var(--primary-color); }
+#searchChoiceModal .modal-body p { color: #aaa; margin-bottom: 25px; }
+
+/* 搜索结果按钮 */
+#searchResultBtns { display: flex; flex-direction: column; gap: 15px; }
+#searchResultBtns .search-btn {
+    width: 100%; padding: 16px; border-radius: 50px; font-size: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+    display: flex; align-items: center; justify-content: center; gap: 10px; margin: 0;
+}
+/* 按钮A: 蓝色 */
+#searchResultBtns button:nth-child(1) { background: linear-gradient(90deg, rgba(0,86,179,0.2), rgba(0,86,179,0.4)); border: 1px solid rgba(0,86,179,0.6); color: #6ec0ff; box-shadow: 0 0 20px rgba(0,86,179,0.1); }
+#searchResultBtns button:nth-child(1):hover { background: #0056b3; border-color: #0056b3; color: #fff; box-shadow: 0 0 30px rgba(0,86,179,0.5); transform: translateY(-3px) scale(1.02); }
+/* 按钮B: 橙色 */
+#searchResultBtns button:nth-child(2) { background: linear-gradient(90deg, rgba(243,112,33,0.2), rgba(243,112,33,0.4)); border: 1px solid rgba(243,112,33,0.6); color: #ffad76; box-shadow: 0 0 20px rgba(243,112,33,0.1); }
+#searchResultBtns button:nth-child(2):hover { background: #F37021; border-color: #F37021; color: #fff; box-shadow: 0 0 30px rgba(243,112,33,0.5); transform: translateY(-3px) scale(1.02); }
+
+/* --- 6.3 Contact Modal (卡片式布局) --- */
+#contactModal .modal-content {
+    background: #fff; width: 90%; max-width: 600px; border-radius: 16px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+    animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#contactModal .modal-body { padding: 40px 30px; }
+.modal-subtitle { text-align: center; color: var(--text-gray); margin-bottom: 30px; }
+
+/* 卡片网格 */
+.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+@media screen and (max-width: 600px) { .contact-grid { grid-template-columns: 1fr; } }
+
+.contact-card {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 25px 15px; border: 1px solid #e0e0e0; border-radius: 12px;
+    background: #fff; text-decoration: none; color: var(--text-main);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.contact-card:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); border-color: transparent; }
+.contact-card .icon { font-size: 32px; margin-bottom: 15px; transition: 0.3s; }
+.contact-card strong { display: block; font-size: 14px; font-weight: 600; margin-bottom: 5px; }
+.contact-card span { font-size: 12px; color: #888; text-align: center; word-break: break-all; }
+
+/* 交互色 */
+.contact-card.telegram:hover { background: linear-gradient(145deg, #fff, #f0f8ff); border-top: 3px solid #229ED9; }
+.contact-card.telegram:hover .icon { transform: scale(1.1); filter: drop-shadow(0 5px 10px rgba(34, 158, 217, 0.3)); }
+.contact-card.whatsapp:hover { background: linear-gradient(145deg, #fff, #f0fff4); border-top: 3px solid #25D366; }
+.contact-card.whatsapp:hover .icon { transform: scale(1.1); filter: drop-shadow(0 5px 10px rgba(37, 211, 102, 0.3)); }
+.contact-card.email:hover { background: linear-gradient(145deg, #fff, #fff8f0); border-top: 3px solid var(--primary-color); }
+.contact-card.email:hover .icon { transform: scale(1.1); filter: drop-shadow(0 5px 10px rgba(243, 112, 33, 0.3)); }
+
+/* =========================================
+   7. 页脚 & 动画
+   ========================================= */
+.site-footer {
+    text-align: center; padding: 40px 20px;
+    background: #2c3e50; color: #ccc;
+    margin-top: 80px;
+}
+.site-footer a { color: #eee; margin: 0 15px; }
+.site-footer a:hover { color: var(--primary-color); }
+
+@keyframes modalPop { 0% { opacity: 0; transform: scale(0.9); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes slideDown { 0% { opacity: 0; transform: translate(-50%, -20px); } 100% { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
