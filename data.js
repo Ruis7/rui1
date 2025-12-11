@@ -154,7 +154,11 @@ const faqDatabase = {
     'i100': [
         { title :'ViLi i100_Dealers_FAQ_2025.09.13.pdf' ,  date:'2025-09-15', url:'https://chcnavigation.jianguoyun.com/p/DTfTpVgQtq_UCxj_2pIGIAA'}
     ],
-    'i89':[],
+    'i89':[
+        { title:'FAQ-How to register a receiver.pdf', date:'2024-12-10',url:'https://chcnavigation.jianguoyun.com/p/DXgo2p8Qtq_UCxjm5ZUGIAA'},
+        { title:'FAQ-How to upgrade the firmware or board of a receiver', date:'2024-12-10',url:'https://chcnavigation.jianguoyun.com/p/DdBsyGYQtq_UCxiV_oQGIAA'},
+        { title:'How to export static data', date:'2024-12-10',url:'https://chcnavigation.jianguoyun.com/p/DZ1Yjg4Qtq_UCxjn5ZUGIAA'}
+    ],
     'i85':[],
     'i83':[],
     'i76':[],
@@ -183,3 +187,4 @@ const faqDatabase = {
         { title:'How to share one antenna between P5U and P5S.mp4',  date:'2024-10-25',url:'https://chcnavigation.jianguoyun.com/p/DdUgAWMQtq_UCxjcxeMFIAA'},
     ]
 };
+
