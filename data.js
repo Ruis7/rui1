@@ -103,7 +103,13 @@ const firmwareDatabase = {
     'gnsstool': [ { version:'GNSSTool', date:'2025-01-29', url:'https://chcnavigation.jianguoyun.com/p/DUcLJogQtq_UCxjk3JUGIAA'},], 
     'sharelocation': [ { version:'Sharelocation', date:'', url:'https://chcnavigation.jianguoyun.com/p/DX8QMLAQtq_UCxjs3JUGIAA'},], 
     'rinex': [ { version:'RINEX Converter', date:'', url:'https://chcnavigation.jianguoyun.com/p/DQaoitEQtq_UCxiaiP8FIAA'},], 
-    'cgbas': [ { version:'', date:'', url:''},]
+    'cgbas': [ 
+        { version:'CGBAS-CORS_V1.3.4.0_X86_64', date:'2025-12-02', url:'https://chcnavigation.jianguoyun.com/p/DebMXjMQtq_UCxiYqZUGIAA'},
+        { version:'CGBAS-CORS_V1.3.2.0_X86_64', date:'2025-10-15', url:'https://chcnavigation.jianguoyun.com/p/DUhwJuYQtq_UCxjl-Y0GIAA'},
+        { version:'CGBAS-CORS_V1.3.1.0_X86_64', date:'2025-07-08', url:'https://chcnavigation.jianguoyun.com/p/DcWx4WgQtq_UCxjJ8IEGIAA'},
+        { version:'CGBAS-CORS_V1.3.0.0_X86_64', date:'2025-05-07', url:'https://chcnavigation.jianguoyun.com/p/DQb3HDYQtq_UCxjIp_oFIAA'},
+        { version:'CGBAS-CORS_V1.2.1.1_X86_64', date:'2025-02-19', url:'https://chcnavigation.jianguoyun.com/p/DR2PXpcQtq_UCxiTie0FIAA'}
+    ]
 };
 
 const manualDatabase = {
