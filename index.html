@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RUI Support Center - Get firmware, manuals and technical support for GNSS, UAV, and Marine survey equipment.">
     <title>RUI Support Center</title>
     <link rel="stylesheet" href="style.css">
-    
-
 </head>
 <body>
 
@@ -44,22 +43,20 @@
         <div class="main-header">
             <div class="logo">RUI <span>SUPPORT</span></div>
             <div class="mobile-menu-toggle" onclick="toggleMenu()">☰</div>
-            
             <nav class="nav-menu" id="navMenu"></nav>
         </div>
     </header>
 
    <div class="hero-section" id="heroSection">
-    <canvas id="particleCanvas"></canvas>
-
-    <h1 data-i18n="hero_title">欢迎来到 <span>RUI'S</span> 技术支持</h1>
-    <p data-i18n="hero_desc">您的说明书、固件和技术支持一站式中心。</p>
-    
-    <div class="search-container">
-        <input type="text" id="searchInput" class="search-input" placeholder="Search Model (e.g. i93, CGO)...">
-        <button class="search-btn" onclick="performSearch()">GO</button>
+        <canvas id="particleCanvas"></canvas>
+        <h1 data-i18n="hero_title">欢迎来到 <span>RUI'S</span> 技术支持</h1>
+        <p data-i18n="hero_desc">您的说明书、固件和技术支持一站式中心。</p>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" class="search-input" placeholder="Search Model (e.g. i93, CGO)...">
+            <button class="search-btn" onclick="performSearch()">GO</button>
+        </div>
     </div>
-</div>
 
     <div class="content-container">
         <div class="card">
@@ -84,205 +81,15 @@
         <p><a href="#">隐私政策</a> | <a href="#">服务条款</a> | <a href="https://chcnav.com" target="_blank">官方网站</a></p>
     </footer>
 
-    <script src="data.js"></script>
-
-    <script>
-        // 1. 移动端菜单
-        function toggleMenu() { document.getElementById('navMenu').classList.toggle('active'); }
-        function toggleSubmenu(element) { if (window.innerWidth <= 768) { const dropdown = element.nextElementSibling; if (dropdown && dropdown.classList.contains('dropdown-menu')) { if (dropdown.style.display === 'block') { dropdown.style.display = 'none'; element.style.color = 'inherit'; } else { document.querySelectorAll('.dropdown-menu').forEach(d => d.style.display = 'none'); dropdown.style.display = 'block'; element.style.color = '#F37021'; } } } }
-
-        // 2. 语言切换逻辑 (点击触发)
-        function toggleLanguage(event) {
-            event.stopPropagation();
-            document.getElementById('langDropdown').classList.toggle('show');
-        }
-        window.addEventListener('click', function(e) {
-            const dropdown = document.getElementById('langDropdown');
-            if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
-        });
-
-        // 3. 动态菜单生成 (依赖 data.js)
-        function initMenu() {
-            const navMenu = document.getElementById('navMenu');
-            if (!navMenu) return;
-            navMenu.innerHTML = ''; 
-
-            if (typeof menuConfig === 'undefined') {
-                console.error("Error: data.js not loaded.");
-                navMenu.innerHTML = '<div style="padding:20px; color:red;">Error: data.js missing</div>';
-                return;
-            }
-
-            menuConfig.forEach(category => {
-                const navItem = document.createElement('div');
-                navItem.className = 'nav-item';
-
-                const navLink = document.createElement('div');
-                navLink.className = 'nav-link';
-                navLink.setAttribute('data-i18n', category.labelKey); 
-                navLink.textContent = category.labelKey; 
-                navLink.onclick = function() { toggleSubmenu(this); }; 
-                navItem.appendChild(navLink);
-
-                if (category.items && category.items.length > 0) {
-                    const dropdown = document.createElement('div');
-                    dropdown.className = 'dropdown-menu';
-
-                    category.items.forEach(productId => {
-                        const productGroup = document.createElement('div');
-                        productGroup.className = 'product-group';
-                        const downloadLabelKey = (category.type === 'software') ? 'link_software' : 'link_firmware';
-
-                        productGroup.innerHTML = `
-                            <span class="product-title">${productId.toUpperCase()}</span>
-                            <div class="product-links">
-                                <a href="#" onclick="openManualModal('${productId}'); return false;" data-i18n="link_manual">Manual</a> | 
-                                <a href="#" onclick="openFirmwareModal('${productId}'); return false;" data-i18n="${downloadLabelKey}">Download</a> | 
-                                <a href="#" data-i18n="link_faq">FAQ</a>
-                            </div>
-                        `;
-                        dropdown.appendChild(productGroup);
-                    });
-                    navItem.appendChild(dropdown);
-                }
-                navMenu.appendChild(navItem);
-            });
-            changeLanguage('zh'); 
-        }
-        document.addEventListener('DOMContentLoaded', initMenu);
-
-        // 4. 翻译逻辑
-        const translations = { 'zh': { 'lang_select': '语言 / Language ▾', 'tech_support': '技术支持', 'menu_gnss': 'GNSS 接收机', 'menu_mobile': '移动测绘', 'menu_ag': '农业导航', 'menu_marine': '海洋测量', 'menu_uav': '无人机系统', 'menu_software': '软件', 'link_manual': '说明书', 'link_firmware': '固件', 'link_software': '软件', 'link_faq': 'FAQ', 'hero_title': '欢迎来到 <span>RUI</span> 技术支持', 'hero_desc': '您的说明书、固件和技术支持一站式中心。', 'card_fw_title': '你好', 'card_fw_desc': '欢迎关注', 'card_doc_title': '敬请期待', 'card_doc_desc': '敬请期待', 'card_ticket_title': '售后工单', 'card_ticket_desc': '遇到技术难题？提交工单，我们的工程师将为您解答。', 'btn_download': '更多 >', 'btn_browse': '浏览 >', 'btn_submit': '提交 >' }, 'en': { 'lang_select': 'Language ▾', 'tech_support': 'Support', 'menu_gnss': 'GNSS Receivers', 'menu_mobile': 'Mobile Mapping', 'menu_ag': 'Agriculture', 'menu_marine': 'Marine Survey', 'menu_uav': 'UAV Systems', 'menu_software': 'Software', 'link_manual': 'Manual', 'link_firmware': 'Firmware', 'link_software': 'Software', 'link_faq': 'FAQ', 'hero_title': 'Welcome to <span>RUI’s</span> Support', 'hero_desc': 'Your one-stop destination for Manuals, Firmware, and Assistance.', 'card_fw_title': 'Hello', 'card_fw_desc': 'HI))', 'card_doc_title': 'Stay tuned, soon!', 'card_doc_desc': 'Stay tuned, soon!', 'card_ticket_title': 'Support Ticket', 'card_ticket_desc': 'Facing issues? Submit a ticket to our engineers.', 'btn_download': 'More >', 'btn_browse': 'Browse >', 'btn_submit': 'Submit >' }, 'ru': { 'lang_select': 'Язык ▾', 'tech_support': 'Поддержка', 'menu_gnss': 'ГНСС Приемники', 'menu_mobile': 'Мобильное картографирование', 'menu_ag': 'Агронавигация', 'menu_marine': 'Морская геодезия', 'menu_uav': 'БПЛА', 'menu_software': 'Программы', 'link_manual': 'Инструкция', 'link_firmware': 'Прошивка', 'link_software': 'Программа', 'link_faq': 'FAQ', 'hero_title': 'Добро пожаловать в <span>RUI‘s</span>', 'hero_desc': 'Ваш единый центр документации, прошивок и техподдержки.', 'card_fw_title': 'Добро пожаловать!', 'card_fw_desc': 'Добро пожаловать!', 'card_doc_title': 'Оставайтесь , скоро!', 'card_doc_desc': 'Оставайтесь , скоро!RUI.', 'card_ticket_title': 'Техподдержка', 'card_ticket_desc': 'Возникли проблемы? Свяжитесь со мной.', 'btn_download': 'Более >', 'btn_browse': 'Обзор >', 'btn_submit': 'Отправить >' }, 'kk': { 'lang_select': 'Тіл ▾', 'tech_support': 'Қолдау', 'menu_gnss': 'GNSS қабылдағыштары', 'menu_mobile': 'Мобильді картаға түсіру', 'menu_ag': 'Агронавигация', 'menu_marine': 'Теңіз геодезиясы', 'menu_uav': 'Ұшқышсыз жүйелер', 'menu_software': 'Бағдарламалар', 'link_manual': 'Нұсқаулық', 'link_firmware': 'Бағдарламалық жасақтама', 'link_software': 'Бағдарлама', 'link_faq': 'FAQ', 'hero_title': '<span>RUI’s</span> қолдау орталығы', 'hero_desc': 'Нұсқаулықтар, бағдарламалық жасақтама және көмек көрсету орталығы.', 'card_fw_title': 'Қош келдіңіз!', 'card_fw_desc': 'Қош келдіңіз!', 'card_doc_title': 'Хабардар болыңыз, жақын арада!', 'card_doc_desc': 'Хабардар болыңыз, жақын арада!', 'card_ticket_title': 'Қолдау билеті', 'card_ticket_desc': 'Мәселе бар ма? Инженерлерге сұрау жіберіңіз.', 'btn_download': 'Тағы >', 'btn_browse': 'Қарау >', 'btn_submit': 'Жіберу >' }, 'uz': { 'lang_select': 'Til ▾', 'tech_support': 'Yordam', 'menu_gnss': 'GNSS qabul qiluvchilar', 'menu_mobile': 'Mobil xaritalash', 'menu_ag': 'Qishloq xo\'jaligi', 'menu_marine': 'Dengiz geodeziyasi', 'menu_uav': 'UAV tizimlari', 'menu_software': 'Dasturlar', 'link_manual': 'Qo\'llanma', 'link_firmware': 'Mikrodastur', 'link_software': 'Dastur', 'link_faq': 'FAQ', 'hero_title': '<span>RUI"s</span> Yordam Markazi', 'hero_desc': 'Qo\'llanmalar va mikrodasturlar uchun yagona manzil.', 'card_fw_title': 'i93 Yangi mikrodastur', 'card_fw_desc': 'RUI i93 Visual IMU-RTK V2.1.0 chiqarildi.', 'card_doc_title': 'Hujjatlar kutubxonasi', 'card_doc_desc': 'Barcha RUI mahsulotlari uchun qo\'llanmalar.', 'card_ticket_title': 'Yordam so\'rovi', 'card_ticket_desc': 'Muammo bormi? Muhandislarimizga murojaat qiling.', 'btn_download': 'Yuklab olish >', 'btn_browse': 'Ko\'rish >', 'btn_submit': 'Yuborish >' }, 'mn': { 'lang_select': 'Хэл ▾', 'tech_support': 'Дэмжлэг', 'menu_gnss': 'GNSS Хүлээн авагч', 'menu_mobile': 'Хөдөлгөөнт зураглал', 'menu_ag': 'Хөдөө аж ахуй', 'menu_marine': 'Далайн хэмжилт', 'menu_uav': 'Нисгэгчгүй төхөөрөмж', 'menu_software': 'Програм', 'link_manual': 'Гарын авлага', 'link_firmware': 'Програм хангамж', 'link_software': 'Програм', 'link_faq': 'FAQ', 'hero_title': '<span>RUI"s</span> Дэмжлэгт тавтай морил', 'hero_desc': 'Гарын авлага, програм хангамж, техникийн туслалцааны нэгдсэн төв.', 'card_fw_title': 'Hi', 'card_fw_desc': 'Hi', 'card_doc_title': 'Stay tuned, soon!', 'card_doc_desc': 'Stay tuned, soon!', 'card_ticket_title': 'Тусламжийн хүсэлт', 'card_ticket_desc': 'Асуудал гарсан уу? Манай инженерүүдэд хандана уу.', 'btn_download': 'More >', 'btn_browse': 'Үзэх >', 'btn_submit': 'Илгээх >' }, 'ua': { 'lang_select': 'Мова ▾', 'tech_support': 'Технічна підтримка', 'menu_gnss': 'GNSS-приймачі', 'menu_mobile': 'Мобільне картографування', 'menu_ag': 'Агронавігація', 'menu_marine': 'Морські вимірювання', 'menu_uav': 'Системи БПЛА', 'menu_software': 'Програми', 'link_manual': 'Інструкції', 'link_firmware': 'Прошивка', 'link_software': 'Програма', 'link_faq': 'Часті запитання (FAQ)', 'hero_title': 'Ласкаво просимо до технічної підтримки <span>RUI</span>', 'hero_desc': 'Ваш єдиний центр для інструкцій, прошивок та технічної підтримки.', 'card_fw_title': 'Вітаємо', 'card_fw_desc': 'Ласкаво просимо', 'card_doc_title': 'Скоро з’явиться', 'card_doc_desc': 'Скоро з’явиться', 'card_ticket_title': 'Сервісна заявка', 'card_ticket_desc': 'Виникли проблеми? Звяжіться зі мною.', 'btn_download': 'Більше >', 'btn_browse': 'Переглянути >', 'btn_submit': 'Надіслати >' } };
-        function changeLanguage(langCode) { const dict = translations[langCode]; if (!dict) return; document.querySelectorAll('[data-i18n]').forEach(el => { const key = el.getAttribute('data-i18n'); if (dict[key]) { dict[key].includes('<') ? el.innerHTML = dict[key] : el.textContent = dict[key]; } }); }
-
-        // 5. 弹窗与搜索
-        function openFirmwareModal(productModel) { const modal = document.getElementById('firmwareModal'); const title = document.getElementById('modalTitle'); const list = document.getElementById('modalList'); title.textContent = productModel.toUpperCase() + ' DOWNLOADS'; list.innerHTML = ''; const data = firmwareDatabase[productModel]; if (!data || data.length === 0) { list.innerHTML = '<p style="text-align:center; color:#666;">Searching for data...</p>'; } else { data.forEach(item => { const row = document.createElement('div'); row.className = 'firmware-item'; row.innerHTML = `<div class="fw-info"><span class="fw-version">💾 ${item.version}</span><span class="fw-date">${item.date || ''}</span></div><a href="${item.url}" class="fw-download-btn" download>Download</a>`; list.appendChild(row); }); } modal.style.display = 'block'; }
-        function openManualModal(productModel) { const modal = document.getElementById('firmwareModal'); const title = document.getElementById('modalTitle'); const list = document.getElementById('modalList'); title.textContent = productModel.toUpperCase() + ' MANUALS'; list.innerHTML = ''; const data = manualDatabase[productModel]; if (!data || data.length === 0) { list.innerHTML = '<p style="text-align:center; color:#666;">No manuals found.</p>'; } else { data.forEach(item => { const row = document.createElement('div'); row.className = 'firmware-item'; row.innerHTML = `<div class="fw-info"><span class="fw-version">📄 ${item.title}</span><span class="fw-date">${item.date || ''}</span></div><a href="${item.url}" class="fw-download-btn" target="_blank">View</a>`; list.appendChild(row); }); } modal.style.display = 'block'; }
-        function closeModal() { document.getElementById('firmwareModal').style.display = 'none'; }
-        function openContactModal() { document.getElementById('contactModal').style.display = 'block'; }
-        function closeContactModal() { document.getElementById('contactModal').style.display = 'none'; }
-        function performSearch() { const query = document.getElementById('searchInput').value.trim().toLowerCase(); if (!query) { alert("Please enter a model name."); return; } if (firmwareDatabase[query] || manualDatabase[query]) { openSearchChoiceModal(query); } else { alert("Product not found (e.g. i93, CGO)."); } }
-        document.getElementById('searchInput').addEventListener("keypress", function(event) { if (event.key === "Enter") performSearch(); });
-        function openSearchChoiceModal(model) { const modal = document.getElementById('searchChoiceModal'); document.getElementById('searchResultTitle').textContent = "RESULT: " + model.toUpperCase(); const btnContainer = document.getElementById('searchResultBtns'); btnContainer.innerHTML = ''; const fwBtn = document.createElement('button'); fwBtn.className = 'search-btn'; fwBtn.innerHTML = '💾 Download Firmware / Software'; fwBtn.onclick = function() { document.getElementById('searchChoiceModal').style.display = 'none'; openFirmwareModal(model); }; btnContainer.appendChild(fwBtn); const docBtn = document.createElement('button'); docBtn.className = 'search-btn'; docBtn.innerHTML = '📄 View Manuals'; docBtn.onclick = function() { document.getElementById('searchChoiceModal').style.display = 'none'; openManualModal(model); }; btnContainer.appendChild(docBtn); modal.style.display = 'block'; }
-        function closeSearchChoiceModal() { document.getElementById('searchChoiceModal').style.display = 'none'; }
-        window.onclick = function(event) { if (event.target.classList.contains('modal')) { event.target.style.display = 'none'; } }
-        /* ------------------------------------------------
-   ✨ Hero 区域鼠标粒子拖尾特效 (Particle Engine)
-   ------------------------------------------------ */
-document.addEventListener('DOMContentLoaded', function() {
-    const canvas = document.getElementById('particleCanvas');
-    const ctx = canvas.getContext('2d');
-    const heroSection = document.getElementById('heroSection');
-    
-    let particlesArray = [];
-    
-    // 设置画布尺寸
-    function resizeCanvas() {
-        canvas.width = heroSection.offsetWidth;
-        canvas.height = heroSection.offsetHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    // 鼠标坐标对象
-    const mouse = {
-        x: null,
-        y: null
-    }
-
-    // 监听鼠标在 Hero 区域的移动
-    heroSection.addEventListener('mousemove', function(event) {
-        // 计算鼠标相对于 canvas 的位置
-        const rect = heroSection.getBoundingClientRect();
-        mouse.x = event.clientX - rect.left;
-        mouse.y = event.clientY - rect.top;
-        
-        // 每次移动生成几个粒子 (数字越大越密集)
-        for (let i = 0; i < 3; i++) {
-            particlesArray.push(new Particle());
-        }
-    });
-
-    // 粒子类
-    class Particle {
-        constructor() {
-            this.x = mouse.x;
-            this.y = mouse.y;
-            // 粒子大小随机
-            this.size = Math.random() * 4 + 1; 
-            // 粒子移动速度和方向 (随机扩散)
-            this.speedX = Math.random() * 3 - 1.5;
-            this.speedY = Math.random() * 3 - 1.5;
-            // 颜色：随机选橙色或半透明白
-            this.color = Math.random() > 0.5 ? 'rgba(243, 112, 33, 1)' : 'rgba(255, 255, 255, 0.8)';
-        }
-        
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-            // 粒子逐渐变小
-            if (this.size > 0.2) this.size -= 0.1;
-        }
-        
-        draw() {
-            ctx.fillStyle = this.color;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    // 动画循环
-    function handleParticles() {
-        // 每次重绘清空画布，但保留一点拖尾残影效果 (rgba 的 a 是关键)
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'; 
-        // 注意：这里用 clearRect 会完全清除，用 fillRect 会有长拖尾效果
-        // 如果想要更干净的效果，用 ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-            particlesArray[i].draw();
-            
-            // 如果粒子太小，就删除它
-            if (particlesArray[i].size <= 0.3) {
-                particlesArray.splice(i, 1);
-                i--;
-            }
-        }
-        
-        // 连线效果 (可选：增加科技感)
-        connectParticles();
-        
-        requestAnimationFrame(handleParticles);
-    }
-
-    // (可选) 连接临近的粒子，形成网格感
-    function connectParticles() {
-        for (let a = 0; a < particlesArray.length; a++) {
-            for (let b = a; b < particlesArray.length; b++) {
-                let dx = particlesArray[a].x - particlesArray[b].x;
-                let dy = particlesArray[a].y - particlesArray[b].y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < 50) { // 距离小于50像素时连线
-                    ctx.strokeStyle = 'rgba(243, 112, 33, 0.2)'; // 淡橙色线
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                    ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                    ctx.stroke();
-                }
-            }
-        }
-    }
-
-    // 启动动画
-    handleParticles();
-});
-    </script>
-
-    <div id="firmwareModal" class="modal"><div class="modal-content"><div class="modal-header"><h3 id="modalTitle">DOWNLOADS</h3><span class="close-btn" onclick="closeModal()">&times;</span></div><div class="modal-body" id="modalList"></div></div></div>
+    <div id="firmwareModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">DOWNLOADS</h3>
+                <span class="close-btn" onclick="closeModal()">&times;</span>
+            </div>
+            <div class="modal-body" id="modalList"></div>
+        </div>
+    </div>
     
     <div id="contactModal" class="modal">
         <div class="modal-content">
@@ -292,20 +99,17 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="modal-body">
                 <p class="modal-subtitle">Choose a channel to start a conversation:</p>
-                
                 <div class="contact-grid">
                     <a href="https://t.me/ccccrui" target="_blank" class="contact-card telegram">
                         <span class="icon">✈️</span>
                         <strong>Telegram</strong>
                         <span>@ccccrui</span>
                     </a>
-
                     <a href="https://wa.me/79895775258" target="_blank" class="contact-card whatsapp">
                         <span class="icon">🟢</span>
                         <strong>WhatsApp</strong>
                         <span>+79895775258</span>
                     </a>
-
                     <a href="mailto:rui_chen@chcnav.com" class="contact-card email">
                         <span class="icon">📧</span>
                         <strong>Email</strong>
@@ -316,7 +120,20 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
     </div>
 
-    <div id="searchChoiceModal" class="modal"><div class="modal-content" style="max-width: 400px;"><div class="modal-header"><h3 id="searchResultTitle">SEARCH RESULT</h3><span class="close-btn" onclick="closeSearchChoiceModal()">&times;</span></div><div class="modal-body"><p>Select data type to access:</p><div id="searchResultBtns" class="search-actions"></div></div></div></div>
+    <div id="searchChoiceModal" class="modal">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 id="searchResultTitle">SEARCH RESULT</h3>
+                <span class="close-btn" onclick="closeSearchChoiceModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p>Select data type to access:</p>
+                <div id="searchResultBtns" class="search-actions"></div>
+            </div>
+        </div>
+    </div>
 
+    <script src="data.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
