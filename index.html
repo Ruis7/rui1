@@ -8,13 +8,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="snow-container">
+        <div class="snow"></div>
+        <div class="snow"></div>
+        <div class="snow"></div>
+    </div>
 
     <div class="bg-decorations">
         <div class="deco-grid-plane"></div>
         <div class="deco-contour-map"></div>
         <div class="deco-network"></div>
         <div class="deco-lidar-sweep"></div>
-        
+
         <div class="deco-item deco-target"></div>
         <div class="deco-item deco-satellite">🛰️</div>
         <div class="deco-item deco-uav">🚁</div>
@@ -52,6 +57,11 @@
         <h1 data-i18n="hero_title">欢迎来到 <span>RUI'S</span> 技术支持</h1>
         <p data-i18n="hero_desc">您的说明书、固件和技术支持一站式中心。</p>
         
+         <div class="new-year-loader">
+             <span>LOADING 2026...</span>
+              <div class="progress-bar"><div class="progress-fill"></div></div>
+         </div>
+
         <div class="search-container">
             <input type="text" id="searchInput" class="search-input" placeholder="Search Model (e.g. i93, CGO)...">
             <button class="search-btn" onclick="performSearch()">GO</button>
@@ -132,7 +142,25 @@
             </div>
         </div>
     </div>
+    <div class="festive-gift" onclick="openFestiveModal()" title="For You">
+    🎁
+    <div class="gift-glow"></div>
+</div>
 
+<div id="festiveModal" class="modal festive-modal">
+    <div class="modal-content festive-content">
+        <div class="modal-header festive-header">
+            <h3>✨ 2026 NEW YEAR ✨</h3>
+            <span class="close-btn" onclick="closeFestiveModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="festive-text" id="festiveText">
+                </div>
+            <div class="festive-decoration">🎆 🎇 🧨</div>
+        </div>
+    </div>
+</div>
+      
     <script src="data.js"></script>
     <script src="main.js"></script>
 </body>
