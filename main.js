@@ -49,15 +49,80 @@ window.addEventListener('click', function(e) {
 // ==========================================
 // 2. 国际化翻译 (I18n)
 // ==========================================
+// ==========================================
+// 2. 国际化翻译 (I18n)
+// ==========================================
 const translations = {
-    'zh': { 'lang_select': '语言 / Language ▾', 'menu_gnss': 'GNSS 接收机', 'menu_mobile': '移动测绘', 'menu_ag': '农业导航', 'menu_marine': '海洋测量', 'menu_uav': '无人机系统', 'menu_software': '软件', 'link_manual': '说明书', 'link_firmware': '固件', 'link_software': '软件', 'link_faq': 'FAQ', 'hero_title': '欢迎来到 <span>RUI</span> 技术支持', 'hero_desc': '您的说明书、固件和技术支持一站式中心。', 'card_fw_title': '你好', 'card_fw_desc': '欢迎关注', 'card_doc_title': '敬请期待', 'card_doc_desc': '敬请期待', 'card_ticket_title': '售后工单', 'card_ticket_desc': '遇到技术难题？提交工单，我将为您解答。', 'btn_download': '更多 >', 'btn_browse': '浏览 >', 'btn_submit': '提交 >' },
-    'en': { 'lang_select': 'Language ▾', 'menu_gnss': 'GNSS Receivers', 'menu_mobile': 'Mobile Mapping', 'menu_ag': 'Agriculture', 'menu_marine': 'Marine Survey', 'menu_uav': 'UAV Systems', 'menu_software': 'Software', 'link_manual': 'Manual', 'link_firmware': 'Firmware', 'link_software': 'Software', 'link_faq': 'FAQ', 'hero_title': 'Welcome to <span>RUI’s</span> Support', 'hero_desc': 'Your one-stop destination for Manuals, Firmware, and Assistance.', 'card_fw_title': 'Hello', 'card_fw_desc': 'HI))', 'card_doc_title': 'Stay tuned', 'card_doc_desc': 'Stay tuned, soon!', 'card_ticket_title': 'Support Ticket', 'card_ticket_desc': 'Facing issues? Submit a ticket to our engineers.', 'btn_download': 'More >', 'btn_browse': 'Browse >', 'btn_submit': 'Submit >' },
-    'ru': { 'lang_select': 'Язык ▾', 'menu_gnss': 'ГНСС Приемники', 'menu_mobile': 'Мобильное картографирование', 'menu_ag': 'Агронавигация', 'menu_marine': 'Морская геодезия', 'menu_uav': 'БПЛА', 'menu_software': 'Программы', 'link_manual': 'Инструкция', 'link_firmware': 'Прошивка', 'link_software': 'Программа', 'link_faq': 'FAQ', 'hero_title': 'Добро пожаловать в <span>RUI‘s</span>', 'hero_desc': 'Ваш единый центр документации, прошивок и техподдержки.', 'card_fw_title': 'Добро пожаловать!', 'card_fw_desc': 'Добро пожаловать!', 'card_doc_title': 'Скоро!', 'card_doc_desc': 'Оставайтесь с нами.', 'card_ticket_title': 'Техподдержка', 'card_ticket_desc': 'Возникли проблемы? Свяжитесь со мной.', 'btn_download': 'Более >', 'btn_browse': 'Обзор >', 'btn_submit': 'Отправить >' },
-    // 简化其他语言以节省篇幅，实际使用保持完整
-    'kk': { 'lang_select': 'Тіл ▾', 'hero_title': '<span>RUI’s</span> қолдау орталығы', 'hero_desc': 'Нұсқаулықтар, бағдарламалық жасақтама орталығы.', 'card_ticket_title': 'Қолдау', 'btn_submit': 'Жіберу >' },
-    'uz': { 'lang_select': 'Til ▾', 'hero_title': '<span>RUI"s</span> Yordam Markazi', 'hero_desc': 'Qo\'llanmalar va mikrodasturlar uchun yagona manzil.', 'card_ticket_title': 'Yordam', 'btn_submit': 'Yuborish >' },
-    'mn': { 'lang_select': 'Хэл ▾', 'hero_title': '<span>RUI"s</span> Дэмжлэг', 'hero_desc': 'Гарын авлага, техникийн туслалцааны нэгдсэн төв.', 'card_ticket_title': 'Тусламж', 'btn_submit': 'Илгээх >' },
-    'ua': { 'lang_select': 'Мова ▾', 'hero_title': 'Підтримка <span>RUI</span>', 'hero_desc': 'Ваш єдиний центр для інструкцій та прошивок.', 'card_ticket_title': 'Заявка', 'btn_submit': 'Надіслати >' }
+    'zh': { 
+        'lang_select': '语言 / Language ▾', 
+        'menu_gnss': 'GNSS 接收机', 'menu_mobile': '移动测绘', 'menu_ag': '农业导航', 'menu_marine': '海洋测量', 'menu_uav': '无人机系统', 'menu_software': '软件', 
+        'link_manual': '说明书', 'link_firmware': '固件', 'link_software': '软件', 'link_faq': 'FAQ', 
+        'hero_title': '欢迎来到 <span>RUI</span> 技术支持', 'hero_desc': '您的说明书、固件和技术支持一站式中心。', 
+        'card_fw_title': '你好', 'card_fw_desc': '欢迎关注', 
+        'card_doc_title': '敬请期待', 'card_doc_desc': '敬请期待', 
+        'card_ticket_title': '售后工单', 'card_ticket_desc': '遇到技术难题？提交工单，我将为您解答。', 
+        'btn_download': '更多 >', 'btn_browse': '浏览 >', 'btn_submit': '提交 >' 
+    },
+    'en': { 
+        'lang_select': 'Language ▾', 
+        'menu_gnss': 'GNSS Receivers', 'menu_mobile': 'Mobile Mapping', 'menu_ag': 'Agriculture', 'menu_marine': 'Marine Survey', 'menu_uav': 'UAV Systems', 'menu_software': 'Software', 
+        'link_manual': 'Manual', 'link_firmware': 'Firmware', 'link_software': 'Software', 'link_faq': 'FAQ', 
+        'hero_title': 'Welcome to <span>RUI’s</span> Support', 'hero_desc': 'Your one-stop destination for Manuals, Firmware, and Assistance.', 
+        'card_fw_title': 'Hello', 'card_fw_desc': 'HI))', 
+        'card_doc_title': 'Stay tuned', 'card_doc_desc': 'Stay tuned, soon!', 
+        'card_ticket_title': 'Support Ticket', 'card_ticket_desc': 'Facing issues? Submit a ticket to our engineers.', 
+        'btn_download': 'More >', 'btn_browse': 'Browse >', 'btn_submit': 'Submit >' 
+    },
+    'ru': { 
+        'lang_select': 'Язык ▾', 
+        'menu_gnss': 'ГНСС Приемники', 'menu_mobile': 'Мобильное картографирование', 'menu_ag': 'Агронавигация', 'menu_marine': 'Морская геодезия', 'menu_uav': 'БПЛА', 'menu_software': 'Программы', 
+        'link_manual': 'Инструкция', 'link_firmware': 'Прошивка', 'link_software': 'Программа', 'link_faq': 'FAQ', 
+        'hero_title': 'Добро пожаловать в <span>RUI‘s</span>', 'hero_desc': 'Ваш единый центр документации, прошивок и техподдержки.', 
+        'card_fw_title': 'Добро пожаловать!', 'card_fw_desc': 'Добро пожаловать!', 
+        'card_doc_title': 'Скоро!', 'card_doc_desc': 'Оставайтесь с нами.', 
+        'card_ticket_title': 'Техподдержка', 'card_ticket_desc': 'Возникли проблемы? Свяжитесь со мной.', 
+        'btn_download': 'Более >', 'btn_browse': 'Обзор >', 'btn_submit': 'Отправить >' 
+    },
+    'kk': { 
+        'lang_select': 'Тіл ▾', 
+        'menu_gnss': 'GNSS қабылдағыштары', 'menu_mobile': 'Мобильді карталау', 'menu_ag': 'Агронавигация', 'menu_marine': 'Гидрография', 'menu_uav': 'ҰАА жүйелері', 'menu_software': 'Бағдарламалар',
+        'link_manual': 'Нұсқаулық', 'link_firmware': 'Бағдарлама', 'link_software': 'Бағдарлама', 'link_faq': 'FAQ',
+        'hero_title': '<span>RUI’s</span> қолдау орталығы', 'hero_desc': 'Нұсқаулықтар, микробағдарламалар және техникалық қолдау орталығы.', 
+        'card_fw_title': 'Сәлем', 'card_fw_desc': 'Қош келдіңіз', 
+        'card_doc_title': 'Күтіңіз', 'card_doc_desc': 'Жақында шығады', 
+        'card_ticket_title': 'Қолдау билеті', 'card_ticket_desc': 'Техникалық мәселелер бар ма? Билет жіберіңіз.', 
+        'btn_download': 'Толығырақ >', 'btn_browse': 'Шолу >', 'btn_submit': 'Жіберу >' 
+    },
+    'uz': { 
+        'lang_select': 'Til ▾', 
+        'menu_gnss': 'GNSS qabul qiluvchilar', 'menu_mobile': 'Mobil xaritalash', 'menu_ag': 'Qishloq xo\'jaligi', 'menu_marine': 'Dengiz geodeziyasi', 'menu_uav': 'PUA tizimlari', 'menu_software': 'Dasturlar',
+        'link_manual': 'Qo\'llanma', 'link_firmware': 'Mikrodastur', 'link_software': 'Dastur', 'link_faq': 'FAQ',
+        'hero_title': '<span>RUI"s</span> Yordam Markazi', 'hero_desc': 'Qo\'llanmalar va mikrodasturlar uchun yagona manzil.', 
+        'card_fw_title': 'Salom', 'card_fw_desc': 'Xush kelibsiz', 
+        'card_doc_title': 'Tez orada', 'card_doc_desc': 'Kuting', 
+        'card_ticket_title': 'Yordam chiptasi', 'card_ticket_desc': 'Muammo bormi? So\'rov yuboring.', 
+        'btn_download': 'Ko\'proq >', 'btn_browse': 'Ko\'rish >', 'btn_submit': 'Yuborish >' 
+    },
+    'mn': { 
+        'lang_select': 'Хэл ▾', 
+        'menu_gnss': 'GNSS Хүлээн авагч', 'menu_mobile': 'Мобайл зураглал', 'menu_ag': 'Хөдөө аж ахуй', 'menu_marine': 'Далайн хэмжилт', 'menu_uav': 'Нисгэгчгүй онгоц', 'menu_software': 'Програм',
+        'link_manual': 'Гарын авлага', 'link_firmware': 'Програм', 'link_software': 'Програм', 'link_faq': 'FAQ',
+        'hero_title': '<span>RUI"s</span> Дэмжлэг', 'hero_desc': 'Гарын авлага, техникийн туслалцааны нэгдсэн төв.', 
+        'card_fw_title': 'Сайн байна уу', 'card_fw_desc': 'Тавтай морил', 
+        'card_doc_title': 'Тун удахгүй', 'card_doc_desc': 'Хүлээж байгаарай', 
+        'card_ticket_title': 'Тусламжийн хүсэлт', 'card_ticket_desc': 'Асуудал гарсан уу? Бидэнд хандана уу.', 
+        'btn_download': 'Дэлгэрэнгүй >', 'btn_browse': 'Харах >', 'btn_submit': 'Илгээх >' 
+    },
+    'ua': { 
+        'lang_select': 'Мова ▾', 
+        'menu_gnss': 'GNSS Приймачі', 'menu_mobile': 'Мобільне картографування', 'menu_ag': 'Агронавігація', 'menu_marine': 'Морська геодезія', 'menu_uav': 'БПЛА', 'menu_software': 'Програми',
+        'link_manual': 'Інструкція', 'link_firmware': 'Прошивка', 'link_software': 'Програма', 'link_faq': 'FAQ',
+        'hero_title': 'Підтримка <span>RUI</span>', 'hero_desc': 'Ваш єдиний центр для інструкцій та прошивок.', 
+        'card_fw_title': 'Вітаю', 'card_fw_desc': 'Ласкаво просимо', 
+        'card_doc_title': 'Скоро', 'card_doc_desc': 'Чекайте оновлень', 
+        'card_ticket_title': 'Техпідтримка', 'card_ticket_desc': 'Є питання? Надішліть запит.', 
+        'btn_download': 'Більше >', 'btn_browse': 'Огляд >', 'btn_submit': 'Надіслати >' 
+    }
 };
 
 window.changeLanguage = function(langCode) {
