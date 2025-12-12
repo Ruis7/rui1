@@ -516,6 +516,247 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     background: #2c3e50; color: #ccc; margin-top: 80px;
 }
 .site-footer a:hover { color: var(--primary-color); }
+/* =========================================
+   ❄️ 2026 混合飘雪 (雪花 + 彩色光点)
+   ========================================= */
+.snow-container {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none; z-index: 9999; overflow: hidden;
+}
+
+/* 定义SVG雪花图案 */
+:root {
+    --flake: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.9)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12h20M12 2v20M20 20l-4-4M4 4l4 4M4 20l4-4M20 4l-4 4'/%3E%3C/svg%3E");
+}
+
+.snow {
+    position: absolute; top: -100%; left: 0; width: 100%; height: 100%;
+    background-repeat: no-repeat;
+    animation: snowFall linear infinite;
+}
+
+/* 混合图层 1：大雪花 + 鲜艳的品牌色圆点 
+   (既有形状，又有你原来的橙色/青色点缀)
+*/
+.snow:nth-child(1) {
+    background-image: 
+        var(--flake),                                                                  /* 1. 雪花 */
+        radial-gradient(circle, rgba(243, 112, 33, 0.9) 4px, transparent 5px),         /* 2. 橙色圆点 (实心) */
+        var(--flake),                                                                  /* 3. 雪花 */
+        radial-gradient(circle, rgba(0, 240, 255, 0.8) 3px, transparent 4px),          /* 4. 青色圆点 */
+        var(--flake);                                                                  /* 5. 雪花 */
+        
+    /* 对应上面5个元素的坐标 */
+    background-position: 10% 10%, 25% 30%, 50% 15%, 75% 40%, 90% 20%;
+    /* 对应上面5个元素的大小 */
+    background-size: 25px, 10px 10px, 30px, 8px 8px, 20px;
+    
+    animation-duration: 12s;
+}
+
+/* 混合图层 2：小雪花 + 白色虚化圆点 
+   (制造背景氛围)
+*/
+.snow:nth-child(2) {
+    background-image: 
+        var(--flake),
+        radial-gradient(circle, rgba(255, 255, 255, 0.6) 2px, transparent 3px),        /* 白色小点 */
+        var(--flake),
+        radial-gradient(circle, rgba(255, 255, 255, 0.5) 3px, transparent 4px);        /* 白色柔光点 */
+        
+    background-position: 5% 60%, 30% 85%, 60% 55%, 85% 75%;
+    background-size: 15px, 6px 6px, 18px, 8px 8px;
+    
+    animation-duration: 20s;
+    animation-delay: -5s;
+    opacity: 0.8;
+}
+
+/* 混合图层 3：快速划过的微粒
+   (主要是微小的点，模拟飞舞的碎雪)
+*/
+.snow:nth-child(3) {
+    background-image: 
+        radial-gradient(circle, rgba(255, 255, 255, 0.8) 1px, transparent 2px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.6) 1.5px, transparent 2.5px);
+        
+    background-position: 40% 20%, 70% 90%;
+    background-size: 4px 4px, 5px 5px;
+    
+    animation-duration: 8s;
+    animation-delay: -2s;
+}
+
+@keyframes snowFall {
+    0% { transform: translateY(-100%) translateX(-10px) rotate(0deg); }
+    50% { transform: translateY(0%) translateX(10px) rotate(180deg); }
+    100% { transform: translateY(100%) translateX(-10px) rotate(360deg); }
+}
+/* =========================================
+   🎅 Logo 节日装饰
+   ========================================= */
+.logo {
+    position: relative;
+    /* 防止帽子被切掉 */
+    overflow: visible; 
+}
+
+.logo::after {
+    content: '🎅'; /* 或者用 '🎉' 代表新年 */
+    position: absolute;
+    top: -15px;
+    right: -10px;
+    font-size: 24px;
+    transform: rotate(15deg);
+    filter: drop-shadow(0 0 5px rgba(255,0,0,0.5));
+    animation: hatBounce 2s infinite ease-in-out;
+}
+
+@keyframes hatBounce {
+    0%, 100% { transform: rotate(15deg) translateY(0); }
+    50% { transform: rotate(25deg) translateY(-3px); }
+}
+
+/* =========================================
+   🎁 悬浮礼物盒
+   ========================================= */
+.festive-gift {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: var(--bg-dark-glass);
+    border: 1px solid var(--primary-color);
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 30px;
+    cursor: pointer;
+    z-index: 2000;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    transition: all 0.3s;
+    animation: giftFloat 3s ease-in-out infinite;
+}
+
+.festive-gift:hover {
+    transform: scale(1.1) rotate(10deg);
+    box-shadow: 0 0 30px var(--primary-glow);
+    background: var(--primary-color);
+}
+
+/* 礼物底部的光圈 */
+.gift-glow {
+    position: absolute; width: 100%; height: 100%;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    opacity: 0;
+    animation: ripple 2s infinite;
+}
+
+@keyframes giftFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes ripple {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.5); opacity: 0; }
+}
+
+/* =========================================
+   ⏳ 2026 加载条
+   ========================================= */
+.new-year-loader {
+    margin: 20px auto;
+    width: 200px;
+    text-align: center;
+    font-family: var(--font-tech);
+    color: var(--tech-cyan);
+}
+.new-year-loader span {
+    font-size: 12px; letter-spacing: 2px;
+    text-shadow: 0 0 5px var(--tech-cyan);
+}
+.progress-bar {
+    width: 100%; height: 4px;
+    background: rgba(255,255,255,0.1);
+    margin-top: 5px;
+    border-radius: 2px;
+    overflow: hidden;
+}
+.progress-fill {
+    width: 98%; /* 假装快加载完了 */
+    height: 100%;
+    background: var(--tech-cyan);
+    box-shadow: 0 0 10px var(--tech-cyan);
+    animation: load2026 2s infinite linear;
+}
+
+@keyframes load2026 {
+    0% { width: 90%; opacity: 0.5; }
+    50% { width: 98%; opacity: 1; }
+    100% { width: 90%; opacity: 0.5; }
+}
+
+/* =========================================
+   🎁 2026 新年礼物与深情弹窗样式
+   ========================================= */
+
+/* 1. 悬浮礼物盒动画 */
+.festive-gift {
+    position: fixed; bottom: 40px; right: 40px;
+    width: 60px; height: 60px;
+    background: rgba(20, 20, 20, 0.9);
+    border: 2px solid var(--primary-color);
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    font-size: 32px; cursor: pointer; z-index: 2000;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    animation: giftFloat 3s ease-in-out infinite;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.festive-gift:hover {
+    transform: scale(1.15) rotate(10deg);
+    background: var(--primary-color);
+    box-shadow: 0 0 40px var(--primary-glow);
+}
+.gift-glow {
+    position: absolute; width: 100%; height: 100%;
+    border-radius: 50%; border: 2px solid var(--primary-color);
+    opacity: 0; animation: ripple 2s infinite; pointer-events: none;
+}
+
+/* 2. 祝福弹窗特别样式 (温暖系) */
+.festive-content {
+    background: linear-gradient(135deg, #1a0b00 0%, #2d1a0e 100%) !important; /* 深棕暖色背景 */
+    border: 1px solid #ffd700 !important; /* 金色边框 */
+    box-shadow: 0 0 50px rgba(255, 215, 0, 0.2) !important;
+    text-align: center;
+}
+.festive-header {
+    border-bottom: 1px solid rgba(255, 215, 0, 0.3) !important;
+    background: rgba(255, 215, 0, 0.05) !important;
+}
+.festive-header h3 {
+    color: #ffd700 !important; /* 金色标题 */
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    width: 100%; text-align: center;
+}
+.festive-text {
+    font-size: 16px; line-height: 1.8;
+    color: #e0e0e0; font-style: italic;
+    padding: 20px 10px;
+    font-family: 'Georgia', serif; /* 使用衬线体增加文学感 */
+}
+.festive-decoration {
+    font-size: 30px; margin-top: 20px; letter-spacing: 20px;
+    opacity: 0.8; animation: pulse 2s infinite;
+}
+
+/* 动画定义 */
+@keyframes giftFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes ripple { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.6); opacity: 0; } }
+@keyframes pulse { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
 
 @keyframes modalPop { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
 @keyframes slideDown { 0% { opacity: 0; transform: translate(-50%, -10px); } 100% { opacity: 1; transform: translate(-50%, 0); } }
