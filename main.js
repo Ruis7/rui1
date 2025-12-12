@@ -495,3 +495,62 @@ document.addEventListener('DOMContentLoaded', function() {
     
     observer.observe(heroSection);
 });
+// ==========================================
+// 6. 新年祝福逻辑 (New Year Greetings)
+// ==========================================
+
+// 1. 定义深情祝福文案库
+const holidayGreetings = {
+    'zh': "时光折叠成代码，记录着我们共同走过的路。感谢这一年里，您对 RUI 的每一次信任与点击。<br><br>2026年，愿我们的连接比卫星信号更稳定，愿您的生活如星河般璀璨，所愿皆所得。<br><br>新年快乐，老朋友。",
+    
+    'en': "Lines of code cannot capture the flow of time. Thank you for your trust and company along this journey.<br><br>In 2026, may our connection be stronger than any signal, and your life shine as bright as the galaxy.<br><br>Wishing you peace and innovation. Happy New Year.",
+    
+    'ru': "Код не может передать тепло человеческого общения. Спасибо за ваше доверие и поддержку в этом путешествии.<br><br>Пусть в 2026 году наша связь будет надежнее спутникового сигнала, а ваша жизнь сияет ярче звезд.<br><br>С Новым годом! Желаю успеха и стабильности.",
+    
+    'kk': "Уақыт код жолдарына сыймайды. Осы сапардағы сеніміңіз бен қолдауыңызға рахмет.<br><br>2026 жылы байланысымыз кез келген сигналдан күшті болсын, ал өміріңіз жұлдыздай жарқырасын.<br><br>Жаңа жылыңызбен! Бейбітшілік пен табыс тілеймін.",
+    
+    'uz': "Kod satrlari vaqt oqimini to'xtata olmaydi. Ushbu sayohatda ishonchingiz va hamrohligingiz uchun tashakkur.<br><br>2026-yilda aloqamiz har qanday signaldan kuchliroq bo'lsin, hayotingiz esa galaktikadek porlasin.<br><br>Yangi yilingiz bilan! Sizga tinchlik va farovonlik tilayman.",
+    
+    'mn': "Кодны мөрүүд цаг хугацааны урсгалыг илэрхийлж чадахгүй. Бидэнд итгэл хүлээлгэн хамт байсан танд баярлалаа.<br><br>2026 онд бидний холбоо ямар ч дохионоос илүү хүчтэй байж, таны амьдрал од эрхэс мэт гэрэлтэх болтугай.<br><br>Шинэ оны мэнд хүргэye!",
+    
+    'ua': "Рядки коду не можуть передати плин часу. Дякуємо за вашу довіру та підтримку на цьому шляху.<br><br>Нехай у 2026 році наш зв'язок буде міцнішим за будь-який сигнал, а ваше життя сяє як галактика.<br><br>З Новим роком! Бажаю миру та інновацій."
+};
+
+// 2. 追踪当前语言 (需要在 changeLanguage 中更新它)
+let currentAppLanguage = 'zh'; // 默认中文
+
+// ⚠️ 重要：请找到原本的 window.changeLanguage 函数，
+// 在函数内部的第一行加上：currentAppLanguage = langCode;
+// 如果不想修改原函数，可以使用下面的覆盖写法（建议直接粘贴到文件末尾）：
+
+const originalChangeLanguage = window.changeLanguage;
+window.changeLanguage = function(langCode) {
+    currentAppLanguage = langCode; // 更新当前语言记录
+    if(originalChangeLanguage) originalChangeLanguage(langCode); // 调用原有逻辑
+};
+
+// 3. 打开祝福弹窗
+window.openFestiveModal = function() {
+    const modal = document.getElementById('festiveModal');
+    const textContainer = document.getElementById('festiveText');
+    
+    // 获取对应语言的祝福，如果没有则默认英文
+    const message = holidayGreetings[currentAppLanguage] || holidayGreetings['en'];
+    
+    textContainer.innerHTML = message;
+    modal.style.display = 'block';
+    
+    // 简单的入场特效
+    textContainer.style.opacity = 0;
+    setTimeout(() => {
+        textContainer.style.transition = 'opacity 1s ease';
+        textContainer.style.opacity = 1;
+    }, 100);
+
+    if (document.body.style.overflow) document.body.style.overflow = 'hidden';
+};
+
+window.closeFestiveModal = function() {
+    document.getElementById('festiveModal').style.display = 'none';
+    document.body.style.overflow = '';
+};
