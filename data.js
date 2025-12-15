@@ -99,6 +99,9 @@ const firmwareDatabase = {
     'cgo': [
         { version:'CGO-2.3.3', date:'2025-09-24', url:'https://chcnavigation.jianguoyun.com/p/DVZOVyEQtq_UCxjR6IsGIAA'},
     ], 
+   'coprocess':[
+      { version:'Coprocess 2025-1.0.3', date:'2025-12-05', url:'https://chcnavigation.jianguoyun.com/p/DTQwb9gQ4vqeDBjTzJIGIAA'}
+   ],
     'mapcloud': [ { version:'MapCloud', date:'2024-10-21', url:'https://chcnavigation.jianguoyun.com/p/DZv4an8Qtq_UCxjw_uEFIAA'},], 
     'gnsstool': [ { version:'GNSSTool', date:'2025-01-29', url:'https://chcnavigation.jianguoyun.com/p/DUcLJogQtq_UCxjk3JUGIAA'},], 
     'sharelocation': [ { version:'Sharelocation', date:'', url:'https://chcnavigation.jianguoyun.com/p/DX8QMLAQtq_UCxjs3JUGIAA'},], 
@@ -187,6 +190,7 @@ const faqDatabase = {
         { title:'How to share one antenna between P5U and P5S.mp4',  date:'2024-10-25',url:'https://chcnavigation.jianguoyun.com/p/DdUgAWMQtq_UCxjcxeMFIAA'},
     ]
 };
+
 
 
 
