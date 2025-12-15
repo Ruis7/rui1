@@ -37,7 +37,7 @@ const menuConfig = [
         categoryId: 'software',
         labelKey: 'menu_software',
         type: 'software', 
-        items: [ 'landstar','cgo', 'mapcloud', 'gnsstool', 'sharelocation', 'rinex', 'cgbas']
+        items: [ 'landstar','cgo','CoProcess 2025', 'mapcloud', 'gnsstool', 'sharelocation', 'rinex', 'cgbas']
     }
 ];
 
@@ -187,5 +187,6 @@ const faqDatabase = {
         { title:'How to share one antenna between P5U and P5S.mp4',  date:'2024-10-25',url:'https://chcnavigation.jianguoyun.com/p/DdUgAWMQtq_UCxjcxeMFIAA'},
     ]
 };
+
 
 
