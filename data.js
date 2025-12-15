@@ -13,7 +13,7 @@ const menuConfig = [
         categoryId: 'mobile',
         labelKey: 'menu_mobile',
         type: 'hardware',
-        items: ['lt60h', 'lt700', 'lt700h', 'lt800', 'lt800h', 'landstar']
+        items: ['lt60h', 'lt700', 'lt700h', 'lt800', 'lt800h']
     },
     {
         categoryId: 'ag',
@@ -37,7 +37,7 @@ const menuConfig = [
         categoryId: 'software',
         labelKey: 'menu_software',
         type: 'software', 
-        items: ['cgo', 'mapcloud', 'gnsstool', 'sharelocation', 'rinex', 'cgbas']
+        items: [ 'landstar','cgo', 'mapcloud', 'gnsstool', 'sharelocation', 'rinex', 'cgbas']
     }
 ];
 
@@ -187,4 +187,5 @@ const faqDatabase = {
         { title:'How to share one antenna between P5U and P5S.mp4',  date:'2024-10-25',url:'https://chcnavigation.jianguoyun.com/p/DdUgAWMQtq_UCxjcxeMFIAA'},
     ]
 };
+
 
