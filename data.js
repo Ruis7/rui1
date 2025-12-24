@@ -87,7 +87,7 @@ const firmwareDatabase = {
     'lt800': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DSTkp2YQtq_UCxjjyJUGIAA' } ],
     'lt800h': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DUlm69oQtq_UCxjkyJUGIAA' } ],
     'landstar': [
-       
+        { version: 'LandStar-8.2.0.1.20251211', date: '2025-12-12', url: 'https://chcnavigation.jianguoyun.com/p/DadrWnsQtq_UCxii7ZUGIAA' },
         { version: 'LandStar-8.2.0.1.20251117', date: '2025-11-17', url: 'https://chcnavigation.jianguoyun.com/p/DfkEdLsQtq_UCxjBtZMGIAA' },
         { version: 'LandStar-8.2.0.1.20250925', date: '2025-09-25', url: 'https://chcnavigation.jianguoyun.com/p/Dc6dTGQQtq_UCxiSi4wGIAA' },
         { version: 'LandStar-8.2.0.1.20250827', date: '2025-08-27', url: 'https://chcnavigation.jianguoyun.com/p/DQWn0G0Qtq_UCxjjjogGIAA' }
@@ -191,6 +191,7 @@ const faqDatabase = {
         { title:'How to share one antenna between P5U and P5S.mp4',  date:'2024-10-25',url:'https://chcnavigation.jianguoyun.com/p/DdUgAWMQtq_UCxjcxeMFIAA'},
     ]
 };
+
 
 
 
