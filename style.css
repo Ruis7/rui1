@@ -663,40 +663,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     100% { transform: scale(1.5); opacity: 0; }
 }
 
-/* =========================================
-   ⏳ 2026 加载条
-   ========================================= */
-.new-year-loader {
-    margin: 20px auto;
-    width: 200px;
-    text-align: center;
-    font-family: var(--font-tech);
-    color: var(--tech-cyan);
-}
-.new-year-loader span {
-    font-size: 12px; letter-spacing: 2px;
-    text-shadow: 0 0 5px var(--tech-cyan);
-}
-.progress-bar {
-    width: 100%; height: 4px;
-    background: rgba(255,255,255,0.1);
-    margin-top: 5px;
-    border-radius: 2px;
-    overflow: hidden;
-}
-.progress-fill {
-    width: 98%; /* 假装快加载完了 */
-    height: 100%;
-    background: var(--tech-cyan);
-    box-shadow: 0 0 10px var(--tech-cyan);
-    animation: load2026 2s infinite linear;
-}
-
-@keyframes load2026 {
-    0% { width: 90%; opacity: 0.5; }
-    50% { width: 98%; opacity: 1; }
-    100% { width: 90%; opacity: 0.5; }
-}
 
 /* =========================================
    🎁 2026 新年礼物与深情弹窗样式
