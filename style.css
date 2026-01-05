@@ -25,7 +25,7 @@
     /* 边框 */
     --border-line: #e9ecef;
 
-    /* 字体栈 (新增) */
+    /* 字体栈 */
     --font-tech: ui-monospace, SFMono-Regular, "SF Mono", "Cascadia Code", "Consolas", "Courier New", monospace;
     --font-base: 'Segoe UI', 'Roboto', Helvetica, Arial, sans-serif;
 }
@@ -36,14 +36,13 @@ body {
     padding: 0;
     color: var(--text-main);
     background-color: var(--bg-page);
-    overflow-x: hidden; /* 防止装饰元素撑开横向滚动 */
+    overflow-x: hidden;
 }
 
 a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
 ul { list-style: none; padding: 0; margin: 0; }
 button { outline: none; cursor: pointer; }
 
-/* 增强无障碍访问：键盘焦点样式 */
 button:focus-visible, a:focus-visible, input:focus-visible {
     outline: 2px solid var(--primary-color);
     outline-offset: 2px;
@@ -60,7 +59,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     overflow: hidden;
 }
 
-/* 等高线 */
 .deco-contour-map {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     background-image: 
@@ -69,7 +67,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     opacity: 0.6;
 }
 
-/* 3D 网格平面 */
 .deco-grid-plane {
     position: absolute; bottom: -10%; left: -10%; width: 120%; height: 50%;
     background-image:
@@ -80,13 +77,11 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     opacity: 0.5;
 }
 
-/* 装饰图标 */
 .deco-item { position: absolute; opacity: 0.05; filter: grayscale(1); z-index: -1; }
 .deco-satellite { top: 12%; right: 15%; font-size: 50px; animation: float 10s ease-in-out infinite; }
 .deco-uav { top: 35%; left: -80px; font-size: 36px; animation: flyPass 40s linear infinite; }
 .deco-total-station { bottom: 15%; right: 20%; font-size: 42px; }
 
-/* 地球线框 */
 .deco-earth-wireframe {
     position: absolute; bottom: 40px; left: 40px; width: 140px; height: 140px;
     border-radius: 50%;
@@ -166,8 +161,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 /* =========================================
    4. 🚀 科技感二级菜单 (Tech Dropdown)
    ========================================= */
-
-/* 仅在 PC 端应用科技浮窗样式 */
 @media screen and (min-width: 769px) {
     .dropdown-menu {
         display: none; 
@@ -175,30 +168,21 @@ button:focus-visible, a:focus-visible, input:focus-visible {
         top: 80px; 
         left: 50%; 
         transform: translateX(-50%);
-        
-        /* 核心：深色磨砂背景 */
         background: var(--bg-dark-glass);
         backdrop-filter: blur(12px);
-        
-        /* 边框：青色微光 + 顶部橙色高亮 */
         border: 1px solid var(--tech-cyan-dim);
         border-top: 2px solid var(--primary-color);
-        
         min-width: 400px;
         padding: 0; 
         z-index: 1002;
         box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-        
-        /* 机械切角效果 */
         clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
         border-radius: 0 0 10px 0;
-        
         animation: slideDown 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     
     .nav-item:hover .dropdown-menu { display: block; }
 
-    /* 单个产品行 */
     .product-group {
         display: flex; 
         justify-content: space-between; 
@@ -210,10 +194,9 @@ button:focus-visible, a:focus-visible, input:focus-visible {
         overflow: hidden;
     }
 
-    /* 悬停光效：左侧橙色光标 + 背景扫光 */
     .product-group:hover {
         background: linear-gradient(90deg, rgba(243, 112, 33, 0.1) 0%, transparent 100%);
-        padding-left: 35px; /* 滑动动画 */
+        padding-left: 35px;
     }
     .product-group::before {
         content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
@@ -223,7 +206,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     }
     .product-group:hover::before { opacity: 1; }
 
-    /* 产品名称 */
     .product-title {
         font-family: var(--font-base);
         font-weight: 700; 
@@ -233,12 +215,11 @@ button:focus-visible, a:focus-visible, input:focus-visible {
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
     }
 
-    /* 链接区域 */
     .product-links {
         font-size: 12px; 
         color: rgba(255, 255, 255, 0.4); 
         display: flex; 
-        gap: 15px; /* 控制链接间距 */
+        gap: 15px;
     }
 
     .product-links a {
@@ -249,13 +230,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
         transition: 0.3s;
     }
 
-    /* 链接悬停高亮 */
     .product-links a:hover { color: var(--primary-color); text-shadow: 0 0 8px var(--primary-color); }
-    /* 说明书链接特殊高亮 (青色) */
     .product-links a:hover[data-i18n*="manual"] { color: var(--tech-cyan); text-shadow: 0 0 8px var(--tech-cyan); }
 }
 
-/* 📱 移动端菜单适配 */
 @media screen and (max-width: 768px) {
     .main-header { padding: 0 20px; height: 70px; }
     .mobile-menu-toggle {
@@ -274,12 +252,10 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     .nav-item { width: 100%; text-align: left; border-bottom: 1px solid #eee; }
     .nav-link { display: block; padding: 18px 25px; color: #333; font-weight: 600; }
     
-    /* 移动端下拉菜单还原为普通列表 */
     .dropdown-menu { 
         display: none; position: static; background: #f4f6f8; 
         box-shadow: inset 0 5px 10px rgba(0,0,0,0.05);
         padding: 0; border-left: 4px solid #ddd;
-        /* 重置 PC 端样式 */
         clip-path: none; border: none; min-width: auto;
     }
     
@@ -392,7 +368,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     position: relative; overflow: hidden;
     animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     
-    /* 四角装饰线条 (背景渐变模拟) */
     background-image: 
         linear-gradient(var(--tech-cyan), var(--tech-cyan)), linear-gradient(var(--tech-cyan), var(--tech-cyan)), 
         linear-gradient(var(--tech-cyan), var(--tech-cyan)), linear-gradient(var(--tech-cyan), var(--tech-cyan));
@@ -410,10 +385,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 .modal-header h3 {
     margin: 0; color: var(--tech-cyan);
-    
-    /* 🚀 字体优化：终端等宽字体 */
     font-family: var(--font-tech);
-    
     text-transform: uppercase;
     letter-spacing: 1.5px; 
     font-size: 18px;
@@ -444,7 +416,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     transform: translateX(5px);
 }
 
-/* 版本号：等宽代码字体 */
 .fw-version { 
     color: #fff; 
     font-family: var(--font-tech); 
@@ -452,7 +423,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     font-weight: 600;
 }
 
-/* 日期：普通无衬线字体，形成对比 */
 .fw-date { 
     color: rgba(255, 255, 255, 0.5); 
     font-family: var(--font-base);
@@ -460,7 +430,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 .firmware-item:hover .fw-date { color: var(--tech-cyan); }
 
-/* 下载按钮：发光实心块 */
 .fw-download-btn {
     background: transparent;
     border: 1px solid var(--primary-color);
@@ -476,7 +445,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     box-shadow: 0 0 15px var(--primary-glow);
 }
 
-/* 滚动条美化 (Webkit) */
 .modal-body::-webkit-scrollbar { width: 6px; }
 .modal-body::-webkit-scrollbar-track { background: #0b1015; }
 .modal-body::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
@@ -524,7 +492,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     pointer-events: none; z-index: 9999; overflow: hidden;
 }
 
-/* 定义SVG雪花图案 */
 :root {
     --flake: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.9)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12h20M12 2v20M20 20l-4-4M4 4l4 4M4 20l4-4M20 4l-4 4'/%3E%3C/svg%3E");
 }
@@ -535,54 +502,37 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     animation: snowFall linear infinite;
 }
 
-/* 混合图层 1：大雪花 + 鲜艳的品牌色圆点 
-   (既有形状，又有你原来的橙色/青色点缀)
-*/
 .snow:nth-child(1) {
     background-image: 
-        var(--flake),                                                                  /* 1. 雪花 */
-        radial-gradient(circle, rgba(243, 112, 33, 0.9) 4px, transparent 5px),         /* 2. 橙色圆点 (实心) */
-        var(--flake),                                                                  /* 3. 雪花 */
-        radial-gradient(circle, rgba(0, 240, 255, 0.8) 3px, transparent 4px),          /* 4. 青色圆点 */
-        var(--flake);                                                                  /* 5. 雪花 */
-        
-    /* 对应上面5个元素的坐标 */
+        var(--flake),                                                                 
+        radial-gradient(circle, rgba(243, 112, 33, 0.9) 4px, transparent 5px),         
+        var(--flake),                                                                  
+        radial-gradient(circle, rgba(0, 240, 255, 0.8) 3px, transparent 4px),          
+        var(--flake);                                                                  
     background-position: 10% 10%, 25% 30%, 50% 15%, 75% 40%, 90% 20%;
-    /* 对应上面5个元素的大小 */
     background-size: 25px, 10px 10px, 30px, 8px 8px, 20px;
-    
     animation-duration: 12s;
 }
 
-/* 混合图层 2：小雪花 + 白色虚化圆点 
-   (制造背景氛围)
-*/
 .snow:nth-child(2) {
     background-image: 
         var(--flake),
-        radial-gradient(circle, rgba(255, 255, 255, 0.6) 2px, transparent 3px),        /* 白色小点 */
+        radial-gradient(circle, rgba(255, 255, 255, 0.6) 2px, transparent 3px),        
         var(--flake),
-        radial-gradient(circle, rgba(255, 255, 255, 0.5) 3px, transparent 4px);        /* 白色柔光点 */
-        
+        radial-gradient(circle, rgba(255, 255, 255, 0.5) 3px, transparent 4px);        
     background-position: 5% 60%, 30% 85%, 60% 55%, 85% 75%;
     background-size: 15px, 6px 6px, 18px, 8px 8px;
-    
     animation-duration: 20s;
     animation-delay: -5s;
     opacity: 0.8;
 }
 
-/* 混合图层 3：快速划过的微粒
-   (主要是微小的点，模拟飞舞的碎雪)
-*/
 .snow:nth-child(3) {
     background-image: 
         radial-gradient(circle, rgba(255, 255, 255, 0.8) 1px, transparent 2px),
         radial-gradient(circle, rgba(255, 255, 255, 0.6) 1.5px, transparent 2.5px);
-        
     background-position: 40% 20%, 70% 90%;
     background-size: 4px 4px, 5px 5px;
-    
     animation-duration: 8s;
     animation-delay: -2s;
 }
@@ -592,17 +542,14 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     50% { transform: translateY(0%) translateX(10px) rotate(180deg); }
     100% { transform: translateY(100%) translateX(-10px) rotate(360deg); }
 }
-/* =========================================
-   🎅 Logo 节日装饰
-   ========================================= */
+
 .logo {
     position: relative;
-    /* 防止帽子被切掉 */
     overflow: visible; 
 }
 
 .logo::after {
-    content: '🎅'; /* 或者用 '🎉' 代表新年 */
+    content: '🎅'; 
     position: absolute;
     top: -15px;
     right: -10px;
@@ -710,7 +657,6 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 
 @keyframes blinkText { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 
-/* 移动端适配 */
 @media screen and (max-width: 768px) {
     .update-toast { width: 90%; right: -120%; }
     .update-toast.show { right: 5%; bottom: 20px; }
