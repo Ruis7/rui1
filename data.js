@@ -223,10 +223,24 @@ const faqDatabase = {
     ]
 };
 
-
-
-
-
-
-
-
+/* 5️⃣ 新闻公告数据库 (News Database) - 新增 */
+const newsDatabase = [
+    {
+        title: 'LandStar 8.2 Major Update Released',
+        date: '2025-12-12',
+        tag: 'Software', 
+        desc: 'New feature: Cloud cadastre support and improved UI performance.'
+    },
+    {
+        title: 'Server Maintenance Notice',
+        date: '2025-11-30',
+        tag: 'Service',
+        desc: 'MapCloud server will be under maintenance on Dec 1st from 00:00 to 04:00 UTC.'
+    },
+    {
+        title: 'New Firmware for i93',
+        date: '2025-10-15',
+        tag: 'Firmware',
+        desc: 'Optimized IMU initialization speed in challenging environments.'
+    }
+];
