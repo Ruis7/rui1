@@ -1,13 +1,11 @@
 /**
  * RUI Support Center - Main Logic
- * 包含了菜单生成、翻译、弹窗逻辑、智能搜索和性能优化的粒子特效
  */
 
 // ==========================================
 // 1. 全局辅助函数 (Global Utilities)
 // ==========================================
 
-// 将函数绑定到 window 对象，以便 HTML 中的 onclick 可以调用
 window.toggleMenu = function() {
     document.getElementById('navMenu').classList.toggle('active');
 };
@@ -33,22 +31,17 @@ window.toggleLanguage = function(event) {
     document.getElementById('langDropdown').classList.toggle('show');
 };
 
-// 点击页面其他地方关闭下拉菜单
 window.addEventListener('click', function(e) {
     const dropdown = document.getElementById('langDropdown');
     if (dropdown && dropdown.classList.contains('show')) {
         dropdown.classList.remove('show');
     }
-    // 关闭搜索结果等
     if (e.target.classList.contains('modal')) {
         e.target.style.display = 'none';
         document.body.style.overflow = '';
     }
 });
 
-// ==========================================
-// 2. 国际化翻译 (I18n)
-// ==========================================
 // ==========================================
 // 2. 国际化翻译 (I18n)
 // ==========================================
@@ -159,7 +152,7 @@ function initMenu() {
         const navLink = document.createElement('div');
         navLink.className = 'nav-link';
         navLink.setAttribute('data-i18n', category.labelKey); 
-        navLink.textContent = category.labelKey; // 默认值
+        navLink.textContent = category.labelKey; 
         navLink.onclick = function() { window.toggleSubmenu(this); }; 
         navItem.appendChild(navLink);
 
@@ -186,7 +179,6 @@ function initMenu() {
         }
         navMenu.appendChild(navItem);
     });
-    // 默认初始化为中文
     window.changeLanguage('zh'); 
 }
 
@@ -194,7 +186,6 @@ function initMenu() {
 // 4. 弹窗与智能搜索逻辑 (Smart Search & Modals)
 // ==========================================
 
-// 滚动锁定辅助
 function lockScroll() { document.body.style.overflow = 'hidden'; }
 function unlockScroll() { document.body.style.overflow = ''; }
 
@@ -231,7 +222,7 @@ window.openFirmwareModal = function(productModel) {
 };
 
 window.openManualModal = function(productModel) {
-    const modal = document.getElementById('firmwareModal'); // 复用同一个弹窗结构
+    const modal = document.getElementById('firmwareModal');
     const title = document.getElementById('modalTitle');
     const list = document.getElementById('modalList');
     
@@ -259,24 +250,20 @@ window.openManualModal = function(productModel) {
     modal.style.display = 'block';
     lockScroll();
 };
-/* main.js - 添加到文件末尾或 openManualModal 函数下方 */
 
 window.openFaqModal = function(productModel) {
-    const modal = document.getElementById('firmwareModal'); // 复用同一个弹窗结构
+    const modal = document.getElementById('firmwareModal'); 
     const title = document.getElementById('modalTitle');
     const list = document.getElementById('modalList');
     
-    // 1. 设置标题
     title.textContent = productModel.toUpperCase() + ' FAQ';
     list.innerHTML = '';
     
-    // 2. 安全获取数据 (防止 faqDatabase 未定义报错)
     let data = [];
     if (typeof faqDatabase !== 'undefined' && faqDatabase[productModel]) {
         data = faqDatabase[productModel];
     }
     
-    // 3. 渲染列表
     if (!data || data.length === 0) {
         list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No FAQs found.</p>';
     } else {
@@ -294,10 +281,10 @@ window.openFaqModal = function(productModel) {
         });
     }
     
-    // 4. 显示弹窗并锁定滚动
     modal.style.display = 'block';
     if (document.body.style.overflow) document.body.style.overflow = 'hidden';
 };
+
 window.closeModal = function() {
     document.getElementById('firmwareModal').style.display = 'none';
     unlockScroll();
@@ -344,7 +331,6 @@ window.closeSearchChoiceModal = function() {
     unlockScroll();
 };
 
-// 智能搜索核心
 window.performSearch = function() {
     const input = document.getElementById('searchInput');
     const query = input.value.trim().toLowerCase();
@@ -354,19 +340,16 @@ window.performSearch = function() {
         return;
     }
 
-    // 获取所有可用型号
     const allModels = new Set([
         ...Object.keys(firmwareDatabase),
         ...Object.keys(manualDatabase)
     ]);
 
-    // 1. 精确匹配
     if (allModels.has(query)) {
         openSearchChoiceModal(query);
         return;
     }
 
-    // 2. 模糊匹配 (包含)
     const partialMatch = Array.from(allModels).find(m => m.includes(query));
     
     if (partialMatch) {
@@ -376,7 +359,6 @@ window.performSearch = function() {
     }
 };
 
-// 绑定回车搜索
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
@@ -384,8 +366,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (event.key === "Enter") window.performSearch();
         });
     }
-    // 初始化菜单
-    initMenu();
 });
 
 // ==========================================
@@ -411,13 +391,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const mouse = { x: null, y: null };
 
-    // 交互事件
     heroSection.addEventListener('mousemove', function(event) {
         const rect = heroSection.getBoundingClientRect();
         mouse.x = event.clientX - rect.left;
         mouse.y = event.clientY - rect.top;
         
-        // 移动端生成更少粒子以优化性能
         const count = window.innerWidth < 768 ? 1 : 3;
         for (let i = 0; i < count; i++) {
             particlesArray.push(new Particle());
@@ -466,7 +444,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleParticles() {
-        // 使用 clearRect 性能更好，若需长拖尾可改用 fillRect 覆盖半透明层
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         
         for (let i = 0; i < particlesArray.length; i++) {
@@ -485,7 +462,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // 使用 IntersectionObserver 仅在可见时渲染，节省电量
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -502,14 +478,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     observer.observe(heroSection);
 });
+
 // ==========================================
 // 6. 智能更新推送逻辑 (Auto Update Notification)
 // ==========================================
 
-// 比较日期的辅助函数
 function parseDate(dateStr) {
-    if (!dateStr) return new Date(0); // 如果没有日期，返回最旧的时间
-    // 处理可能的不同格式，这里假设格式主要是 YYYY-MM-DD
+    if (!dateStr) return new Date(0); 
     return new Date(dateStr);
 }
 
@@ -518,13 +493,12 @@ function findLatestFirmware() {
     let latestDate = new Date(0);
     let latestModel = '';
 
-    // 1. 扫描固件数据库
     if (typeof firmwareDatabase !== 'undefined') {
         for (const [model, list] of Object.entries(firmwareDatabase)) {
             if (Array.isArray(list)) {
                 list.forEach(item => {
                     const itemDate = parseDate(item.date);
-                    if (itemDate > latestDate && item.url) { // 必须有下载链接才推送
+                    if (itemDate > latestDate && item.url) { 
                         latestDate = itemDate;
                         latestItem = item;
                         latestModel = model;
@@ -538,21 +512,18 @@ function findLatestFirmware() {
 }
 
 function initUpdateToast() {
-    // 检查是否已经手动关闭过 (本次会话)
     if (sessionStorage.getItem('rui_toast_closed')) return;
 
     const result = findLatestFirmware();
-    if (!result.item) return; // 如果没找到任何数据，不显示
+    if (!result.item) return; 
 
     const { item, model } = result;
     
-    // 填充数据
     document.getElementById('toastModel').textContent = model.toUpperCase();
     document.getElementById('toastVer').textContent = item.version;
     document.getElementById('toastDate').textContent = 'Released: ' + item.date;
     document.getElementById('toastLink').href = item.url;
     
-    // 延迟 2.5 秒后滑入显示
     setTimeout(() => {
         document.getElementById('updateToast').classList.add('show');
     }, 2500);
@@ -561,40 +532,27 @@ function initUpdateToast() {
 window.closeUpdateToast = function() {
     const toast = document.getElementById('updateToast');
     toast.classList.remove('show');
-    // 记录状态，防止刷新页面重复弹出 (关闭浏览器后失效)
     sessionStorage.setItem('rui_toast_closed', 'true');
 };
 
-// 在页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', function() {
-    // 原有的初始化
-    initMenu(); 
-    
-    // 新的推送初始化
-    initUpdateToast();
-});
 // ==========================================
-// 7. 公告弹窗逻辑 (News Modal) - 新增
+// 7. 公告弹窗逻辑 (News Modal)
 // ==========================================
 window.openNewsModal = function() {
-    const modal = document.getElementById('firmwareModal'); // 复用现有弹窗
+    const modal = document.getElementById('firmwareModal'); 
     const title = document.getElementById('modalTitle');
     const list = document.getElementById('modalList');
     
-    // 1. 设置标题
     title.textContent = 'LATEST NEWS & LOGS';
     list.innerHTML = '';
     
-    // 2. 检查数据
     if (typeof newsDatabase === 'undefined' || newsDatabase.length === 0) {
         list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No news available.</p>';
     } else {
-        // 3. 渲染列表
         newsDatabase.forEach(item => {
             const row = document.createElement('div');
-            row.className = 'firmware-item'; // 复用现有样式
+            row.className = 'firmware-item'; 
             
-            // 根据标签类型设置不同颜色
             let tagColor = '#999';
             let borderColor = 'rgba(153,153,153,0.3)';
             
@@ -619,7 +577,12 @@ window.openNewsModal = function() {
         });
     }
     
-    // 4. 显示弹窗
     modal.style.display = 'block';
     if(document.body.style.overflow) document.body.style.overflow = 'hidden';
 };
+
+// 页面加载入口 (Merged Init)
+document.addEventListener('DOMContentLoaded', function() {
+    initMenu(); 
+    initUpdateToast();
+});
