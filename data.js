@@ -165,20 +165,50 @@ const faqDatabase = {
         { title:'How to export static data', date:'2024-12-10',url:'https://chcnavigation.jianguoyun.com/p/DZ1Yjg4Qtq_UCxjn5ZUGIAA'}
     ],
     'i85':[],
-    'i83':[],
-    'i76':[],
-    'i73':[],
-    'lt60h':[],
+    'i83':[
+        { title :'I83 FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/DUvXYUcQtq_UCxir-JgGIAA'}
+    ],
+    'i76':[
+        { title :'I76 FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/DeBXH_MQtq_UCxit-JgGIAA'}
+    ],
+    'i73':[
+        { title :'I73 FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/DUWzeSUQtq_UCxijq5MGIAA'}
+    ],
+    'lt60h':[
+        { title :'LT60H FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/DR-iwC8Qtq_UCxiv9sAFIAA'}
+    ],
     'lt700':[],
-    'lt700h':[],
-    'lt800':[],
-    'lt800h':[],
-    'nx510':[],
+    'lt700h':[
+        { title :'LT700H FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/DWmyZrsQtq_UCxiy-JgGIAA'}
+    ],
+    'lt800':[
+        { title :'I800 FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/DR-iwC8Qtq_UCxiv9sAFIAA'}
+    ],
+    'lt800h':[
+         { title :'I800H FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/Db0fusAQtq_UCxi2_vsFIAA'}
+    ],
+    'nx510':[
+        { title:'NX510 FAQ', date:'2024-12-15',url:'https://chcnavigation.jianguoyun.com/p/DRFVOTkQtq_UCxi3-JgGIAA'}
+    ],
     'apache3':[],
-    'apache4':[],
-    'apache6':[],
-    'landstar': [],
-    'cgo': [],
+    'apache4':[
+        { title:'Apache4 FAQ', date:'2025-02-15',url:'https://chcnavigation.jianguoyun.com/p/Dc_9DiMQtq_UCxjc2JEGIAA'}
+    ],
+    'apache6':[
+        { title:'Apache6 FAQ', date:'2025-09-10',url:'https://chcnavigation.jianguoyun.com/p/DT1iVfoQtq_UCxi6-JgGIAA'}
+    ],
+    'x500':[
+        { title:'X500 FAQ', date:'2024-11-20',url:'https://chcnavigation.jianguoyun.com/p/DXGR6kwQ4vqeDBjGipYGIAA'}
+    ],
+    'landstar': [
+        { title:'FAQ LandStar software', date:'2024-12-12',url:'https://chcnavigation.jianguoyun.com/p/DVUAd74Qtq_UCxi9-JgGIAA'},
+    ],
+    'cgo': [
+        { title:'FAQ-CGO software', date:'2025-01-15',url:'https://chcnavigation.jianguoyun.com/p/DSbdnjoQtq_UCxit7tQFIAA'},
+    ],
+    'coprocess': [
+        { title:'FAQ-Coprocess software', date:'2025-12-10',url:'https://chcnavigation.jianguoyun.com/p/DbNVtpEQ4vqeDBjMipYGIAA'},
+    ],
     'mapcloud': [], 
     'gnsstool': [], 
     'sharelocation': [], 
@@ -192,9 +222,6 @@ const faqDatabase = {
         { title:'How to share one antenna between P5U and P5S.mp4',  date:'2024-10-25',url:'https://chcnavigation.jianguoyun.com/p/DdUgAWMQtq_UCxjcxeMFIAA'},
     ]
 };
-
-
-
 
 
 
