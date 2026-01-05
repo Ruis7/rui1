@@ -618,105 +618,102 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 
 /* =========================================
-   🎁 悬浮礼物盒
+   🚀 智能推送卡片 (Smart Update Toast)
    ========================================= */
-.festive-gift {
+.update-toast {
     position: fixed;
     bottom: 30px;
-    right: 30px;
-    width: 60px;
-    height: 60px;
-    background: var(--bg-dark-glass);
-    border: 1px solid var(--primary-color);
-    border-radius: 50%;
-    display: flex; justify-content: center; align-items: center;
-    font-size: 30px;
-    cursor: pointer;
-    z-index: 2000;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    transition: all 0.3s;
-    animation: giftFloat 3s ease-in-out infinite;
+    right: -400px; /* 初始隐藏在屏幕右侧 */
+    width: 320px;
+    background: rgba(11, 16, 21, 0.95); /* 深色背景 */
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--tech-cyan); /* 青色边框 */
+    border-left: 4px solid var(--primary-color); /* 左侧橙色高亮 */
+    border-radius: 6px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 240, 255, 0.1);
+    z-index: 9999;
+    font-family: var(--font-base);
+    transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 弹性滑入动画 */
+    overflow: hidden;
 }
 
-.festive-gift:hover {
-    transform: scale(1.1) rotate(10deg);
-    box-shadow: 0 0 30px var(--primary-glow);
-    background: var(--primary-color);
+.update-toast.show {
+    right: 30px; /* 滑入显示位置 */
 }
 
-/* 礼物底部的光圈 */
-.gift-glow {
-    position: absolute; width: 100%; height: 100%;
-    border-radius: 50%;
-    border: 2px solid var(--primary-color);
-    opacity: 0;
-    animation: ripple 2s infinite;
+/* 装饰背景网格 */
+.update-toast::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px; pointer-events: none; z-index: -1;
 }
 
-@keyframes giftFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+.toast-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-@keyframes ripple {
-    0% { transform: scale(1); opacity: 0.8; }
-    100% { transform: scale(1.5); opacity: 0; }
+.toast-title {
+    color: var(--primary-color);
+    font-size: 12px; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase;
+    animation: blinkText 2s infinite;
 }
 
-
-/* =========================================
-   🎁 2026 新年礼物与深情弹窗样式
-   ========================================= */
-
-/* 1. 悬浮礼物盒动画 */
-.festive-gift {
-    position: fixed; bottom: 40px; right: 40px;
-    width: 60px; height: 60px;
-    background: rgba(20, 20, 20, 0.9);
-    border: 2px solid var(--primary-color);
-    border-radius: 50%;
-    display: flex; justify-content: center; align-items: center;
-    font-size: 32px; cursor: pointer; z-index: 2000;
-    box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    animation: giftFloat 3s ease-in-out infinite;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+.close-toast {
+    color: #888; cursor: pointer; font-size: 20px; line-height: 1;
+    transition: 0.3s;
 }
-.festive-gift:hover {
-    transform: scale(1.15) rotate(10deg);
-    background: var(--primary-color);
-    box-shadow: 0 0 40px var(--primary-glow);
-}
-.gift-glow {
-    position: absolute; width: 100%; height: 100%;
-    border-radius: 50%; border: 2px solid var(--primary-color);
-    opacity: 0; animation: ripple 2s infinite; pointer-events: none;
+.close-toast:hover { color: #fff; }
+
+.toast-body { padding: 20px; }
+
+.toast-model {
+    color: #fff; font-size: 18px; font-weight: 700;
+    margin-bottom: 5px; text-transform: uppercase;
+    font-family: var(--font-tech);
 }
 
-/* 2. 祝福弹窗特别样式 (温暖系) */
-.festive-content {
-    background: linear-gradient(135deg, #1a0b00 0%, #2d1a0e 100%) !important; /* 深棕暖色背景 */
-    border: 1px solid #ffd700 !important; /* 金色边框 */
-    box-shadow: 0 0 50px rgba(255, 215, 0, 0.2) !important;
-    text-align: center;
+.toast-version {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
 }
-.festive-header {
-    border-bottom: 1px solid rgba(255, 215, 0, 0.3) !important;
-    background: rgba(255, 215, 0, 0.05) !important;
+
+#toastVer { color: var(--tech-cyan); font-family: var(--font-tech); font-size: 14px; }
+
+.toast-tag {
+    background: var(--primary-color); color: #fff;
+    font-size: 10px; padding: 2px 6px; border-radius: 2px; font-weight: bold;
 }
-.festive-header h3 {
-    color: #ffd700 !important; /* 金色标题 */
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-    width: 100%; text-align: center;
+
+.toast-date {
+    color: #888; font-size: 12px; margin-bottom: 15px;
 }
-.festive-text {
-    font-size: 16px; line-height: 1.8;
-    color: #e0e0e0; font-style: italic;
-    padding: 20px 10px;
-    font-family: 'Georgia', serif; /* 使用衬线体增加文学感 */
+
+.toast-btn {
+    display: block; width: 100%; text-align: center;
+    padding: 10px 0;
+    background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent);
+    border: 1px solid var(--tech-cyan);
+    color: var(--tech-cyan);
+    font-size: 13px; font-weight: bold; text-transform: uppercase;
+    transition: 0.3s; text-decoration: none;
 }
-.festive-decoration {
-    font-size: 30px; margin-top: 20px; letter-spacing: 20px;
-    opacity: 0.8; animation: pulse 2s infinite;
+
+.toast-btn:hover {
+    background: var(--tech-cyan); color: #000;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+@keyframes blinkText { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+    .update-toast { width: 90%; right: -120%; }
+    .update-toast.show { right: 5%; bottom: 20px; }
 }
 
 /* 动画定义 */
