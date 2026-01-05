@@ -1,625 +1,729 @@
-/**
- * RUI Support Center - Main Logic
- * 包含了菜单生成、翻译、弹窗逻辑、智能搜索和性能优化的粒子特效
- */
-
-// ==========================================
-// 1. 全局辅助函数 (Global Utilities)
-// ==========================================
-
-// 将函数绑定到 window 对象，以便 HTML 中的 onclick 可以调用
-window.toggleMenu = function() {
-    document.getElementById('navMenu').classList.toggle('active');
-};
-
-window.toggleSubmenu = function(element) {
-    if (window.innerWidth <= 768) {
-        const dropdown = element.nextElementSibling;
-        if (dropdown && dropdown.classList.contains('dropdown-menu')) {
-            if (dropdown.style.display === 'block') {
-                dropdown.style.display = 'none';
-                element.style.color = 'inherit';
-            } else {
-                document.querySelectorAll('.dropdown-menu').forEach(d => d.style.display = 'none');
-                dropdown.style.display = 'block';
-                element.style.color = 'var(--primary-color)';
-            }
-        }
-    }
-};
-
-window.toggleLanguage = function(event) {
-    event.stopPropagation();
-    document.getElementById('langDropdown').classList.toggle('show');
-};
-
-// 点击页面其他地方关闭下拉菜单
-window.addEventListener('click', function(e) {
-    const dropdown = document.getElementById('langDropdown');
-    if (dropdown && dropdown.classList.contains('show')) {
-        dropdown.classList.remove('show');
-    }
-    // 关闭搜索结果等
-    if (e.target.classList.contains('modal')) {
-        e.target.style.display = 'none';
-        document.body.style.overflow = '';
-    }
-});
-
-// ==========================================
-// 2. 国际化翻译 (I18n)
-// ==========================================
-// ==========================================
-// 2. 国际化翻译 (I18n)
-// ==========================================
-const translations = {
-    'zh': { 
-        'lang_select': '语言 / Language ▾', 
-        'menu_gnss': 'GNSS 接收机', 'menu_mobile': '移动测绘', 'menu_ag': '农业导航', 'menu_marine': '海洋测量', 'menu_uav': '无人机系统', 'menu_software': '软件', 
-        'link_manual': '说明书', 'link_firmware': '固件', 'link_software': '软件', 'link_faq': 'FAQ', 
-        'hero_title': '欢迎来到 <span>RUI</span> 技术支持', 'hero_desc': '您的说明书、固件和技术支持一站式中心。', 
-        'card_fw_title': '你好', 'card_fw_desc': '欢迎关注', 
-        'card_doc_title': '最新公告', 
-        'card_doc_desc': '查看固件更新日志、服务器维护通知及重要新闻。',
-        'card_ticket_title': '售后工单', 'card_ticket_desc': '遇到技术难题？提交工单，我将为您解答。', 
-        'btn_download': '更多 >', 'btn_browse': '浏览 >', 'btn_submit': '提交 >' 
-    },
-    'en': { 
-        'lang_select': 'Language ▾', 
-        'menu_gnss': 'GNSS Receivers', 'menu_mobile': 'Mobile Mapping', 'menu_ag': 'Agriculture', 'menu_marine': 'Marine Survey', 'menu_uav': 'UAV Systems', 'menu_software': 'Software', 
-        'link_manual': 'Manual', 'link_firmware': 'Firmware', 'link_software': 'Software', 'link_faq': 'FAQ', 
-        'hero_title': 'Welcome to <span>RUI’s</span> Support', 'hero_desc': 'Your one-stop destination for Manuals, Firmware, and Assistance.', 
-        'card_fw_title': 'Hello', 'card_fw_desc': 'HI))', 
-        'card_doc_title': 'Latest News', 
-        'card_doc_desc': 'Firmware changelogs, server maintenance, and updates.',
-        'card_ticket_title': 'Support Ticket', 'card_ticket_desc': 'Facing issues? Submit a ticket to our engineers.', 
-        'btn_download': 'More >', 'btn_browse': 'Browse >', 'btn_submit': 'Submit >' 
-    },
-    'ru': { 
-        'lang_select': 'Язык ▾', 
-        'menu_gnss': 'ГНСС Приемники', 'menu_mobile': 'Мобильное картографирование', 'menu_ag': 'Агронавигация', 'menu_marine': 'Морская геодезия', 'menu_uav': 'БПЛА', 'menu_software': 'Программы', 
-        'link_manual': 'Инструкция', 'link_firmware': 'Прошивка', 'link_software': 'Программа', 'link_faq': 'FAQ', 
-        'hero_title': 'Добро пожаловать в <span>RUI‘s</span>', 'hero_desc': 'Ваш единый центр документации, прошивок и техподдержки.', 
-        'card_fw_title': 'Добро пожаловать!', 'card_fw_desc': 'Добро пожаловать!', 
-        'card_doc_title': 'Новости', 
-        'card_doc_desc': 'Журнал обновлений и уведомления о техобслуживании.', 
-        'card_ticket_title': 'Техподдержка', 'card_ticket_desc': 'Возникли проблемы? Свяжитесь со мной.', 
-        'btn_download': 'Более >', 'btn_browse': 'Обзор >', 'btn_submit': 'Отправить >' 
-    },
-    'kk': { 
-        'lang_select': 'Тіл ▾', 
-        'menu_gnss': 'GNSS қабылдағыштары', 'menu_mobile': 'Мобильді карталау', 'menu_ag': 'Агронавигация', 'menu_marine': 'Гидрография', 'menu_uav': 'ҰАА жүйелері', 'menu_software': 'Бағдарламалар',
-        'link_manual': 'Нұсқаулық', 'link_firmware': 'Бағдарлама', 'link_software': 'Бағдарлама', 'link_faq': 'FAQ',
-        'hero_title': '<span>RUI’s</span> қолдау орталығы', 'hero_desc': 'Нұсқаулықтар, микробағдарламалар және техникалық қолдау орталығы.', 
-        'card_fw_title': 'Сәлем', 'card_fw_desc': 'Қош келдіңіз', 
-        'card_doc_title': 'Жаңалықтар', 
-        'card_doc_desc': 'Жаңартулар мен техникалық қызмет көрсету туралы хабарламалар.', 
-        'card_ticket_title': 'Қолдау билеті', 'card_ticket_desc': 'Техникалық мәселелер бар ма? Билет жіберіңіз.', 
-        'btn_download': 'Толығырақ >', 'btn_browse': 'Шолу >', 'btn_submit': 'Жіберу >' 
-    },
-    'uz': { 
-        'lang_select': 'Til ▾', 
-        'menu_gnss': 'GNSS qabul qiluvchilar', 'menu_mobile': 'Mobil xaritalash', 'menu_ag': 'Qishloq xo\'jaligi', 'menu_marine': 'Dengiz geodeziyasi', 'menu_uav': 'PUA tizimlari', 'menu_software': 'Dasturlar',
-        'link_manual': 'Qo\'llanma', 'link_firmware': 'Mikrodastur', 'link_software': 'Dastur', 'link_faq': 'FAQ',
-        'hero_title': '<span>RUI"s</span> Yordam Markazi', 'hero_desc': 'Qo\'llanmalar va mikrodasturlar uchun yagona manzil.', 
-        'card_fw_title': 'Salom', 'card_fw_desc': 'Xush kelibsiz', 
-        'card_doc_title': 'Yangiliklar', 
-        'card_doc_desc': 'Yangilanishlar va server xizmat ko\'rsatish xabarlari.',
-        'card_ticket_title': 'Yordam chiptasi', 'card_ticket_desc': 'Muammo bormi? So\'rov yuboring.', 
-        'btn_download': 'Ko\'proq >', 'btn_browse': 'Ko\'rish >', 'btn_submit': 'Yuborish >' 
-    },
-    'mn': { 
-        'lang_select': 'Хэл ▾', 
-        'menu_gnss': 'GNSS Хүлээн авагч', 'menu_mobile': 'Мобайл зураглал', 'menu_ag': 'Хөдөө аж ахуй', 'menu_marine': 'Далайн хэмжилт', 'menu_uav': 'Нисгэгчгүй онгоц', 'menu_software': 'Програм',
-        'link_manual': 'Гарын авлага', 'link_firmware': 'Програм', 'link_software': 'Програм', 'link_faq': 'FAQ',
-        'hero_title': '<span>RUI"s</span> Дэмжлэг', 'hero_desc': 'Гарын авлага, техникийн туслалцааны нэгдсэн төв.', 
-        'card_fw_title': 'Сайн байна уу', 'card_fw_desc': 'Тавтай морил', 
-        'card_doc_title': 'Мэдээ', 
-        'card_doc_desc': 'Программын шинэчлэл болон серверийн засвар үйлчилгээ.',
-        'card_ticket_title': 'Тусламжийн хүсэлт', 'card_ticket_desc': 'Асуудал гарсан уу? Бидэнд хандана уу.', 
-        'btn_download': 'Дэлгэрэнгүй >', 'btn_browse': 'Харах >', 'btn_submit': 'Илгээх >' 
-    },
-    'ua': { 
-        'lang_select': 'Мова ▾', 
-        'menu_gnss': 'GNSS Приймачі', 'menu_mobile': 'Мобільне картографування', 'menu_ag': 'Агронавігація', 'menu_marine': 'Морська геодезія', 'menu_uav': 'БПЛА', 'menu_software': 'Програми',
-        'link_manual': 'Інструкція', 'link_firmware': 'Прошивка', 'link_software': 'Програма', 'link_faq': 'FAQ',
-        'hero_title': 'Підтримка <span>RUI</span>', 'hero_desc': 'Ваш єдиний центр для інструкцій та прошивок.', 
-        'card_fw_title': 'Вітаю', 'card_fw_desc': 'Ласкаво просимо', 
-        'card_doc_title': 'Новини', 
-        'card_doc_desc': 'Журнал оновлень та повідомлення про обслуговування.', 
-        'card_ticket_title': 'Техпідтримка', 'card_ticket_desc': 'Є питання? Надішліть запит.', 
-        'btn_download': 'Більше >', 'btn_browse': 'Огляд >', 'btn_submit': 'Надіслати >' 
-    }
-};
-
-window.changeLanguage = function(langCode) {
-    const dict = translations[langCode];
-    if (!dict) return;
-    document.querySelectorAll('[data-i18n]').forEach(el => {
-        const key = el.getAttribute('data-i18n');
-        if (dict[key]) {
-            dict[key].includes('<') ? el.innerHTML = dict[key] : el.textContent = dict[key];
-        }
-    });
-};
-
-// ==========================================
-// 3. 动态菜单生成
-// ==========================================
-function initMenu() {
-    const navMenu = document.getElementById('navMenu');
-    if (!navMenu || typeof menuConfig === 'undefined') return;
+/* =========================================
+   1. 全局配置 & 变量 (Variables)
+   ========================================= */
+:root {
+    /* 核心品牌色 */
+    --primary-color: #F37021;       /* 品牌橙 */
+    --primary-glow: rgba(243, 112, 33, 0.4);
     
-    navMenu.innerHTML = ''; 
+    /* 科技辅助色 */
+    --tech-cyan: #00f0ff;           /* 赛博青 (用于边框/高亮) */
+    --tech-cyan-dim: rgba(0, 240, 255, 0.15);
+    --tech-blue: #0056b3;           /* 深蓝 (用于背景装饰) */
+    
+    /* 文字颜色 */
+    --text-main: #333333;           /* 主页面深色字 */
+    --text-light: #ffffff;          /* 反白字 */
+    --text-gray: #666666;           /* 辅助灰 */
+    
+    /* 背景体系 */
+    --bg-page: #ffffff;             /* 页面白底 */
+    --bg-section: #f8f9fa;          /* 浅灰分区 */
+    --bg-dark-glass: rgba(11, 16, 21, 0.96); /* 深色磨砂玻璃 (用于菜单/弹窗) */
+    --hero-bg: radial-gradient(circle at 50% 30%, #232d38 0%, #0b1015 100%);
+    
+    /* 边框 */
+    --border-line: #e9ecef;
 
-    menuConfig.forEach(category => {
-        const navItem = document.createElement('div');
-        navItem.className = 'nav-item';
-
-        const navLink = document.createElement('div');
-        navLink.className = 'nav-link';
-        navLink.setAttribute('data-i18n', category.labelKey); 
-        navLink.textContent = category.labelKey; // 默认值
-        navLink.onclick = function() { window.toggleSubmenu(this); }; 
-        navItem.appendChild(navLink);
-
-        if (category.items && category.items.length > 0) {
-            const dropdown = document.createElement('div');
-            dropdown.className = 'dropdown-menu';
-
-            category.items.forEach(productId => {
-                const productGroup = document.createElement('div');
-                productGroup.className = 'product-group';
-                const downloadLabelKey = (category.type === 'software') ? 'link_software' : 'link_firmware';
-
-                productGroup.innerHTML = `
-                    <span class="product-title">${productId.toUpperCase()}</span>
-                    <div class="product-links">
-                        <a href="#" onclick="openManualModal('${productId}'); return false;" data-i18n="link_manual">Manual</a> | 
-                        <a href="#" onclick="openFirmwareModal('${productId}'); return false;" data-i18n="${downloadLabelKey}">Download</a> | 
-                        <a href="#" onclick="openFaqModal('${productId}'); return false;" data-i18n="link_faq">FAQ</a> | 
-                    </div>
-                `;
-                dropdown.appendChild(productGroup);
-            });
-            navItem.appendChild(dropdown);
-        }
-        navMenu.appendChild(navItem);
-    });
-    // 默认初始化为中文
-    window.changeLanguage('zh'); 
+    /* 字体栈 (新增) */
+    --font-tech: ui-monospace, SFMono-Regular, "SF Mono", "Cascadia Code", "Consolas", "Courier New", monospace;
+    --font-base: 'Segoe UI', 'Roboto', Helvetica, Arial, sans-serif;
 }
 
-// ==========================================
-// 4. 弹窗与智能搜索逻辑 (Smart Search & Modals)
-// ==========================================
+body {
+    font-family: var(--font-base);
+    margin: 0;
+    padding: 0;
+    color: var(--text-main);
+    background-color: var(--bg-page);
+    overflow-x: hidden; /* 防止装饰元素撑开横向滚动 */
+}
 
-// 滚动锁定辅助
-function lockScroll() { document.body.style.overflow = 'hidden'; }
-function unlockScroll() { document.body.style.overflow = ''; }
+a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+ul { list-style: none; padding: 0; margin: 0; }
+button { outline: none; cursor: pointer; }
 
-window.openFirmwareModal = function(productModel) {
-    const modal = document.getElementById('firmwareModal');
-    const title = document.getElementById('modalTitle');
-    const list = document.getElementById('modalList');
-    
-    title.textContent = productModel.toUpperCase() + ' DOWNLOADS';
-    list.innerHTML = '';
-    
-    const data = firmwareDatabase[productModel];
-    
-    if (!data) {
-        list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">🚫 Configuration not found.</p>';
-    } else if (data.length === 0) {
-        list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No firmware currently available.</p>';
-    } else {
-        data.forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'firmware-item';
-            row.innerHTML = `
-                <div class="fw-info">
-                    <span class="fw-version">💾 ${item.version}</span>
-                    <span class="fw-date">${item.date ? '📅 ' + item.date : ''}</span>
-                </div>
-                <a href="${item.url}" class="fw-download-btn" target="_blank">Download</a>
-            `;
-            list.appendChild(row);
-        });
+/* 增强无障碍访问：键盘焦点样式 */
+button:focus-visible, a:focus-visible, input:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* =========================================
+   2. 🛠️ 背景装饰 (Background FX)
+   ========================================= */
+.bg-decorations {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 0; 
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* 等高线 */
+.deco-contour-map {
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        radial-gradient(circle at 10% 20%, transparent 0%, transparent 90%, rgba(0,0,0,0.03) 91%, transparent 92%),
+        radial-gradient(ellipse at 80% 80%, transparent 0%, transparent 85%, rgba(0,0,0,0.02) 86%, transparent 87%);
+    opacity: 0.6;
+}
+
+/* 3D 网格平面 */
+.deco-grid-plane {
+    position: absolute; bottom: -10%; left: -10%; width: 120%; height: 50%;
+    background-image:
+        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    transform: perspective(1000px) rotateX(60deg);
+    opacity: 0.5;
+}
+
+/* 装饰图标 */
+.deco-item { position: absolute; opacity: 0.05; filter: grayscale(1); z-index: -1; }
+.deco-satellite { top: 12%; right: 15%; font-size: 50px; animation: float 10s ease-in-out infinite; }
+.deco-uav { top: 35%; left: -80px; font-size: 36px; animation: flyPass 40s linear infinite; }
+.deco-total-station { bottom: 15%; right: 20%; font-size: 42px; }
+
+/* 地球线框 */
+.deco-earth-wireframe {
+    position: absolute; bottom: 40px; left: 40px; width: 140px; height: 140px;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 86, 179, 0.6); 
+    background: radial-gradient(circle at 30% 30%, rgba(0, 86, 179, 0.1), rgba(0, 86, 179, 0.05) 60%);
+    box-shadow: 0 0 25px rgba(0, 86, 179, 0.2), inset 0 0 20px rgba(0, 86, 179, 0.1);
+    animation: rotateGlobe 20s linear infinite;
+    z-index: 10;
+}
+.deco-earth-wireframe::before, .deco-earth-wireframe::after {
+    content: ''; position: absolute; top: 50%; left: 50%; border: 2px solid rgba(0, 86, 179, 0.4); border-radius: 50%;
+}
+.deco-earth-wireframe::before { width: 90%; height: 35%; transform: translate(-50%, -50%) rotate(-35deg); }
+.deco-earth-wireframe::after { width: 35%; height: 90%; transform: translate(-50%, -50%) rotate(55deg); }
+
+/* =========================================
+   3. 顶部导航 (Header)
+   ========================================= */
+.top-bar {
+    background-color: #2c3e50;
+    color: #ccc;
+    padding: 8px 40px;
+    text-align: right;
+    font-size: 12px;
+    position: relative;
+    z-index: 1002;
+}
+.lang-selector { position: relative; display: inline-block; cursor: pointer; padding: 4px 10px; border-radius: 4px; user-select: none; }
+.lang-selector:hover { background-color: rgba(255,255,255,0.1); color: #fff; }
+
+.lang-dropdown {
+    display: none; position: absolute; right: 0; top: 130%; 
+    background: #fff; border: 1px solid var(--border-line);
+    z-index: 1000; min-width: 140px; 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15); border-radius: 6px; 
+    text-align: left; padding: 5px 0;
+}
+.lang-dropdown.show { display: block; animation: fadeIn 0.2s; }
+.lang-dropdown li { padding: 8px 20px; border-bottom: 1px solid #f5f5f5; color: var(--text-main); font-size: 13px; transition: 0.2s; }
+.lang-dropdown li:hover { background-color: var(--bg-section); color: var(--primary-color); padding-left: 25px; }
+
+.main-header {
+    background-color: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    padding: 0 50px;
+    height: 80px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative; z-index: 1001;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.03); border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+.logo { font-size: 28px; font-weight: 900; color: #1a1a1a; letter-spacing: 1px; font-family: 'Arial Black', sans-serif; }
+.logo span { color: var(--primary-color); }
+
+/* PC 导航布局 */
+@media screen and (min-width: 769px) {
+    .nav-menu {
+        position: absolute; left: 50%; transform: translateX(-50%);
+        display: flex; height: 100%; align-items: center; gap: 50px;
     }
-    modal.style.display = 'block';
-    lockScroll();
-};
-
-window.openManualModal = function(productModel) {
-    const modal = document.getElementById('firmwareModal'); // 复用同一个弹窗结构
-    const title = document.getElementById('modalTitle');
-    const list = document.getElementById('modalList');
-    
-    title.textContent = productModel.toUpperCase() + ' MANUALS';
-    list.innerHTML = '';
-    
-    const data = manualDatabase[productModel];
-    
-    if (!data || data.length === 0) {
-        list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No manuals found.</p>';
-    } else {
-        data.forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'firmware-item';
-            row.innerHTML = `
-                <div class="fw-info">
-                    <span class="fw-version">📄 ${item.title}</span>
-                    <span class="fw-date">${item.date || ''}</span>
-                </div>
-                <a href="${item.url}" class="fw-download-btn" target="_blank">View</a>
-            `;
-            list.appendChild(row);
-        });
+    .nav-item { position: relative; height: 100%; display: flex; align-items: center; cursor: pointer; }
+    .nav-link { 
+        font-size: 15px; font-weight: 700; color: #444; 
+        position: relative; padding: 5px 0; text-transform: uppercase;
     }
-    modal.style.display = 'block';
-    lockScroll();
-};
-/* main.js - 添加到文件末尾或 openManualModal 函数下方 */
-
-window.openFaqModal = function(productModel) {
-    const modal = document.getElementById('firmwareModal'); // 复用同一个弹窗结构
-    const title = document.getElementById('modalTitle');
-    const list = document.getElementById('modalList');
-    
-    // 1. 设置标题
-    title.textContent = productModel.toUpperCase() + ' FAQ';
-    list.innerHTML = '';
-    
-    // 2. 安全获取数据 (防止 faqDatabase 未定义报错)
-    let data = [];
-    if (typeof faqDatabase !== 'undefined' && faqDatabase[productModel]) {
-        data = faqDatabase[productModel];
+    .nav-link::after {
+        content: ''; position: absolute; width: 0; height: 3px;
+        bottom: -24px; left: 50%; transform: translateX(-50%);
+        background-color: var(--primary-color);
+        transition: width 0.3s ease; box-shadow: 0 -2px 10px var(--primary-glow);
     }
+    .nav-item:hover .nav-link { color: var(--primary-color); }
+    .nav-item:hover .nav-link::after { width: 100%; }
     
-    // 3. 渲染列表
-    if (!data || data.length === 0) {
-        list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No FAQs found.</p>';
-    } else {
-        data.forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'firmware-item';
-            row.innerHTML = `
-                <div class="fw-info">
-                    <span class="fw-version">❓ ${item.title}</span>
-                    <span class="fw-date">${item.date || ''}</span>
-                </div>
-                <a href="${item.url}" class="fw-download-btn" target="_blank">View</a>
-            `;
-            list.appendChild(row);
-        });
-    }
-    
-    // 4. 显示弹窗并锁定滚动
-    modal.style.display = 'block';
-    if (document.body.style.overflow) document.body.style.overflow = 'hidden';
-};
-window.closeModal = function() {
-    document.getElementById('firmwareModal').style.display = 'none';
-    unlockScroll();
-};
+    .mobile-menu-toggle { display: none; }
+}
 
-window.openContactModal = function() {
-    document.getElementById('contactModal').style.display = 'block';
-    lockScroll();
-};
-window.closeContactModal = function() {
-    document.getElementById('contactModal').style.display = 'none';
-    unlockScroll();
-};
+/* =========================================
+   4. 🚀 科技感二级菜单 (Tech Dropdown)
+   ========================================= */
 
-window.openSearchChoiceModal = function(model) {
-    const modal = document.getElementById('searchChoiceModal');
-    document.getElementById('searchResultTitle').textContent = "RESULT: " + model.toUpperCase();
-    const btnContainer = document.getElementById('searchResultBtns');
-    btnContainer.innerHTML = '';
-
-    const fwBtn = document.createElement('button');
-    fwBtn.className = 'search-btn';
-    fwBtn.innerHTML = '💾 Download Firmware / Software';
-    fwBtn.onclick = function() { 
-        modal.style.display = 'none'; 
-        openFirmwareModal(model); 
-    };
-    btnContainer.appendChild(fwBtn);
-
-    const docBtn = document.createElement('button');
-    docBtn.className = 'search-btn';
-    docBtn.innerHTML = '📄 View Manuals';
-    docBtn.onclick = function() { 
-        modal.style.display = 'none'; 
-        openManualModal(model); 
-    };
-    btnContainer.appendChild(docBtn);
-
-    modal.style.display = 'block';
-    lockScroll();
-};
-window.closeSearchChoiceModal = function() {
-    document.getElementById('searchChoiceModal').style.display = 'none';
-    unlockScroll();
-};
-
-// 智能搜索核心
-window.performSearch = function() {
-    const input = document.getElementById('searchInput');
-    const query = input.value.trim().toLowerCase();
-    
-    if (!query) {
-        alert("Please enter a model name.");
-        return;
-    }
-
-    // 获取所有可用型号
-    const allModels = new Set([
-        ...Object.keys(firmwareDatabase),
-        ...Object.keys(manualDatabase)
-    ]);
-
-    // 1. 精确匹配
-    if (allModels.has(query)) {
-        openSearchChoiceModal(query);
-        return;
-    }
-
-    // 2. 模糊匹配 (包含)
-    const partialMatch = Array.from(allModels).find(m => m.includes(query));
-    
-    if (partialMatch) {
-        openSearchChoiceModal(partialMatch);
-    } else {
-        alert(`Product "${query}" not found. Try generic names like 'i93', 'CGO' or 'Landstar'.`);
-    }
-};
-
-// 绑定回车搜索
-document.addEventListener('DOMContentLoaded', function() {
-    const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") window.performSearch();
-        });
-    }
-    // 初始化菜单
-    initMenu();
-});
-
-// ==========================================
-// 5. 高性能粒子动画 (Particle Engine)
-// ==========================================
-document.addEventListener('DOMContentLoaded', function() {
-    const canvas = document.getElementById('particleCanvas');
-    if (!canvas) return;
-    
-    const ctx = canvas.getContext('2d');
-    const heroSection = document.getElementById('heroSection');
-    
-    let particlesArray = [];
-    let animationId;
-    let isAnimating = false;
-    
-    function resizeCanvas() {
-        canvas.width = heroSection.offsetWidth;
-        canvas.height = heroSection.offsetHeight;
-    }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-
-    const mouse = { x: null, y: null };
-
-    // 交互事件
-    heroSection.addEventListener('mousemove', function(event) {
-        const rect = heroSection.getBoundingClientRect();
-        mouse.x = event.clientX - rect.left;
-        mouse.y = event.clientY - rect.top;
+/* 仅在 PC 端应用科技浮窗样式 */
+@media screen and (min-width: 769px) {
+    .dropdown-menu {
+        display: none; 
+        position: absolute; 
+        top: 80px; 
+        left: 50%; 
+        transform: translateX(-50%);
         
-        // 移动端生成更少粒子以优化性能
-        const count = window.innerWidth < 768 ? 1 : 3;
-        for (let i = 0; i < count; i++) {
-            particlesArray.push(new Particle());
-        }
-    });
-
-    class Particle {
-        constructor() {
-            this.x = mouse.x;
-            this.y = mouse.y;
-            this.size = Math.random() * 4 + 1; 
-            this.speedX = Math.random() * 3 - 1.5;
-            this.speedY = Math.random() * 3 - 1.5;
-            this.color = Math.random() > 0.5 ? 'rgba(243, 112, 33, 1)' : 'rgba(255, 255, 255, 0.8)';
-        }
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-            if (this.size > 0.2) this.size -= 0.1;
-        }
-        draw() {
-            ctx.fillStyle = this.color;
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fill();
-        }
-    }
-
-    function connectParticles() {
-        for (let a = 0; a < particlesArray.length; a++) {
-            for (let b = a; b < particlesArray.length; b++) {
-                let dx = particlesArray[a].x - particlesArray[b].x;
-                let dy = particlesArray[a].y - particlesArray[b].y;
-                let distance = Math.sqrt(dx * dx + dy * dy);
-                
-                if (distance < 50) {
-                    ctx.strokeStyle = 'rgba(243, 112, 33, 0.2)';
-                    ctx.lineWidth = 1;
-                    ctx.beginPath();
-                    ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                    ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                    ctx.stroke();
-                }
-            }
-        }
-    }
-
-    function handleParticles() {
-        // 使用 clearRect 性能更好，若需长拖尾可改用 fillRect 覆盖半透明层
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        /* 核心：深色磨砂背景 */
+        background: var(--bg-dark-glass);
+        backdrop-filter: blur(12px);
         
-        for (let i = 0; i < particlesArray.length; i++) {
-            particlesArray[i].update();
-            particlesArray[i].draw();
-            
-            if (particlesArray[i].size <= 0.3) {
-                particlesArray.splice(i, 1);
-                i--;
-            }
-        }
-        connectParticles();
+        /* 边框：青色微光 + 顶部橙色高亮 */
+        border: 1px solid var(--tech-cyan-dim);
+        border-top: 2px solid var(--primary-color);
         
-        if (isAnimating) {
-            animationId = requestAnimationFrame(handleParticles);
-        }
-    }
-
-    // 使用 IntersectionObserver 仅在可见时渲染，节省电量
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                if (!isAnimating) {
-                    isAnimating = true;
-                    handleParticles();
-                }
-            } else {
-                isAnimating = false;
-                cancelAnimationFrame(animationId);
-            }
-        });
-    });
-    
-    observer.observe(heroSection);
-});
-// ==========================================
-// 6. 智能更新推送逻辑 (Auto Update Notification)
-// ==========================================
-
-// 比较日期的辅助函数
-function parseDate(dateStr) {
-    if (!dateStr) return new Date(0); // 如果没有日期，返回最旧的时间
-    // 处理可能的不同格式，这里假设格式主要是 YYYY-MM-DD
-    return new Date(dateStr);
-}
-
-function findLatestFirmware() {
-    let latestItem = null;
-    let latestDate = new Date(0);
-    let latestModel = '';
-
-    // 1. 扫描固件数据库
-    if (typeof firmwareDatabase !== 'undefined') {
-        for (const [model, list] of Object.entries(firmwareDatabase)) {
-            if (Array.isArray(list)) {
-                list.forEach(item => {
-                    const itemDate = parseDate(item.date);
-                    if (itemDate > latestDate && item.url) { // 必须有下载链接才推送
-                        latestDate = itemDate;
-                        latestItem = item;
-                        latestModel = model;
-                    }
-                });
-            }
-        }
-    }
-
-    return { item: latestItem, model: latestModel };
-}
-
-function initUpdateToast() {
-    // 检查是否已经手动关闭过 (本次会话)
-    if (sessionStorage.getItem('rui_toast_closed')) return;
-
-    const result = findLatestFirmware();
-    if (!result.item) return; // 如果没找到任何数据，不显示
-
-    const { item, model } = result;
-    
-    // 填充数据
-    document.getElementById('toastModel').textContent = model.toUpperCase();
-    document.getElementById('toastVer').textContent = item.version;
-    document.getElementById('toastDate').textContent = 'Released: ' + item.date;
-    document.getElementById('toastLink').href = item.url;
-    
-    // 延迟 2.5 秒后滑入显示
-    setTimeout(() => {
-        document.getElementById('updateToast').classList.add('show');
-    }, 2500);
-}
-
-window.closeUpdateToast = function() {
-    const toast = document.getElementById('updateToast');
-    toast.classList.remove('show');
-    // 记录状态，防止刷新页面重复弹出 (关闭浏览器后失效)
-    sessionStorage.setItem('rui_toast_closed', 'true');
-};
-
-// 在页面加载完成后初始化
-document.addEventListener('DOMContentLoaded', function() {
-    // 原有的初始化
-    initMenu(); 
-    
-    // 新的推送初始化
-    initUpdateToast();
-});
-// ==========================================
-// 7. 公告弹窗逻辑 (News Modal) - 新增
-// ==========================================
-window.openNewsModal = function() {
-    const modal = document.getElementById('firmwareModal'); // 复用现有弹窗
-    const title = document.getElementById('modalTitle');
-    const list = document.getElementById('modalList');
-    
-    // 1. 设置标题
-    title.textContent = 'LATEST NEWS & LOGS';
-    list.innerHTML = '';
-    
-    // 2. 检查数据
-    if (typeof newsDatabase === 'undefined' || newsDatabase.length === 0) {
-        list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No news available.</p>';
-    } else {
-        // 3. 渲染列表
-        newsDatabase.forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'firmware-item'; // 复用现有样式
-            
-            // 根据标签类型设置不同颜色
-            let tagColor = '#999';
-            let borderColor = 'rgba(153,153,153,0.3)';
-            
-            if(item.tag === 'Software') { tagColor = '#28a745'; borderColor = 'rgba(40, 167, 69, 0.3)'; }
-            else if(item.tag === 'Firmware') { tagColor = '#17a2b8'; borderColor = 'rgba(23, 162, 184, 0.3)'; }
-            else if(item.tag === 'Service') { tagColor = '#ffc107'; borderColor = 'rgba(255, 193, 7, 0.3)'; }
-            else if(item.tag === 'Website') { tagColor = '#F37021'; borderColor = 'rgba(243, 112, 33, 0.3)'; }
-            
-            row.innerHTML = `
-                <div class="fw-info" style="width: 100%;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                        <span class="fw-version" style="font-size:15px; color:#fff;">${item.title}</span>
-                        <span style="font-size:11px; color:${tagColor}; border:1px solid ${borderColor}; padding:1px 6px; border-radius:4px; font-family:var(--font-tech); text-transform: uppercase;">${item.tag}</span>
-                    </div>
-                    <div style="font-size:13px; color:#aaa; display:flex; justify-content:space-between;">
-                        <span style="max-width: 75%; opacity: 0.8;">${item.desc || ''}</span>
-                        <span class="fw-date" style="color:#666;">📅 ${item.date}</span>
-                    </div>
-                </div>
-            `;
-            list.appendChild(row);
-        });
+        min-width: 400px;
+        padding: 0; 
+        z-index: 1002;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+        
+        /* 机械切角效果 */
+        clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
+        border-radius: 0 0 10px 0;
+        
+        animation: slideDown 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     
-    // 4. 显示弹窗
-    modal.style.display = 'block';
-    if(document.body.style.overflow) document.body.style.overflow = 'hidden';
-};
+    .nav-item:hover .dropdown-menu { display: block; }
+
+    /* 单个产品行 */
+    .product-group {
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+        padding: 16px 25px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* 悬停光效：左侧橙色光标 + 背景扫光 */
+    .product-group:hover {
+        background: linear-gradient(90deg, rgba(243, 112, 33, 0.1) 0%, transparent 100%);
+        padding-left: 35px; /* 滑动动画 */
+    }
+    .product-group::before {
+        content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+        background: var(--primary-color);
+        opacity: 0; transition: 0.3s;
+        box-shadow: 0 0 10px var(--primary-color);
+    }
+    .product-group:hover::before { opacity: 1; }
+
+    /* 产品名称 */
+    .product-title {
+        font-family: var(--font-base);
+        font-weight: 700; 
+        font-size: 16px; 
+        color: #fff; 
+        letter-spacing: 1px;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+    }
+
+    /* 链接区域 */
+    .product-links {
+        font-size: 12px; 
+        color: rgba(255, 255, 255, 0.4); 
+        display: flex; 
+        gap: 15px; /* 控制链接间距 */
+    }
+
+    .product-links a {
+        color: rgba(255, 255, 255, 0.6); 
+        font-weight: 500; 
+        text-transform: uppercase;
+        position: relative;
+        transition: 0.3s;
+    }
+
+    /* 链接悬停高亮 */
+    .product-links a:hover { color: var(--primary-color); text-shadow: 0 0 8px var(--primary-color); }
+    /* 说明书链接特殊高亮 (青色) */
+    .product-links a:hover[data-i18n*="manual"] { color: var(--tech-cyan); text-shadow: 0 0 8px var(--tech-cyan); }
+}
+
+/* 📱 移动端菜单适配 */
+@media screen and (max-width: 768px) {
+    .main-header { padding: 0 20px; height: 70px; }
+    .mobile-menu-toggle {
+        display: block; font-size: 20px; color: var(--text-main);
+        padding: 8px 12px; border: 1px solid rgba(0,0,0,0.1); border-radius: 6px;
+        background: rgba(255,255,255,0.5);
+    }
+    
+    .nav-menu {
+        display: none; position: absolute; top: 70px; left: 0; width: 100%;
+        background: rgba(255, 255, 255, 0.98); 
+        flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.15); z-index: 99;
+    }
+    .nav-menu.active { display: flex; }
+    
+    .nav-item { width: 100%; text-align: left; border-bottom: 1px solid #eee; }
+    .nav-link { display: block; padding: 18px 25px; color: #333; font-weight: 600; }
+    
+    /* 移动端下拉菜单还原为普通列表 */
+    .dropdown-menu { 
+        display: none; position: static; background: #f4f6f8; 
+        box-shadow: inset 0 5px 10px rgba(0,0,0,0.05);
+        padding: 0; border-left: 4px solid #ddd;
+        /* 重置 PC 端样式 */
+        clip-path: none; border: none; min-width: auto;
+    }
+    
+    .product-group {
+        display: block; padding: 12px 30px; border-bottom: 1px solid #eee;
+    }
+    .product-title { color: #555; font-size: 14px; display: block; margin-bottom: 5px; text-shadow: none; }
+    .product-links { display: flex; gap: 10px; font-size: 13px; }
+    .product-links a { color: #888; }
+    .product-links a:hover { color: var(--primary-color); }
+}
+
+/* =========================================
+   5. Hero Section
+   ========================================= */
+.hero-section {
+    position: relative;
+    background: var(--hero-bg);
+    padding: 140px 20px 160px;
+    text-align: center;
+    color: var(--text-light);
+    z-index: 1; 
+    overflow: hidden;
+}
+.hero-section::after {
+    content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100px;
+    background: linear-gradient(to bottom, transparent, var(--bg-page)); 
+    z-index: 3; pointer-events: none;
+}
+#particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+.hero-section h1, .hero-section p, .search-container { position: relative; z-index: 10; }
+
+.hero-section h1 { 
+    margin: 0 0 20px; font-size: 3.5em; font-weight: 800; 
+    color: #fff; text-shadow: 0 5px 15px rgba(0,0,0,0.8);
+    letter-spacing: 1px; 
+}
+.hero-section h1 span { color: var(--primary-color); position: relative; display: inline-block; }
+.hero-section h1 span::after {
+    content: ''; position: absolute; bottom: 5px; left: 0; width: 100%; height: 4px;
+    background-color: var(--primary-color); opacity: 0.3; border-radius: 2px;
+}
+.hero-section p { color: rgba(255,255,255,0.9); text-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 1.25em; margin-bottom: 50px; }
+
+/* 搜索框 */
+.search-container { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 35px; }
+
+.search-input {
+    width: 100%; max-width: 450px; padding: 15px 30px;
+    border-radius: 50px; 
+    background: rgba(255, 255, 255, 0.1); 
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff; font-size: 16px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.3s ease;
+}
+.search-input::placeholder { color: rgba(255, 255, 255, 0.7); }
+.search-input:focus {
+    background: rgba(255, 255, 255, 0.15); border-color: var(--primary-color);
+    box-shadow: 0 0 20px var(--primary-glow); width: 480px;
+}
+.search-btn {
+    padding: 15px 35px; border-radius: 50px; border: none;
+    background: linear-gradient(135deg, var(--primary-color) 0%, #ff9a44 100%);
+    color: white; font-weight: bold; transition: all 0.3s ease;
+}
+.search-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--primary-glow); }
+
+/* =========================================
+   6. 内容卡片 (Content Cards)
+   ========================================= */
+.content-container {
+    display: flex; justify-content: center; flex-wrap: wrap; gap: 30px;
+    padding: 60px 20px; max-width: 1200px; margin: -50px auto 0;
+    position: relative; z-index: 10;
+}
+.card {
+    background: #fff; width: 320px; padding: 40px; border-radius: 16px;
+    border: 1px solid var(--border-line);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    text-align: left; transition: 0.4s; position: relative; overflow: hidden;
+}
+.card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.12); }
+.card::after {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 3px;
+    background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
+    transform: scaleX(0); transition: 0.4s;
+}
+.card:hover::after { transform: scaleX(1); }
+.card h3 { color: #2c3e50; margin-top: 0; font-size: 1.5em; }
+.card p { color: var(--text-gray); font-size: 14px; margin-bottom: 30px; min-height: 45px; }
+.card a { color: var(--primary-color); font-weight: bold; font-size: 14px; }
+
+/* =========================================
+   7. 📂 科技感弹窗 (Sci-Fi Modals)
+   ========================================= */
+.modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); backdrop-filter: blur(5px); }
+
+/* 弹窗通用样式：HUD 界面风格 */
+#firmwareModal .modal-content, 
+#manualModal .modal-content,
+#searchChoiceModal .modal-content,
+#contactModal .modal-content {
+    background: var(--bg-dark-glass);
+    border: 1px solid rgba(0, 240, 255, 0.3); /* 青色描边 */
+    box-shadow: 0 0 40px rgba(0, 240, 255, 0.15), inset 0 0 20px rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 4px;
+    margin: 8% auto; width: 90%; max-width: 500px;
+    position: relative; overflow: hidden;
+    animation: modalPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    
+    /* 四角装饰线条 (背景渐变模拟) */
+    background-image: 
+        linear-gradient(var(--tech-cyan), var(--tech-cyan)), linear-gradient(var(--tech-cyan), var(--tech-cyan)), 
+        linear-gradient(var(--tech-cyan), var(--tech-cyan)), linear-gradient(var(--tech-cyan), var(--tech-cyan));
+    background-repeat: no-repeat;
+    background-size: 2px 20px, 20px 2px;
+    background-position: left top, left top, right bottom, right bottom;
+}
+
+/* 弹窗头部：终端风格 */
+.modal-header {
+    background: rgba(0, 240, 255, 0.05);
+    border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+    padding: 15px 25px;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.modal-header h3 {
+    margin: 0; color: var(--tech-cyan);
+    
+    /* 🚀 字体优化：终端等宽字体 */
+    font-family: var(--font-tech);
+    
+    text-transform: uppercase;
+    letter-spacing: 1.5px; 
+    font-size: 18px;
+    font-weight: 700;
+    text-shadow: 0 0 5px rgba(0, 240, 255, 0.4);
+}
+.modal-header h3::before { content: '>_ '; color: var(--primary-color); }
+
+.close-btn { color: rgba(255,255,255,0.5); font-size: 28px; cursor: pointer; transition: 0.3s; }
+.close-btn:hover { color: #ff3333; text-shadow: 0 0 10px #ff0000; transform: rotate(90deg); }
+
+/* 列表容器 */
+.modal-body { padding: 25px; max-height: 500px; overflow-y: auto; }
+
+/* 列表项：数据行 */
+.firmware-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 15px; margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-left: 2px solid transparent;
+    transition: 0.2s;
+}
+.firmware-item:hover {
+    background: rgba(0, 240, 255, 0.05);
+    border-color: rgba(0, 240, 255, 0.3);
+    border-left-color: var(--tech-cyan);
+    transform: translateX(5px);
+}
+
+/* 版本号：等宽代码字体 */
+.fw-version { 
+    color: #fff; 
+    font-family: var(--font-tech); 
+    font-size: 15px; 
+    font-weight: 600;
+}
+
+/* 日期：普通无衬线字体，形成对比 */
+.fw-date { 
+    color: rgba(255, 255, 255, 0.5); 
+    font-family: var(--font-base);
+    font-size: 12px; margin-left: 10px; 
+}
+.firmware-item:hover .fw-date { color: var(--tech-cyan); }
+
+/* 下载按钮：发光实心块 */
+.fw-download-btn {
+    background: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 5px 15px; border-radius: 2px;
+    text-transform: uppercase; font-size: 11px; letter-spacing: 1px;
+    transition: 0.3s;
+    font-family: var(--font-base);
+    font-weight: 700;
+}
+.fw-download-btn:hover {
+    background: var(--primary-color); color: #000;
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+/* 滚动条美化 (Webkit) */
+.modal-body::-webkit-scrollbar { width: 6px; }
+.modal-body::-webkit-scrollbar-track { background: #0b1015; }
+.modal-body::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+.modal-body::-webkit-scrollbar-thumb:hover { background: var(--primary-color); }
+
+/* --- Search Choice Modal 特殊调整 --- */
+#searchResultBtns .search-btn {
+    width: 100%; padding: 16px; margin-bottom: 10px;
+    background: rgba(0,0,0,0.3); border: 1px solid var(--border-line);
+    color: #ccc;
+}
+#searchResultBtns button:nth-child(1) { border-color: var(--tech-cyan); color: var(--tech-cyan); }
+#searchResultBtns button:nth-child(1):hover { background: var(--tech-cyan); color: #000; box-shadow: 0 0 20px var(--tech-cyan-dim); }
+#searchResultBtns button:nth-child(2) { border-color: var(--primary-color); color: var(--primary-color); }
+#searchResultBtns button:nth-child(2):hover { background: var(--primary-color); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
+
+/* --- Contact Modal 特殊调整 --- */
+#contactModal .modal-content { max-width: 700px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); margin: 0; }
+.contact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.contact-card {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 30px 20px;
+    background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px;
+    color: #ccc; transition: all 0.4s;
+}
+.contact-card:hover { transform: translateY(-5px); background: rgba(255, 255, 255, 0.06); }
+.contact-card .icon { font-size: 32px; margin-bottom: 15px; }
+.contact-card.telegram:hover { border-color: #229ED9; color: #229ED9; box-shadow: 0 0 20px rgba(34, 158, 217, 0.2); }
+.contact-card.whatsapp:hover { border-color: #25D366; color: #25D366; box-shadow: 0 0 20px rgba(37, 211, 102, 0.2); }
+.contact-card.email:hover { border-color: var(--primary-color); color: var(--primary-color); box-shadow: 0 0 20px var(--primary-glow); }
+
+/* =========================================
+   8. 页脚 & 动画
+   ========================================= */
+.site-footer {
+    text-align: center; padding: 40px 20px;
+    background: #2c3e50; color: #ccc; margin-top: 80px;
+}
+.site-footer a:hover { color: var(--primary-color); }
+/* =========================================
+   ❄️ 2026 混合飘雪 (雪花 + 彩色光点)
+   ========================================= */
+.snow-container {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    pointer-events: none; z-index: 9999; overflow: hidden;
+}
+
+/* 定义SVG雪花图案 */
+:root {
+    --flake: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.9)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 12h20M12 2v20M20 20l-4-4M4 4l4 4M4 20l4-4M20 4l-4 4'/%3E%3C/svg%3E");
+}
+
+.snow {
+    position: absolute; top: -100%; left: 0; width: 100%; height: 100%;
+    background-repeat: no-repeat;
+    animation: snowFall linear infinite;
+}
+
+/* 混合图层 1：大雪花 + 鲜艳的品牌色圆点 
+   (既有形状，又有你原来的橙色/青色点缀)
+*/
+.snow:nth-child(1) {
+    background-image: 
+        var(--flake),                                                                  /* 1. 雪花 */
+        radial-gradient(circle, rgba(243, 112, 33, 0.9) 4px, transparent 5px),         /* 2. 橙色圆点 (实心) */
+        var(--flake),                                                                  /* 3. 雪花 */
+        radial-gradient(circle, rgba(0, 240, 255, 0.8) 3px, transparent 4px),          /* 4. 青色圆点 */
+        var(--flake);                                                                  /* 5. 雪花 */
+        
+    /* 对应上面5个元素的坐标 */
+    background-position: 10% 10%, 25% 30%, 50% 15%, 75% 40%, 90% 20%;
+    /* 对应上面5个元素的大小 */
+    background-size: 25px, 10px 10px, 30px, 8px 8px, 20px;
+    
+    animation-duration: 12s;
+}
+
+/* 混合图层 2：小雪花 + 白色虚化圆点 
+   (制造背景氛围)
+*/
+.snow:nth-child(2) {
+    background-image: 
+        var(--flake),
+        radial-gradient(circle, rgba(255, 255, 255, 0.6) 2px, transparent 3px),        /* 白色小点 */
+        var(--flake),
+        radial-gradient(circle, rgba(255, 255, 255, 0.5) 3px, transparent 4px);        /* 白色柔光点 */
+        
+    background-position: 5% 60%, 30% 85%, 60% 55%, 85% 75%;
+    background-size: 15px, 6px 6px, 18px, 8px 8px;
+    
+    animation-duration: 20s;
+    animation-delay: -5s;
+    opacity: 0.8;
+}
+
+/* 混合图层 3：快速划过的微粒
+   (主要是微小的点，模拟飞舞的碎雪)
+*/
+.snow:nth-child(3) {
+    background-image: 
+        radial-gradient(circle, rgba(255, 255, 255, 0.8) 1px, transparent 2px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.6) 1.5px, transparent 2.5px);
+        
+    background-position: 40% 20%, 70% 90%;
+    background-size: 4px 4px, 5px 5px;
+    
+    animation-duration: 8s;
+    animation-delay: -2s;
+}
+
+@keyframes snowFall {
+    0% { transform: translateY(-100%) translateX(-10px) rotate(0deg); }
+    50% { transform: translateY(0%) translateX(10px) rotate(180deg); }
+    100% { transform: translateY(100%) translateX(-10px) rotate(360deg); }
+}
+/* =========================================
+   🎅 Logo 节日装饰
+   ========================================= */
+.logo {
+    position: relative;
+    /* 防止帽子被切掉 */
+    overflow: visible; 
+}
+
+.logo::after {
+    content: '🎅'; /* 或者用 '🎉' 代表新年 */
+    position: absolute;
+    top: -15px;
+    right: -10px;
+    font-size: 24px;
+    transform: rotate(15deg);
+    filter: drop-shadow(0 0 5px rgba(255,0,0,0.5));
+    animation: hatBounce 2s infinite ease-in-out;
+}
+
+@keyframes hatBounce {
+    0%, 100% { transform: rotate(15deg) translateY(0); }
+    50% { transform: rotate(25deg) translateY(-3px); }
+}
+
+/* =========================================
+   🚀 智能推送卡片 (Smart Update Toast)
+   ========================================= */
+.update-toast {
+    position: fixed;
+    bottom: 30px;
+    right: -400px; /* 初始隐藏在屏幕右侧 */
+    width: 320px;
+    background: rgba(11, 16, 21, 0.95); /* 深色背景 */
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--tech-cyan); /* 青色边框 */
+    border-left: 4px solid var(--primary-color); /* 左侧橙色高亮 */
+    border-radius: 6px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6), 0 0 15px rgba(0, 240, 255, 0.1);
+    z-index: 9999;
+    font-family: var(--font-base);
+    transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 弹性滑入动画 */
+    overflow: hidden;
+}
+
+.update-toast.show {
+    right: 30px; /* 滑入显示位置 */
+}
+
+/* 装饰背景网格 */
+.update-toast::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background-image: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px; pointer-events: none; z-index: -1;
+}
+
+.toast-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 20px;
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.toast-title {
+    color: var(--primary-color);
+    font-size: 12px; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase;
+    animation: blinkText 2s infinite;
+}
+
+.close-toast {
+    color: #888; cursor: pointer; font-size: 20px; line-height: 1;
+    transition: 0.3s;
+}
+.close-toast:hover { color: #fff; }
+
+.toast-body { padding: 20px; }
+
+.toast-model {
+    color: #fff; font-size: 18px; font-weight: 700;
+    margin-bottom: 5px; text-transform: uppercase;
+    font-family: var(--font-tech);
+}
+
+.toast-version {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 10px;
+}
+
+#toastVer { color: var(--tech-cyan); font-family: var(--font-tech); font-size: 14px; }
+
+.toast-tag {
+    background: var(--primary-color); color: #fff;
+    font-size: 10px; padding: 2px 6px; border-radius: 2px; font-weight: bold;
+}
+
+.toast-date {
+    color: #888; font-size: 12px; margin-bottom: 15px;
+}
+
+.toast-btn {
+    display: block; width: 100%; text-align: center;
+    padding: 10px 0;
+    background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent);
+    border: 1px solid var(--tech-cyan);
+    color: var(--tech-cyan);
+    font-size: 13px; font-weight: bold; text-transform: uppercase;
+    transition: 0.3s; text-decoration: none;
+}
+
+.toast-btn:hover {
+    background: var(--tech-cyan); color: #000;
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+}
+
+@keyframes blinkText { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+
+/* 移动端适配 */
+@media screen and (max-width: 768px) {
+    .update-toast { width: 90%; right: -120%; }
+    .update-toast.show { right: 5%; bottom: 20px; }
+}
+
+/* 动画定义 */
+@keyframes giftFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes ripple { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(1.6); opacity: 0; } }
+@keyframes pulse { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+
+@keyframes modalPop { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+@keyframes slideDown { 0% { opacity: 0; transform: translate(-50%, -10px); } 100% { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes rotateGlobe { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(10deg); } 50% { transform: translateY(-20px) rotate(5deg); } }
+@keyframes flyPass { 0% { left: -10%; transform: translateY(0); } 100% { left: 110%; transform: translateY(-40px); } }
