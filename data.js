@@ -43,6 +43,7 @@ const menuConfig = [
 
 const firmwareDatabase = {
     'i100': [
+        { version: 'v1.3.12, date: '2025-12-29', url:'https://chcnavigation.jianguoyun.com/p/DTm-gwsQtq_UCxiE-JgGIAA'},
         { version: 'v1.3.7', date: '2025-12-01', url: 'https://chcnavigation.jianguoyun.com/p/DYau6gcQtq_UCxjFtZMGIAA' },
         { version: 'V1.3.5', date: '2025-11-10', url: 'https://chcnavigation.jianguoyun.com/p/DYau6gcQtq_UCxjFtZMGIAA' },
         { version: 'V1.2.13', date: '2025-09-23', url: 'https://chcnavigation.jianguoyun.com/p/DYoSKLcQtq_UCxiYkY8GIAA' }
@@ -191,6 +192,7 @@ const faqDatabase = {
         { title:'How to share one antenna between P5U and P5S.mp4',  date:'2024-10-25',url:'https://chcnavigation.jianguoyun.com/p/DdUgAWMQtq_UCxjcxeMFIAA'},
     ]
 };
+
 
 
 
