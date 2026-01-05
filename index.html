@@ -70,10 +70,10 @@
             <p data-i18n="card_fw_desc">欢迎关注</p>
             <a href="https://flic.kr/ps/3YHpp5" target="_blank" data-i18n="btn_download">更多 ></a>
         </div>
-        <div class="card">
-            <h3 data-i18n="card_doc_title">敬请期待</h3>
-            <p data-i18n="card_doc_desc">敬请期待</p>
-            <a href="https://flic.kr/ps/3YHpp5" target="_blank" data-i18n="btn_browse">浏览 ></a>
+         <div class="card">
+            <h3 data-i18n="card_doc_title">Latest News</h3>
+            <p data-i18n="card_doc_desc">Firmware changelogs, server maintenance, and updates.</p>
+            <a href="#" onclick="openNewsModal(); return false;" data-i18n="btn_browse">Browse ></a>
         </div>
         <div class="card">
             <h3 data-i18n="card_ticket_title">售后工单</h3>
@@ -138,24 +138,23 @@
             </div>
         </div>
     </div>
-    <div class="festive-gift" onclick="openFestiveModal()" title="For You">
-    🎁
-    <div class="gift-glow"></div>
 </div>
-
-<div id="festiveModal" class="modal festive-modal">
-    <div class="modal-content festive-content">
-        <div class="modal-header festive-header">
-            <h3>✨ 2026 NEW YEAR ✨</h3>
-            <span class="close-btn" onclick="closeFestiveModal()">&times;</span>
+<div id="updateToast" class="update-toast">
+        <div class="toast-header">
+            <span class="toast-title">🔔 LATEST RELEASE</span>
+            <span class="close-toast" onclick="closeUpdateToast()">&times;</span>
         </div>
-        <div class="modal-body">
-            <div class="festive-text" id="festiveText">
-                </div>
-            <div class="festive-decoration">🎆 🎇 🧨</div>
+        <div class="toast-body">
+            <div class="toast-model" id="toastModel">Model Name</div>
+            <div class="toast-version">
+                <span id="toastVer">V1.0.0</span>
+                <span class="toast-tag">NEW</span>
+            </div>
+            <div class="toast-date" id="toastDate">2025-12-28</div>
+            <a href="#" id="toastLink" class="toast-btn" target="_blank">Download Now</a>
         </div>
     </div>
-</div>
+
       
     <script src="data.js"></script>
     <script src="main.js"></script>
