@@ -59,7 +59,8 @@ const translations = {
         'link_manual': '说明书', 'link_firmware': '固件', 'link_software': '软件', 'link_faq': 'FAQ', 
         'hero_title': '欢迎来到 <span>RUI</span> 技术支持', 'hero_desc': '您的说明书、固件和技术支持一站式中心。', 
         'card_fw_title': '你好', 'card_fw_desc': '欢迎关注', 
-        'card_doc_title': '敬请期待', 'card_doc_desc': '敬请期待', 
+        'card_doc_title': '最新公告', 
+        'card_doc_desc': '查看固件更新日志、服务器维护通知及重要新闻。',
         'card_ticket_title': '售后工单', 'card_ticket_desc': '遇到技术难题？提交工单，我将为您解答。', 
         'btn_download': '更多 >', 'btn_browse': '浏览 >', 'btn_submit': '提交 >' 
     },
@@ -69,7 +70,8 @@ const translations = {
         'link_manual': 'Manual', 'link_firmware': 'Firmware', 'link_software': 'Software', 'link_faq': 'FAQ', 
         'hero_title': 'Welcome to <span>RUI’s</span> Support', 'hero_desc': 'Your one-stop destination for Manuals, Firmware, and Assistance.', 
         'card_fw_title': 'Hello', 'card_fw_desc': 'HI))', 
-        'card_doc_title': 'Stay tuned', 'card_doc_desc': 'Stay tuned, soon!', 
+        'card_doc_title': 'Latest News', 
+        'card_doc_desc': 'Firmware changelogs, server maintenance, and updates.',
         'card_ticket_title': 'Support Ticket', 'card_ticket_desc': 'Facing issues? Submit a ticket to our engineers.', 
         'btn_download': 'More >', 'btn_browse': 'Browse >', 'btn_submit': 'Submit >' 
     },
@@ -79,7 +81,8 @@ const translations = {
         'link_manual': 'Инструкция', 'link_firmware': 'Прошивка', 'link_software': 'Программа', 'link_faq': 'FAQ', 
         'hero_title': 'Добро пожаловать в <span>RUI‘s</span>', 'hero_desc': 'Ваш единый центр документации, прошивок и техподдержки.', 
         'card_fw_title': 'Добро пожаловать!', 'card_fw_desc': 'Добро пожаловать!', 
-        'card_doc_title': 'Скоро!', 'card_doc_desc': 'Оставайтесь с нами.', 
+        'card_doc_title': 'Новости', 
+        'card_doc_desc': 'Журнал обновлений и уведомления о техобслуживании.', 
         'card_ticket_title': 'Техподдержка', 'card_ticket_desc': 'Возникли проблемы? Свяжитесь со мной.', 
         'btn_download': 'Более >', 'btn_browse': 'Обзор >', 'btn_submit': 'Отправить >' 
     },
@@ -89,7 +92,8 @@ const translations = {
         'link_manual': 'Нұсқаулық', 'link_firmware': 'Бағдарлама', 'link_software': 'Бағдарлама', 'link_faq': 'FAQ',
         'hero_title': '<span>RUI’s</span> қолдау орталығы', 'hero_desc': 'Нұсқаулықтар, микробағдарламалар және техникалық қолдау орталығы.', 
         'card_fw_title': 'Сәлем', 'card_fw_desc': 'Қош келдіңіз', 
-        'card_doc_title': 'Күтіңіз', 'card_doc_desc': 'Жақында шығады', 
+        'card_doc_title': 'Жаңалықтар', 
+        'card_doc_desc': 'Жаңартулар мен техникалық қызмет көрсету туралы хабарламалар.', 
         'card_ticket_title': 'Қолдау билеті', 'card_ticket_desc': 'Техникалық мәселелер бар ма? Билет жіберіңіз.', 
         'btn_download': 'Толығырақ >', 'btn_browse': 'Шолу >', 'btn_submit': 'Жіберу >' 
     },
@@ -99,7 +103,8 @@ const translations = {
         'link_manual': 'Qo\'llanma', 'link_firmware': 'Mikrodastur', 'link_software': 'Dastur', 'link_faq': 'FAQ',
         'hero_title': '<span>RUI"s</span> Yordam Markazi', 'hero_desc': 'Qo\'llanmalar va mikrodasturlar uchun yagona manzil.', 
         'card_fw_title': 'Salom', 'card_fw_desc': 'Xush kelibsiz', 
-        'card_doc_title': 'Tez orada', 'card_doc_desc': 'Kuting', 
+        'card_doc_title': 'Yangiliklar', 
+        'card_doc_desc': 'Yangilanishlar va server xizmat ko\'rsatish xabarlari.',
         'card_ticket_title': 'Yordam chiptasi', 'card_ticket_desc': 'Muammo bormi? So\'rov yuboring.', 
         'btn_download': 'Ko\'proq >', 'btn_browse': 'Ko\'rish >', 'btn_submit': 'Yuborish >' 
     },
@@ -109,7 +114,8 @@ const translations = {
         'link_manual': 'Гарын авлага', 'link_firmware': 'Програм', 'link_software': 'Програм', 'link_faq': 'FAQ',
         'hero_title': '<span>RUI"s</span> Дэмжлэг', 'hero_desc': 'Гарын авлага, техникийн туслалцааны нэгдсэн төв.', 
         'card_fw_title': 'Сайн байна уу', 'card_fw_desc': 'Тавтай морил', 
-        'card_doc_title': 'Тун удахгүй', 'card_doc_desc': 'Хүлээж байгаарай', 
+        'card_doc_title': 'Мэдээ', 
+        'card_doc_desc': 'Программын шинэчлэл болон серверийн засвар үйлчилгээ.',
         'card_ticket_title': 'Тусламжийн хүсэлт', 'card_ticket_desc': 'Асуудал гарсан уу? Бидэнд хандана уу.', 
         'btn_download': 'Дэлгэрэнгүй >', 'btn_browse': 'Харах >', 'btn_submit': 'Илгээх >' 
     },
@@ -119,7 +125,8 @@ const translations = {
         'link_manual': 'Інструкція', 'link_firmware': 'Прошивка', 'link_software': 'Програма', 'link_faq': 'FAQ',
         'hero_title': 'Підтримка <span>RUI</span>', 'hero_desc': 'Ваш єдиний центр для інструкцій та прошивок.', 
         'card_fw_title': 'Вітаю', 'card_fw_desc': 'Ласкаво просимо', 
-        'card_doc_title': 'Скоро', 'card_doc_desc': 'Чекайте оновлень', 
+        'card_doc_title': 'Новини', 
+        'card_doc_desc': 'Журнал оновлень та повідомлення про обслуговування.', 
         'card_ticket_title': 'Техпідтримка', 'card_ticket_desc': 'Є питання? Надішліть запит.', 
         'btn_download': 'Більше >', 'btn_browse': 'Огляд >', 'btn_submit': 'Надіслати >' 
     }
@@ -496,61 +503,123 @@ document.addEventListener('DOMContentLoaded', function() {
     observer.observe(heroSection);
 });
 // ==========================================
-// 6. 新年祝福逻辑 (New Year Greetings)
+// 6. 智能更新推送逻辑 (Auto Update Notification)
 // ==========================================
 
-// 1. 定义深情祝福文案库
-const holidayGreetings = {
-    'zh': "时光折叠成代码，记录着我们共同走过的路。感谢这一年里，您对 RUI 的每一次信任与点击。<br><br>2026年，愿我们的连接比卫星信号更稳定，愿您的生活如星河般璀璨，所愿皆所得。<br><br>新年快乐，老朋友。",
-    
-    'en': "Lines of code cannot capture the flow of time. Thank you for your trust and company along this journey.<br><br>In 2026, may our connection be stronger than any signal, and your life shine as bright as the galaxy.<br><br>Wishing you peace and innovation. Happy New Year.",
-    
-    'ru': "Код не может передать тепло человеческого общения. Спасибо за ваше доверие и поддержку в этом путешествии.<br><br>Пусть в 2026 году наша связь будет надежнее спутникового сигнала, а ваша жизнь сияет ярче звезд.<br><br>С Новым годом! Желаю успеха и стабильности.",
-    
-    'kk': "Уақыт код жолдарына сыймайды. Осы сапардағы сеніміңіз бен қолдауыңызға рахмет.<br><br>2026 жылы байланысымыз кез келген сигналдан күшті болсын, ал өміріңіз жұлдыздай жарқырасын.<br><br>Жаңа жылыңызбен! Бейбітшілік пен табыс тілеймін.",
-    
-    'uz': "Kod satrlari vaqt oqimini to'xtata olmaydi. Ushbu sayohatda ishonchingiz va hamrohligingiz uchun tashakkur.<br><br>2026-yilda aloqamiz har qanday signaldan kuchliroq bo'lsin, hayotingiz esa galaktikadek porlasin.<br><br>Yangi yilingiz bilan! Sizga tinchlik va farovonlik tilayman.",
-    
-    'mn': "Кодны мөрүүд цаг хугацааны урсгалыг илэрхийлж чадахгүй. Бидэнд итгэл хүлээлгэн хамт байсан танд баярлалаа.<br><br>2026 онд бидний холбоо ямар ч дохионоос илүү хүчтэй байж, таны амьдрал од эрхэс мэт гэрэлтэх болтугай.<br><br>Шинэ оны мэнд хүргэye!",
-    
-    'ua': "Рядки коду не можуть передати плин часу. Дякуємо за вашу довіру та підтримку на цьому шляху.<br><br>Нехай у 2026 році наш зв'язок буде міцнішим за будь-який сигнал, а ваше життя сяє як галактика.<br><br>З Новим роком! Бажаю миру та інновацій."
-};
+// 比较日期的辅助函数
+function parseDate(dateStr) {
+    if (!dateStr) return new Date(0); // 如果没有日期，返回最旧的时间
+    // 处理可能的不同格式，这里假设格式主要是 YYYY-MM-DD
+    return new Date(dateStr);
+}
 
-// 2. 追踪当前语言 (需要在 changeLanguage 中更新它)
-let currentAppLanguage = 'zh'; // 默认中文
+function findLatestFirmware() {
+    let latestItem = null;
+    let latestDate = new Date(0);
+    let latestModel = '';
 
-// ⚠️ 重要：请找到原本的 window.changeLanguage 函数，
-// 在函数内部的第一行加上：currentAppLanguage = langCode;
-// 如果不想修改原函数，可以使用下面的覆盖写法（建议直接粘贴到文件末尾）：
+    // 1. 扫描固件数据库
+    if (typeof firmwareDatabase !== 'undefined') {
+        for (const [model, list] of Object.entries(firmwareDatabase)) {
+            if (Array.isArray(list)) {
+                list.forEach(item => {
+                    const itemDate = parseDate(item.date);
+                    if (itemDate > latestDate && item.url) { // 必须有下载链接才推送
+                        latestDate = itemDate;
+                        latestItem = item;
+                        latestModel = model;
+                    }
+                });
+            }
+        }
+    }
 
-const originalChangeLanguage = window.changeLanguage;
-window.changeLanguage = function(langCode) {
-    currentAppLanguage = langCode; // 更新当前语言记录
-    if(originalChangeLanguage) originalChangeLanguage(langCode); // 调用原有逻辑
-};
+    return { item: latestItem, model: latestModel };
+}
 
-// 3. 打开祝福弹窗
-window.openFestiveModal = function() {
-    const modal = document.getElementById('festiveModal');
-    const textContainer = document.getElementById('festiveText');
+function initUpdateToast() {
+    // 检查是否已经手动关闭过 (本次会话)
+    if (sessionStorage.getItem('rui_toast_closed')) return;
+
+    const result = findLatestFirmware();
+    if (!result.item) return; // 如果没找到任何数据，不显示
+
+    const { item, model } = result;
     
-    // 获取对应语言的祝福，如果没有则默认英文
-    const message = holidayGreetings[currentAppLanguage] || holidayGreetings['en'];
+    // 填充数据
+    document.getElementById('toastModel').textContent = model.toUpperCase();
+    document.getElementById('toastVer').textContent = item.version;
+    document.getElementById('toastDate').textContent = 'Released: ' + item.date;
+    document.getElementById('toastLink').href = item.url;
     
-    textContainer.innerHTML = message;
-    modal.style.display = 'block';
-    
-    // 简单的入场特效
-    textContainer.style.opacity = 0;
+    // 延迟 2.5 秒后滑入显示
     setTimeout(() => {
-        textContainer.style.transition = 'opacity 1s ease';
-        textContainer.style.opacity = 1;
-    }, 100);
+        document.getElementById('updateToast').classList.add('show');
+    }, 2500);
+}
 
-    if (document.body.style.overflow) document.body.style.overflow = 'hidden';
+window.closeUpdateToast = function() {
+    const toast = document.getElementById('updateToast');
+    toast.classList.remove('show');
+    // 记录状态，防止刷新页面重复弹出 (关闭浏览器后失效)
+    sessionStorage.setItem('rui_toast_closed', 'true');
 };
 
-window.closeFestiveModal = function() {
-    document.getElementById('festiveModal').style.display = 'none';
-    document.body.style.overflow = '';
+// 在页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 原有的初始化
+    initMenu(); 
+    
+    // 新的推送初始化
+    initUpdateToast();
+});
+// ==========================================
+// 7. 公告弹窗逻辑 (News Modal) - 新增
+// ==========================================
+window.openNewsModal = function() {
+    const modal = document.getElementById('firmwareModal'); // 复用现有弹窗
+    const title = document.getElementById('modalTitle');
+    const list = document.getElementById('modalList');
+    
+    // 1. 设置标题
+    title.textContent = 'LATEST NEWS & LOGS';
+    list.innerHTML = '';
+    
+    // 2. 检查数据
+    if (typeof newsDatabase === 'undefined' || newsDatabase.length === 0) {
+        list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No news available.</p>';
+    } else {
+        // 3. 渲染列表
+        newsDatabase.forEach(item => {
+            const row = document.createElement('div');
+            row.className = 'firmware-item'; // 复用现有样式
+            
+            // 根据标签类型设置不同颜色
+            let tagColor = '#999';
+            let borderColor = 'rgba(153,153,153,0.3)';
+            
+            if(item.tag === 'Software') { tagColor = '#28a745'; borderColor = 'rgba(40, 167, 69, 0.3)'; }
+            else if(item.tag === 'Firmware') { tagColor = '#17a2b8'; borderColor = 'rgba(23, 162, 184, 0.3)'; }
+            else if(item.tag === 'Service') { tagColor = '#ffc107'; borderColor = 'rgba(255, 193, 7, 0.3)'; }
+            else if(item.tag === 'Website') { tagColor = '#F37021'; borderColor = 'rgba(243, 112, 33, 0.3)'; }
+            
+            row.innerHTML = `
+                <div class="fw-info" style="width: 100%;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span class="fw-version" style="font-size:15px; color:#fff;">${item.title}</span>
+                        <span style="font-size:11px; color:${tagColor}; border:1px solid ${borderColor}; padding:1px 6px; border-radius:4px; font-family:var(--font-tech); text-transform: uppercase;">${item.tag}</span>
+                    </div>
+                    <div style="font-size:13px; color:#aaa; display:flex; justify-content:space-between;">
+                        <span style="max-width: 75%; opacity: 0.8;">${item.desc || ''}</span>
+                        <span class="fw-date" style="color:#666;">📅 ${item.date}</span>
+                    </div>
+                </div>
+            `;
+            list.appendChild(row);
+        });
+    }
+    
+    // 4. 显示弹窗
+    modal.style.display = 'block';
+    if(document.body.style.overflow) document.body.style.overflow = 'hidden';
 };
