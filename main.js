@@ -603,7 +603,8 @@ document.addEventListener('DOMContentLoaded', function() {
         'Dushanbe': [68.7870, 38.5358],  // 塔吉克斯坦
         'Yerevan': [44.5090, 40.1872],   // 亚美尼亚
         'Baku': [49.8671, 40.4093],      // 阿塞拜疆
-        'Ashgabat': [58.3261, 37.9601]   // 土库曼斯坦
+        'Ashgabat': [58.3261, 37.9601],   // 土库曼斯坦
+         'Ulaanbaatar': [106.9176, 47.9212] // 蒙古-乌兰巴托
     };
 
     // --- 2. 自动生成：呼吸灯数据 ---
