@@ -581,7 +581,144 @@ window.openNewsModal = function() {
     if(document.body.style.overflow) document.body.style.overflow = 'hidden';
 };
 
-// 页面加载入口 (Merged Init)
+// ==========================================
+// 8. 全球动态背景地图逻辑 (Global Map Background)
+// ==========================================
+document.addEventListener('DOMContentLoaded', function() {
+    var mapContainer = document.getElementById('global-map-bg');
+    if (!mapContainer) return; // 防止页面没加载完报错
+
+    var myChart = echarts.init(mapContainer);
+
+    // --- 1. 数据定义：上海+独联体首都 (英文版) ---
+    var geoCoordMap = {
+        'Shanghai': [121.4737, 31.2304],
+        'Moscow': [37.6173, 55.7558],    // 俄罗斯
+        'Kyiv': [30.5234, 50.4501],      // 乌克兰
+        'Tbilisi': [44.8271, 41.7151],   // 格鲁吉亚
+        'Minsk': [27.5615, 53.9045],     // 白俄罗斯
+        'Astana': [71.4304, 51.1605],    // 哈萨克斯坦
+        'Tashkent': [69.2401, 41.2995],  // 乌兹别克斯坦
+        'Bishkek': [74.5698, 42.8746],   // 吉尔吉斯斯坦
+        'Dushanbe': [68.7870, 38.5358],  // 塔吉克斯坦
+        'Yerevan': [44.5090, 40.1872],   // 亚美尼亚
+        'Baku': [49.8671, 40.4093],      // 阿塞拜疆
+        'Ashgabat': [58.3261, 37.9601]   // 土库曼斯坦
+    };
+
+    // --- 2. 自动生成：呼吸灯数据 ---
+    var breathingCitiesData = [];
+    for (var key in geoCoordMap) {
+        // 双中心：Moscow/Shanghai 光圈大，其他小
+        var weight = (key === 'Moscow' || key === 'Shanghai') ? 150 : 60;
+        breathingCitiesData.push({
+            name: key,
+            value: geoCoordMap[key].concat(weight)
+        });
+    }
+
+    // --- 3. 自动生成：双中心汇聚流光连线 ---
+    var streamLineData = [];
+    var centers = ['Shanghai', 'Moscow']; // 更新为英文中心名
+
+    for (var cityName in geoCoordMap) {
+        var startPoint = geoCoordMap[cityName];
+        centers.forEach(function(centerName) {
+            // 不自己连自己
+            if (cityName !== centerName) {
+                var endPoint = geoCoordMap[centerName];
+                streamLineData.push({
+                    fromName: cityName,
+                    toName: centerName,
+                    coords: [startPoint, endPoint]
+                });
+            }
+        });
+    }
+
+    // --- 4. ECharts 配置项 ---
+    var option = {
+        backgroundColor: 'transparent', // 保持透明，配合 CSS 背景色
+        
+        geo: {
+            map: 'world',
+            roam: true, // 开启漫游，方便你查看细节
+            zoom: 2.6, // 🔍 放大地图
+            center: [70, 45], // 🎯 视野中心定位在中亚/独联体区域，裁掉美洲和非洲
+            label: { emphasis: { show: false } },
+            itemStyle: {
+                normal: {
+                    areaColor: '#092838', // 陆地深蓝
+                    borderColor: '#154e6b', // 边界线
+                    borderWidth: 1
+                },
+                emphasis: {
+                    areaColor: '#0b354d' // 鼠标悬停略微变亮
+                }
+            }
+        },
+        
+        series: [
+            // 图层1：呼吸灯节点
+            {
+                name: 'Service Nodes',
+                type: 'effectScatter',
+                coordinateSystem: 'geo',
+                data: breathingCitiesData,
+                symbolSize: function (val) { return val[2] / 10; }, // 稍微调小一点，避免放大后太拥挤
+                showEffectOn: 'render',
+                rippleEffect: { brushType: 'stroke', scale: 3, period: 4 },
+                label: {
+                    normal: {
+                        formatter: '{b}', position: 'right', show: true,
+                        fontSize: 11, // 英文名称
+                        color: '#8dcfff', opacity: 0.9,
+                        textBorderColor: '#000', textBorderWidth: 2
+                    }
+                },
+                itemStyle: {
+                    normal: { color: '#00eaff', shadowBlur: 10, shadowColor: '#00eaff' }
+                },
+                zlevel: 1
+            },
+            
+            // 图层2：动态流光
+            {
+                name: 'Data Link',
+                type: 'lines',
+                zlevel: 2,
+                effect: {
+                    show: true, period: 5, trailLength: 0.2,
+                    color: '#F37021', // 使用品牌橙色
+                    symbol: 'circle', symbolSize: 3
+                },
+                lineStyle: {
+                    normal: { color: '#F37021', width: 0, opacity: 0, curveness: 0.2 }
+                },
+                data: streamLineData
+            },
+            
+            // 图层3：弱背景连线
+            {
+                type: 'lines',
+                zlevel: 1,
+                lineStyle: {
+                    normal: { color: '#4af', width: 0.5, opacity: 0.05, curveness: 0.2 }
+                },
+                data: streamLineData
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+
+    // 窗口调整
+    window.addEventListener('resize', function () {
+        myChart.resize();
+    });
+});
+
+// 页面加载入口
 document.addEventListener('DOMContentLoaded', function() {
     initMenu(); 
     initUpdateToast();
