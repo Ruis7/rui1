@@ -20,7 +20,7 @@
     --bg-page: #ffffff;             /* 页面白底 */
     --bg-section: #f8f9fa;          /* 浅灰分区 */
     --bg-dark-glass: rgba(11, 16, 21, 0.96); /* 深色磨砂玻璃 (用于菜单/弹窗) */
-    --hero-bg: radial-gradient(circle at 50% 30%, #232d38 0%, #0b1015 100%);
+    /* --hero-bg: radial-gradient(circle at 50% 30%, #232d38 0%, #0b1015 100%);  <-- 已废弃，改用地图背景 */
     
     /* 边框 */
     --border-line: #e9ecef;
@@ -49,53 +49,16 @@ button:focus-visible, a:focus-visible, input:focus-visible {
 }
 
 /* =========================================
-   2. 🛠️ 背景装饰 (Background FX)
+   2. 🛠️ 背景装饰 (Background FX - Map Container)
    ========================================= */
 .bg-decorations {
     position: fixed;
     top: 0; left: 0; width: 100%; height: 100%;
-    z-index: 0; 
-    pointer-events: none;
+    z-index: -1;  /* 确保在所有内容最底层 */
+    pointer-events: none; /* 允许鼠标穿透点击上方内容 */
+    background-color: #021019; /* 基础深色底，防止地图加载前闪白 */
     overflow: hidden;
 }
-
-.deco-contour-map {
-    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-    background-image: 
-        radial-gradient(circle at 10% 20%, transparent 0%, transparent 90%, rgba(0,0,0,0.03) 91%, transparent 92%),
-        radial-gradient(ellipse at 80% 80%, transparent 0%, transparent 85%, rgba(0,0,0,0.02) 86%, transparent 87%);
-    opacity: 0.6;
-}
-
-.deco-grid-plane {
-    position: absolute; bottom: -10%; left: -10%; width: 120%; height: 50%;
-    background-image:
-        linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
-    background-size: 60px 60px;
-    transform: perspective(1000px) rotateX(60deg);
-    opacity: 0.5;
-}
-
-.deco-item { position: absolute; opacity: 0.05; filter: grayscale(1); z-index: -1; }
-.deco-satellite { top: 12%; right: 15%; font-size: 50px; animation: float 10s ease-in-out infinite; }
-.deco-uav { top: 35%; left: -80px; font-size: 36px; animation: flyPass 40s linear infinite; }
-.deco-total-station { bottom: 15%; right: 20%; font-size: 42px; }
-
-.deco-earth-wireframe {
-    position: absolute; bottom: 40px; left: 40px; width: 140px; height: 140px;
-    border-radius: 50%;
-    border: 2px solid rgba(0, 86, 179, 0.6); 
-    background: radial-gradient(circle at 30% 30%, rgba(0, 86, 179, 0.1), rgba(0, 86, 179, 0.05) 60%);
-    box-shadow: 0 0 25px rgba(0, 86, 179, 0.2), inset 0 0 20px rgba(0, 86, 179, 0.1);
-    animation: rotateGlobe 20s linear infinite;
-    z-index: 10;
-}
-.deco-earth-wireframe::before, .deco-earth-wireframe::after {
-    content: ''; position: absolute; top: 50%; left: 50%; border: 2px solid rgba(0, 86, 179, 0.4); border-radius: 50%;
-}
-.deco-earth-wireframe::before { width: 90%; height: 35%; transform: translate(-50%, -50%) rotate(-35deg); }
-.deco-earth-wireframe::after { width: 35%; height: 90%; transform: translate(-50%, -50%) rotate(55deg); }
 
 /* =========================================
    3. 顶部导航 (Header)
@@ -273,18 +236,15 @@ button:focus-visible, a:focus-visible, input:focus-visible {
    ========================================= */
 .hero-section {
     position: relative;
-    background: var(--hero-bg);
+    /* 关键修改：改为透明，显示底层地图 */
+    background: transparent;
     padding: 140px 20px 160px;
     text-align: center;
     color: var(--text-light);
     z-index: 1; 
     overflow: hidden;
 }
-.hero-section::after {
-    content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100px;
-    background: linear-gradient(to bottom, transparent, var(--bg-page)); 
-    z-index: 3; pointer-events: none;
-}
+
 #particleCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
 .hero-section h1, .hero-section p, .search-container { position: relative; z-index: 10; }
 
@@ -333,10 +293,27 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     position: relative; z-index: 10;
 }
 .card {
-    background: #fff; width: 320px; padding: 40px; border-radius: 16px;
-    border: 1px solid var(--border-line);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-    text-align: left; transition: 0.4s; position: relative; overflow: hidden;
+    /* background: #fff;  <-- 删除旧的白色背景 */
+    background: rgba(15, 25, 35, 0.75); /* ✨ 新背景：深蓝灰半透明 */
+    backdrop-filter: blur(10px);        /* ✨ 特效：背景模糊（毛玻璃） */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* ✨ 边框：微弱的白边，更有质感 */
+    
+    width: 320px; 
+    padding: 40px; 
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3); /* 阴影加深一点 */
+    text-align: left; 
+    transition: 0.4s; 
+    position: relative; 
+    overflow: hidden;
+}
+
+/* 鼠标悬停时的效果也可以优化一下 */
+.card:hover {
+    transform: translateY(-10px);
+    background: rgba(15, 25, 35, 0.9); /* 悬停时稍微不透明一点 */
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    border-color: var(--primary-color); /* 悬停时边框变橙色 */
 }
 .card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.12); }
 .card::after {
@@ -345,8 +322,22 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     transform: scaleX(0); transition: 0.4s;
 }
 .card:hover::after { transform: scaleX(1); }
-.card h3 { color: #2c3e50; margin-top: 0; font-size: 1.5em; }
-.card p { color: var(--text-gray); font-size: 14px; margin-bottom: 30px; min-height: 45px; }
+/* 找到 .card h3 并替换 */
+.card h3 { 
+    /* color: #2c3e50; <-- 删除旧的深色 */
+    color: #ffffff;    /* ✨ 改为纯白 */
+    margin-top: 0; 
+    font-size: 1.5em; 
+    letter-spacing: 1px;
+}
+/* 找到 .card p 并替换 */
+.card p { 
+    /* color: var(--text-gray); <-- 删除旧的灰色 */
+    color: rgba(255, 255, 255, 0.7); /* ✨ 改为浅白色 */
+    font-size: 14px; 
+    margin-bottom: 30px; 
+    min-height: 45px; 
+}
 .card a { color: var(--primary-color); font-weight: bold; font-size: 14px; }
 
 /* =========================================
@@ -484,6 +475,7 @@ button:focus-visible, a:focus-visible, input:focus-visible {
     background: #2c3e50; color: #ccc; margin-top: 80px;
 }
 .site-footer a:hover { color: var(--primary-color); }
+
 /* =========================================
    ❄️ 2026 混合飘雪 (雪花 + 彩色光点)
    ========================================= */
