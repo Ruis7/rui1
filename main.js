@@ -5,7 +5,7 @@
 // ==========================================
 // 1. 全局辅助函数 (Global Utilities)
 // ==========================================
-window.currentLang = 'zh'; // 全局语言变量
+window.currentLang = 'zh';
 
 window.toggleMenu = function() {
     document.getElementById('navMenu').classList.toggle('active');
@@ -40,7 +40,6 @@ window.addEventListener('click', function(e) {
     if (e.target.classList.contains('modal')) {
         e.target.style.display = 'none';
         document.body.style.overflow = '';
-        // 如果是 PointSKY 弹窗关闭，停止罗盘
         if (e.target.id === 'toolModal' && window.removeEventListener) {
             window.removeEventListener('deviceorientation', handleOrientation);
             document.getElementById('btnCompass').classList.remove('active');
@@ -184,8 +183,6 @@ const translations = {
 window.changeLanguage = function(langCode) {
     window.currentLang = langCode;
     const dict = translations[langCode] || translations['en'];
-    
-    // 更新静态文本
     document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (dict[key]) {
@@ -193,8 +190,7 @@ window.changeLanguage = function(langCode) {
             else dict[key].includes('<') ? el.innerHTML = dict[key] : el.textContent = dict[key];
         }
     });
-
-    // 动态更新 PointSKY 弹窗内容 (如果它是打开的)
+    // 更新动态内容
     if (document.getElementById('toolModal').style.display !== 'none') {
         updateSatInfo();
         const btnCompass = document.getElementById('btnCompass');
@@ -217,37 +213,30 @@ window.getI18n = function(key) {
 function initMenu() {
     const navMenu = document.getElementById('navMenu');
     if (!navMenu || typeof menuConfig === 'undefined') return;
-    
     navMenu.innerHTML = ''; 
-
     menuConfig.forEach(category => {
         const navItem = document.createElement('div');
         navItem.className = 'nav-item';
-
         const navLink = document.createElement('div');
         navLink.className = 'nav-link';
         navLink.setAttribute('data-i18n', category.labelKey); 
         navLink.textContent = category.labelKey; 
         navLink.onclick = function() { window.toggleSubmenu(this); }; 
         navItem.appendChild(navLink);
-
         if (category.items && category.items.length > 0) {
             const dropdown = document.createElement('div');
             dropdown.className = 'dropdown-menu';
-
             category.items.forEach(productId => {
                 const productGroup = document.createElement('div');
                 productGroup.className = 'product-group';
                 const downloadLabelKey = (category.type === 'software') ? 'link_software' : 'link_firmware';
-
                 productGroup.innerHTML = `
                     <span class="product-title">${productId.toUpperCase()}</span>
                     <div class="product-links">
                         <a href="#" onclick="openManualModal('${productId}'); return false;" data-i18n="link_manual">Manual</a> | 
                         <a href="#" onclick="openFirmwareModal('${productId}'); return false;" data-i18n="${downloadLabelKey}">Download</a> | 
                         <a href="#" onclick="openFaqModal('${productId}'); return false;" data-i18n="link_faq">FAQ</a> | 
-                    </div>
-                `;
+                    </div>`;
                 dropdown.appendChild(productGroup);
             });
             navItem.appendChild(dropdown);
@@ -258,9 +247,8 @@ function initMenu() {
 }
 
 // ==========================================
-// 4. 弹窗与智能搜索逻辑 (Smart Search & Modals)
+// 4. 弹窗与智能搜索逻辑
 // ==========================================
-
 function lockScroll() { document.body.style.overflow = 'hidden'; }
 function unlockScroll() { document.body.style.overflow = ''; }
 
@@ -275,12 +263,8 @@ window.openFirmwareModal = function(productModel) {
     else if (data.length === 0) list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No firmware currently available.</p>';
     else {
         data.forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'firmware-item';
-            row.innerHTML = `
-                <div class="fw-info"><span class="fw-version">💾 ${item.version}</span><span class="fw-date">${item.date ? '📅 ' + item.date : ''}</span></div>
-                <a href="${item.url}" class="fw-download-btn" target="_blank">Download</a>
-            `;
+            const row = document.createElement('div'); row.className = 'firmware-item';
+            row.innerHTML = `<div class="fw-info"><span class="fw-version">💾 ${item.version}</span><span class="fw-date">${item.date ? '📅 ' + item.date : ''}</span></div><a href="${item.url}" class="fw-download-btn" target="_blank">Download</a>`;
             list.appendChild(row);
         });
     }
@@ -297,12 +281,8 @@ window.openManualModal = function(productModel) {
     if (!data || data.length === 0) list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No manuals found.</p>';
     else {
         data.forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'firmware-item';
-            row.innerHTML = `
-                <div class="fw-info"><span class="fw-version">📄 ${item.title}</span><span class="fw-date">${item.date || ''}</span></div>
-                <a href="${item.url}" class="fw-download-btn" target="_blank">View</a>
-            `;
+            const row = document.createElement('div'); row.className = 'firmware-item';
+            row.innerHTML = `<div class="fw-info"><span class="fw-version">📄 ${item.title}</span><span class="fw-date">${item.date || ''}</span></div><a href="${item.url}" class="fw-download-btn" target="_blank">View</a>`;
             list.appendChild(row);
         });
     }
@@ -313,55 +293,38 @@ window.openFaqModal = function(productModel) {
     const modal = document.getElementById('firmwareModal'); 
     const title = document.getElementById('modalTitle');
     const list = document.getElementById('modalList');
-    title.textContent = productModel.toUpperCase() + ' FAQ';
-    list.innerHTML = '';
+    title.textContent = productModel.toUpperCase() + ' FAQ'; list.innerHTML = '';
     let data = [];
     if (typeof faqDatabase !== 'undefined' && faqDatabase[productModel]) data = faqDatabase[productModel];
-    
     if (!data || data.length === 0) list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No FAQs found.</p>';
     else {
         data.forEach(item => {
-            const row = document.createElement('div');
-            row.className = 'firmware-item';
-            row.innerHTML = `
-                <div class="fw-info"><span class="fw-version">❓ ${item.title}</span><span class="fw-date">${item.date || ''}</span></div>
-                <a href="${item.url}" class="fw-download-btn" target="_blank">View</a>
-            `;
+            const row = document.createElement('div'); row.className = 'firmware-item';
+            row.innerHTML = `<div class="fw-info"><span class="fw-version">❓ ${item.title}</span><span class="fw-date">${item.date || ''}</span></div><a href="${item.url}" class="fw-download-btn" target="_blank">View</a>`;
             list.appendChild(row);
         });
     }
     modal.style.display = 'block'; lockScroll();
 };
 
-window.closeModal = function() {
-    document.getElementById('firmwareModal').style.display = 'none'; unlockScroll();
-};
-
-window.openContactModal = function() {
-    document.getElementById('contactModal').style.display = 'block'; lockScroll();
-};
-window.closeContactModal = function() {
-    document.getElementById('contactModal').style.display = 'none'; unlockScroll();
-};
+window.closeModal = function() { document.getElementById('firmwareModal').style.display = 'none'; unlockScroll(); };
+window.openContactModal = function() { document.getElementById('contactModal').style.display = 'block'; lockScroll(); };
+window.closeContactModal = function() { document.getElementById('contactModal').style.display = 'none'; unlockScroll(); };
 
 window.openSearchChoiceModal = function(model) {
     const modal = document.getElementById('searchChoiceModal');
     document.getElementById('searchResultTitle').textContent = "RESULT: " + model.toUpperCase();
     const btnContainer = document.getElementById('searchResultBtns');
     btnContainer.innerHTML = '';
-    const fwBtn = document.createElement('button');
-    fwBtn.className = 'search-btn'; fwBtn.innerHTML = '💾 Download Firmware / Software';
+    const fwBtn = document.createElement('button'); fwBtn.className = 'search-btn'; fwBtn.innerHTML = '💾 Download Firmware / Software';
     fwBtn.onclick = function() { modal.style.display = 'none'; openFirmwareModal(model); };
     btnContainer.appendChild(fwBtn);
-    const docBtn = document.createElement('button');
-    docBtn.className = 'search-btn'; docBtn.innerHTML = '📄 View Manuals';
+    const docBtn = document.createElement('button'); docBtn.className = 'search-btn'; docBtn.innerHTML = '📄 View Manuals';
     docBtn.onclick = function() { modal.style.display = 'none'; openManualModal(model); };
     btnContainer.appendChild(docBtn);
     modal.style.display = 'block'; lockScroll();
 };
-window.closeSearchChoiceModal = function() {
-    document.getElementById('searchChoiceModal').style.display = 'none'; unlockScroll();
-};
+window.closeSearchChoiceModal = function() { document.getElementById('searchChoiceModal').style.display = 'none'; unlockScroll(); };
 
 window.performSearch = function() {
     const input = document.getElementById('searchInput');
@@ -376,28 +339,20 @@ window.performSearch = function() {
 
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        searchInput.addEventListener("keypress", function(event) {
-            if (event.key === "Enter") window.performSearch();
-        });
-    }
+    if (searchInput) { searchInput.addEventListener("keypress", function(event) { if (event.key === "Enter") window.performSearch(); }); }
 });
 
 // ==========================================
-// 5. 高性能粒子动画 (Particle Engine)
+// 5. 粒子动画
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
     const canvas = document.getElementById('particleCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     const heroSection = document.getElementById('heroSection');
-    let particlesArray = [];
-    let animationId;
-    let isAnimating = false;
-    
+    let particlesArray = []; let animationId; let isAnimating = false;
     function resizeCanvas() { canvas.width = heroSection.offsetWidth; canvas.height = heroSection.offsetHeight; }
-    window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas); resizeCanvas();
     const mouse = { x: null, y: null };
     heroSection.addEventListener('mousemove', function(event) {
         const rect = heroSection.getBoundingClientRect();
@@ -405,42 +360,32 @@ document.addEventListener('DOMContentLoaded', function() {
         const count = window.innerWidth < 768 ? 1 : 3;
         for (let i = 0; i < count; i++) particlesArray.push(new Particle());
     });
-
     class Particle {
         constructor() {
-            this.x = mouse.x; this.y = mouse.y;
-            this.size = Math.random() * 4 + 1; 
+            this.x = mouse.x; this.y = mouse.y; this.size = Math.random() * 4 + 1; 
             this.speedX = Math.random() * 3 - 1.5; this.speedY = Math.random() * 3 - 1.5;
             this.color = Math.random() > 0.5 ? 'rgba(243, 112, 33, 1)' : 'rgba(255, 255, 255, 0.8)';
         }
         update() { this.x += this.speedX; this.y += this.speedY; if (this.size > 0.2) this.size -= 0.1; }
         draw() { ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fill(); }
     }
-
     function connectParticles() {
         for (let a = 0; a < particlesArray.length; a++) {
             for (let b = a; b < particlesArray.length; b++) {
-                let dx = particlesArray[a].x - particlesArray[b].x;
-                let dy = particlesArray[a].y - particlesArray[b].y;
+                let dx = particlesArray[a].x - particlesArray[b].x; let dy = particlesArray[a].y - particlesArray[b].y;
                 let distance = Math.sqrt(dx * dx + dy * dy);
-                if (distance < 50) {
-                    ctx.strokeStyle = 'rgba(243, 112, 33, 0.2)'; ctx.lineWidth = 1;
-                    ctx.beginPath(); ctx.moveTo(particlesArray[a].x, particlesArray[a].y); ctx.lineTo(particlesArray[b].x, particlesArray[b].y); ctx.stroke();
-                }
+                if (distance < 50) { ctx.strokeStyle = 'rgba(243, 112, 33, 0.2)'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(particlesArray[a].x, particlesArray[a].y); ctx.lineTo(particlesArray[b].x, particlesArray[b].y); ctx.stroke(); }
             }
         }
     }
-
     function handleParticles() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         for (let i = 0; i < particlesArray.length; i++) {
             particlesArray[i].update(); particlesArray[i].draw();
             if (particlesArray[i].size <= 0.3) { particlesArray.splice(i, 1); i--; }
         }
-        connectParticles();
-        if (isAnimating) animationId = requestAnimationFrame(handleParticles);
+        connectParticles(); if (isAnimating) animationId = requestAnimationFrame(handleParticles);
     }
-
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) { if (!isAnimating) { isAnimating = true; handleParticles(); } }
@@ -451,7 +396,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ==========================================
-// 6. 智能更新推送逻辑
+// 6. 更新推送
 // ==========================================
 function parseDate(dateStr) { if (!dateStr) return new Date(0); return new Date(dateStr); }
 function findLatestFirmware() {
@@ -479,19 +424,13 @@ function initUpdateToast() {
     document.getElementById('toastLink').href = item.url;
     setTimeout(() => { document.getElementById('updateToast').classList.add('show'); }, 2500);
 }
-window.closeUpdateToast = function() {
-    const toast = document.getElementById('updateToast');
-    toast.classList.remove('show');
-    sessionStorage.setItem('rui_toast_closed', 'true');
-};
+window.closeUpdateToast = function() { document.getElementById('updateToast').classList.remove('show'); sessionStorage.setItem('rui_toast_closed', 'true'); };
 
 // ==========================================
-// 7. 公告弹窗逻辑
+// 7. 新闻弹窗
 // ==========================================
 window.openNewsModal = function() {
-    const modal = document.getElementById('firmwareModal'); 
-    const title = document.getElementById('modalTitle');
-    const list = document.getElementById('modalList');
+    const modal = document.getElementById('firmwareModal'); const title = document.getElementById('modalTitle'); const list = document.getElementById('modalList');
     title.textContent = 'LATEST NEWS & LOGS'; list.innerHTML = '';
     if (typeof newsDatabase === 'undefined' || newsDatabase.length === 0) list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No news available.</p>';
     else {
@@ -509,7 +448,7 @@ window.openNewsModal = function() {
 };
 
 // ==========================================
-// 8. 全球动态背景地图逻辑
+// 8. 全球地图背景
 // ==========================================
 document.addEventListener('DOMContentLoaded', function() {
     var mapContainer = document.getElementById('global-map-bg');
@@ -517,27 +456,15 @@ document.addEventListener('DOMContentLoaded', function() {
     var myChart = echarts.init(mapContainer);
     var geoCoordMap = { 'Shanghai': [121.4737, 31.2304], 'Moscow': [37.6173, 55.7558], 'Kyiv': [30.5234, 50.4501], 'Tbilisi': [44.8271, 41.7151], 'Minsk': [27.5615, 53.9045], 'Astana': [71.4304, 51.1605], 'Tashkent': [69.2401, 41.2995], 'Bishkek': [74.5698, 42.8746], 'Dushanbe': [68.7870, 38.5358], 'Yerevan': [44.5090, 40.1872], 'Baku': [49.8671, 40.4093], 'Ashgabat': [58.3261, 37.9601], 'Ulaanbaatar': [106.9176, 47.9212] };
     var breathingCitiesData = [];
-    for (var key in geoCoordMap) {
-        var weight = (key === 'Moscow' || key === 'Shanghai') ? 150 : 60;
-        breathingCitiesData.push({ name: key, value: geoCoordMap[key].concat(weight) });
-    }
-    var streamLineData = [];
-    var centers = ['Shanghai', 'Moscow'];
+    for (var key in geoCoordMap) { var weight = (key === 'Moscow' || key === 'Shanghai') ? 150 : 60; breathingCitiesData.push({ name: key, value: geoCoordMap[key].concat(weight) }); }
+    var streamLineData = []; var centers = ['Shanghai', 'Moscow'];
     for (var cityName in geoCoordMap) {
         var startPoint = geoCoordMap[cityName];
-        centers.forEach(function(centerName) {
-            if (cityName !== centerName) {
-                var endPoint = geoCoordMap[centerName];
-                streamLineData.push({ fromName: cityName, toName: centerName, coords: [startPoint, endPoint] });
-            }
-        });
+        centers.forEach(function(centerName) { if (cityName !== centerName) { var endPoint = geoCoordMap[centerName]; streamLineData.push({ fromName: cityName, toName: centerName, coords: [startPoint, endPoint] }); } });
     }
     var option = {
         backgroundColor: 'transparent',
-        geo: {
-            map: 'world', roam: true, zoom: 2.6, center: [70, 45], label: { emphasis: { show: false } },
-            itemStyle: { normal: { areaColor: '#092838', borderColor: '#154e6b', borderWidth: 1 }, emphasis: { areaColor: '#0b354d' } }
-        },
+        geo: { map: 'world', roam: true, zoom: 2.6, center: [70, 45], label: { emphasis: { show: false } }, itemStyle: { normal: { areaColor: '#092838', borderColor: '#154e6b', borderWidth: 1 }, emphasis: { areaColor: '#0b354d' } } },
         series: [
             { name: 'Service Nodes', type: 'effectScatter', coordinateSystem: 'geo', data: breathingCitiesData, symbolSize: function (val) { return val[2] / 10; }, showEffectOn: 'render', rippleEffect: { brushType: 'stroke', scale: 3, period: 4 }, label: { normal: { formatter: '{b}', position: 'right', show: true, fontSize: 11, color: '#8dcfff', opacity: 0.9, textBorderColor: '#000', textBorderWidth: 2 } }, itemStyle: { normal: { color: '#00eaff', shadowBlur: 10, shadowColor: '#00eaff' } }, zlevel: 1 },
             { name: 'Data Link', type: 'lines', zlevel: 2, effect: { show: true, period: 5, trailLength: 0.2, color: '#F37021', symbol: 'circle', symbolSize: 3 }, lineStyle: { normal: { color: '#F37021', width: 0, opacity: 0, curveness: 0.2 } }, data: streamLineData },
@@ -554,33 +481,19 @@ document.addEventListener('DOMContentLoaded', function() { initMenu(); initUpdat
 // 12. PointSKY 现代实用版逻辑 (含罗盘+多语言)
 // ==========================================
 
-const satDB = {
-    'region_eu': { lon: 25.0 },
-    'region_as': { lon: 83.5 },
-    'region_am': { lon: -98.0 }
-};
-
+const satDB = { 'region_eu': { lon: 25.0 }, 'region_as': { lon: 83.5 }, 'region_am': { lon: -98.0 } };
 let currentAzimuth = 0; 
 
 // 弹窗控制
 window.openToolModal = function() {
     const modal = document.getElementById('toolModal');
-    if(modal) {
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        updateSatInfo();
-    }
+    if(modal) { modal.style.display = 'flex'; document.body.style.overflow = 'hidden'; updateSatInfo(); }
 };
 window.closeToolModal = function() {
-    document.getElementById('toolModal').style.display = 'none';
-    document.body.style.overflow = '';
-    // 关闭罗盘
+    document.getElementById('toolModal').style.display = 'none'; document.body.style.overflow = '';
     window.removeEventListener('deviceorientation', handleOrientation);
     const btn = document.getElementById('btnCompass');
-    if (btn) {
-        btn.classList.remove('active');
-        btn.innerText = getI18n('ps_btn_compass_on');
-    }
+    if (btn) { btn.classList.remove('active'); btn.innerText = getI18n('ps_btn_compass_on'); }
 };
 
 // 更新卫星信息
@@ -597,20 +510,14 @@ window.getAutoLocation = function() {
         const btn = document.querySelector('.text-btn');
         const oldText = getI18n('ps_btn_auto');
         btn.innerText = getI18n('ps_msg_locating');
-        
         navigator.geolocation.getCurrentPosition(function(pos) {
             document.getElementById('psLat').value = pos.coords.latitude.toFixed(6);
             document.getElementById('psLon').value = pos.coords.longitude.toFixed(6);
             btn.innerText = getI18n('ps_msg_ok');
             setTimeout(() => { btn.innerText = getI18n('ps_btn_auto'); }, 2000);
             calculatePointSky();
-        }, function(err) {
-            alert(getI18n('ps_msg_fail'));
-            btn.innerText = getI18n('ps_btn_auto');
-        });
-    } else {
-        alert("Geolocation not supported");
-    }
+        }, function(err) { alert(getI18n('ps_msg_fail')); btn.innerText = oldText; });
+    } else { alert("Geolocation not supported"); }
 };
 
 // 罗盘开关
@@ -623,12 +530,8 @@ window.toggleCompass = function() {
         updateCompassUI(0);
     } else {
         if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
-            DeviceOrientationEvent.requestPermission()
-                .then(res => res === 'granted' ? startCompass(btn) : alert("Permission Denied"))
-                .catch(console.error);
-        } else {
-            startCompass(btn);
-        }
+            DeviceOrientationEvent.requestPermission().then(res => res === 'granted' ? startCompass(btn) : alert("Permission Denied")).catch(console.error);
+        } else { startCompass(btn); }
     }
 };
 function startCompass(btn) {
@@ -643,44 +546,31 @@ window.calculatePointSky = function() {
     const lonVal = document.getElementById('psLon').value;
     if (latVal === "" || lonVal === "") { document.getElementById('psLat').focus(); return; }
 
-    const lat = parseFloat(latVal);
-    const lon = parseFloat(lonVal);
-    const satKey = document.getElementById('psSat').value;
-    const satLon = satDB[satKey].lon;
-
+    const lat = parseFloat(latVal); const lon = parseFloat(lonVal);
+    const satKey = document.getElementById('psSat').value; const satLon = satDB[satKey].lon;
     const RAD = Math.PI / 180.0; const DEG = 180.0 / Math.PI;
     const RE = 6378.137; const RS = 42164.0;
 
     let phi = lat * RAD; let lam = lon * RAD; let lamS = satLon * RAD; let dLam = lamS - lam;
-
     let azRad = Math.atan2(Math.tan(dLam), Math.sin(phi));
     let azimuth = azRad * DEG + 180;
     if (lat > 0) azimuth = 180 + (azRad * DEG); else azimuth = 360 + (azRad * DEG);
-    azimuth = (azimuth + 360) % 360;
-    currentAzimuth = azimuth;
+    azimuth = (azimuth + 360) % 360; currentAzimuth = azimuth;
 
     let cosGamma = Math.cos(phi) * Math.cos(dLam);
     let sinGamma = Math.sqrt(1 - cosGamma*cosGamma);
     let elRad = Math.atan((cosGamma - 0.1513) / sinGamma);
     let elevation = elRad * DEG;
-
     let dist = Math.sqrt(RE*RE + RS*RS - 2*RE*RS*cosGamma);
 
     document.getElementById('resAz').innerText = azimuth.toFixed(1) + "°";
     document.getElementById('resEl').innerText = elevation.toFixed(1) + "°";
     document.getElementById('resDist').innerText = dist.toFixed(0) + " km";
-
     updateCompassUI(0);
 
-    const warn = document.getElementById('psWarn');
-    const ok = document.getElementById('psOk');
-    if (elevation < 10) {
-        warn.style.display = 'block'; ok.style.display = 'none';
-        document.getElementById('resEl').style.color = '#d32f2f';
-    } else {
-        warn.style.display = 'none'; ok.style.display = 'block';
-        document.getElementById('resEl').style.color = '#333';
-    }
+    const warn = document.getElementById('psWarn'); const ok = document.getElementById('psOk');
+    if (elevation < 10) { warn.style.display = 'block'; ok.style.display = 'none'; document.getElementById('resEl').style.color = '#d32f2f'; }
+    else { warn.style.display = 'none'; ok.style.display = 'block'; document.getElementById('resEl').style.color = '#333'; }
 };
 
 function handleOrientation(e) {
