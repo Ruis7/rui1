@@ -216,8 +216,8 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
 .text-btn { background: none; border: none; color: var(--primary-color); cursor: pointer; font-size: 12px; font-weight: 600; padding: 0; }
 .input-grid { display: flex; gap: 10px; flex-wrap: wrap; /* 允许换行 */ }
 .input-group { flex: 1; position: relative; min-width: 100px; }
-.input-tag { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 12px; color: #999; pointer-events: none; }
-.modern-input { padding-left: 35px; }
+.input-tag { display: none !important; }
+.modern-input { padding-left: 12px !important; }
 
 .modern-btn-main { width: 100%; background: var(--primary-color); color: #fff; border: none; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(243,112,33,0.3); transition: 0.2s; }
 .modern-btn-main:hover { background: #e06010; }
