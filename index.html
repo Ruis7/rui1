@@ -20,7 +20,6 @@
 
     <div class="bg-decorations">
         <div id="global-map-bg" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1;"></div>
-        
         <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 16, 25, 0.3); z-index: 2; pointer-events: none;"></div>
     </div>
 
@@ -47,7 +46,7 @@
         </div>
     </header>
 
-   <div class="hero-section" id="heroSection">
+    <div class="hero-section" id="heroSection">
         <canvas id="particleCanvas"></canvas>
         <h1 data-i18n="hero_title">欢迎来到 <span>RUI'S</span> 技术支持</h1>
         <p data-i18n="hero_desc">您的说明书、固件和技术支持一站式中心。</p>
@@ -60,15 +59,17 @@
 
     <div class="content-container">
         <div class="card">
-            <h3 data-i18n="card_fw_title">你好</h3>
-            <p data-i18n="card_fw_desc">欢迎关注</p>
-            <a href="https://flic.kr/ps/3YHpp5" target="_blank" data-i18n="btn_download">更多 ></a>
+            <h3 data-i18n="ps_title" style="color: #fff;">📡 PointSKY</h3>
+            <p data-i18n="ps_desc_card" style="color: rgba(255,255,255,0.8);">专业 L-Band 卫星寻星计算工具。</p>
+            <a href="#" onclick="openToolModal(); return false;" data-i18n="btn_open_tool" style="color: var(--primary-color); font-weight:bold;">打开工具 ></a>
         </div>
-         <div class="card">
+
+        <div class="card">
             <h3 data-i18n="card_doc_title">Latest News</h3>
             <p data-i18n="card_doc_desc">Firmware changelogs, server maintenance, and updates.</p>
             <a href="#" onclick="openNewsModal(); return false;" data-i18n="btn_browse">Browse ></a>
         </div>
+
         <div class="card">
             <h3 data-i18n="card_ticket_title">售后工单</h3>
             <p data-i18n="card_ticket_desc">遇到技术难题？提交工单，我将为您解答。</p>
@@ -146,6 +147,93 @@
             </div>
             <div class="toast-date" id="toastDate">2025-12-28</div>
             <a href="#" id="toastLink" class="toast-btn" target="_blank">Download Now</a>
+        </div>
+    </div>
+
+    <div id="toolModal" class="modal">
+        <div class="modal-content modern-modal">
+            <div class="modern-header">
+                <div class="header-title">
+                    <h3 data-i18n="ps_title">🛰️ PointSKY 寻星助手</h3>
+                    <span data-i18n="ps_subtitle">专业版 v2.1</span>
+                </div>
+                <span class="close-btn modern-close" onclick="closeToolModal()">&times;</span>
+            </div>
+
+            <div class="modern-body">
+                <div class="modern-grid">
+                    <div class="panel-settings">
+                        <div class="section-block">
+                            <label class="section-label" data-i18n="ps_label_sat">📡 卫星选择</label>
+                            <select id="psSat" class="modern-select" onchange="updateSatInfo()">
+                                <option value="region_eu" data-i18n="ps_opt_eu">EMEA - 欧洲/非洲 (25°E)</option>
+                                <option value="region_as" data-i18n="ps_opt_as" selected>APAC - 亚太/俄罗斯 (83.5°E)</option>
+                                <option value="region_am" data-i18n="ps_opt_am">Americas - 美洲 (98°W)</option>
+                            </select>
+                            <div class="sat-info-display" id="satInfoDisplay">--</div>
+                        </div>
+
+                        <div class="section-block">
+                            <div class="label-row">
+                                <label class="section-label" data-i18n="ps_label_loc">📍 地面站位置</label>
+                                <button onclick="getAutoLocation()" class="text-btn" data-i18n="ps_btn_auto">⌖ 自动定位</button>
+                            </div>
+                            <div class="input-grid">
+                                <div class="input-group">
+                                    <span class="input-tag" data-i18n="ps_ph_lat">Lat</span>
+                                    <input type="number" id="psLat" class="modern-input" data-i18n="ps_ph_lat" placeholder="纬度">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-tag" data-i18n="ps_ph_lon">Lon</span>
+                                    <input type="number" id="psLon" class="modern-input" data-i18n="ps_ph_lon" placeholder="经度">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-tag" data-i18n="ps_ph_alt">Alt</span>
+                                    <input type="number" id="psAlt" class="modern-input" value="10" data-i18n="ps_ph_alt" placeholder="高度">
+                                </div>
+                            </div>
+                        </div>
+
+                        <button onclick="calculatePointSky()" class="modern-btn-main" data-i18n="ps_btn_calc">开始计算</button>
+                    </div>
+
+                    <div class="panel-dashboard">
+                        <div class="result-cards">
+                            <div class="res-card">
+                                <span class="res-label" data-i18n="ps_lbl_az">方位角</span>
+                                <span class="res-val" id="resAz">--°</span>
+                            </div>
+                            <div class="res-card">
+                                <span class="res-label" data-i18n="ps_lbl_el">俯仰角</span>
+                                <span class="res-val" id="resEl">--°</span>
+                            </div>
+                            <div class="res-card">
+                                <span class="res-label" data-i18n="ps_lbl_dist">直线距离</span>
+                                <span class="res-val highlight" id="resDist">-- km</span>
+                            </div>
+                        </div>
+
+                        <div class="compass-wrapper">
+                            <div class="compass-header-row">
+                                <div class="compass-label" data-i18n="ps_lbl_compass">寻星指南针</div>
+                                <button id="btnCompass" class="compass-toggle" onclick="toggleCompass()" data-i18n="ps_btn_compass_on">
+                                    📱 启用罗盘
+                                </button>
+                            </div>
+                            <div class="modern-compass">
+                                <div class="compass-dial" id="compassDial">
+                                    <span class="c-txt n">N</span><span class="c-txt e">E</span><span class="c-txt s">S</span><span class="c-txt w">W</span>
+                                </div>
+                                <div class="compass-needle-wrap" id="psArrow">
+                                    <div class="needle-body"></div><div class="needle-head"></div>
+                                </div>
+                            </div>
+                            <p id="psWarn" class="status-badge error" style="display:none;" data-i18n="ps_warn_low">⚠️ 仰角过低</p>
+                            <p id="psOk" class="status-badge success" style="display:none;" data-i18n="ps_status_good">✅ 信号良好</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
       
