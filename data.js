@@ -88,6 +88,7 @@ const firmwareDatabase = {
     'lt800': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DSTkp2YQtq_UCxjjyJUGIAA' } ],
     'lt800h': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DUlm69oQtq_UCxjkyJUGIAA' } ],
     'landstar': [
+        { version: 'LandStar-8.2.0.3.20260111', date: '2026-01-11', url: 'https://chcnavigation.jianguoyun.com/p/DQecQMwQtq_UCxiOzJkGIAA' },
         { version: 'LandStar-8.2.0.1.20251211', date: '2025-12-12', url: 'https://chcnavigation.jianguoyun.com/p/DadrWnsQtq_UCxii7ZUGIAA' },
         { version: 'LandStar-8.2.0.1.20251117', date: '2025-11-17', url: 'https://chcnavigation.jianguoyun.com/p/DfkEdLsQtq_UCxjBtZMGIAA' },
         { version: 'LandStar-8.2.0.1.20250925', date: '2025-09-25', url: 'https://chcnavigation.jianguoyun.com/p/Dc6dTGQQtq_UCxiSi4wGIAA' },
@@ -244,3 +245,4 @@ const newsDatabase = [
         desc: 'Optimized IMU initialization speed in challenging environments.'
     }
 ];
+
