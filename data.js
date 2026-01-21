@@ -49,6 +49,7 @@ const firmwareDatabase = {
         { version: 'V1.2.13', date: '2025-09-23', url: 'https://chcnavigation.jianguoyun.com/p/DYoSKLcQtq_UCxiYkY8GIAA' }
     ],
     'i93': [
+        { version: 'V1.5.2', date: '2026-01-21', url: 'https://chcnavigation.jianguoyun.com/p/DUaypfUQtq_UCxj2jpsGIAA' },
         { version: 'V1.3.8.2', date: '2025-04-01', url: 'https://chcnavigation.jianguoyun.com/p/DeF3R4YQtq_UCxjKlfgFIAA' },
         { version: 'V1.3.7', date: '2024-12-12', url: 'https://chcnavigation.jianguoyun.com/p/DRpFc9AQtq_UCxi8pOUFIAA' },
         { version: 'V1.3.6', date: '2024-10-15', url: 'https://chcnavigation.jianguoyun.com/p/DbSr6HkQtq_UCxjWquIFIAA' },
@@ -226,23 +227,15 @@ const faqDatabase = {
 
 /* 5️⃣ 新闻公告数据库 (News Database) - 新增 */
 const newsDatabase = [
-    {
-        title: 'LandStar 8.2 Major Update Released',
-        date: '2025-12-12',
+        {
+        title: 'LandStar 8.2.0.2 Release Note',
+        date: '2025-12-19',
         tag: 'Software', 
-        desc: 'New feature: Cloud cadastre support and improved UI performance.'
+        desc: `
+        1.Resolved the survey line switching function failure by adjusting module data interaction logic, realizingstable andaccurateswitching between multiplesurveylines.
+        <br></br>
+        2.Fixed system crash issues triggered by translation exceptions by optimizing exception capture mechanisms,ensuringstable operationinmulti-languageapplicationscenarios.`
     },
-    {
-        title: 'Server Maintenance Notice',
-        date: '2025-11-30',
-        tag: 'Service',
-        desc: 'MapCloud server will be under maintenance on Dec 1st from 00:00 to 04:00 UTC.'
-    },
-    {
-        title: 'New Firmware for i93',
-        date: '2025-10-15',
-        tag: 'Firmware',
-        desc: 'Optimized IMU initialization speed in challenging environments.'
-    }
 ];
+
 
