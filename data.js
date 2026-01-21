@@ -56,6 +56,7 @@ const firmwareDatabase = {
         { version: 'V1.2.9', date: '2024-03-31', url: 'https://chcnavigation.jianguoyun.com/p/DUOUYD0Qtq_UCxjFhsgFIAA' }
     ],
     'i89': [
+        { version: 'V1.5.2', date: '2026-01-21', url: 'https://chcnavigation.jianguoyun.com/p/DXG_lfYQtq_UCxjwjZsGIAA' },
         { version: 'V1.3.8', date: '2024-12-27', url: 'https://chcnavigation.jianguoyun.com/p/DXYjrugQtq_UCxj-yeYFIAA' },
         { version: 'V1.3.5', date: '2024-10-15', url: 'https://chcnavigation.jianguoyun.com/p/DZ-RVnIQtq_UCxjXquIFIAA' },
         { version: 'OEM Board', date: '2025-02-28', url: 'https://chcnavigation.jianguoyun.com/p/DQ4O7hUQtq_UCxjNjdgFIAA'},
@@ -70,6 +71,7 @@ const firmwareDatabase = {
         { version: 'V1.3.10', date: '2025-01-23', url: 'https://chcnavigation.jianguoyun.com/p/DdjPGVgQtq_UCxif0esFIAA' }
     ],
     'i76': [
+        { version: 'V1.5.1', date: '2026-01-21', url: 'https://chcnavigation.jianguoyun.com/p/Dda06AEQtq_UCxj-jJsGIAA' },
         { version: 'V1.4.3.3', date: '2025-09-26', url: 'https://chcnavigation.jianguoyun.com/p/DaWjPlgQtq_UCxjZlpIGIAA' },
         { version: 'V1.4.3', date: '2025-03-27', url: 'https://chcnavigation.jianguoyun.com/p/DQi4BBcQtq_UCxj_mYUGIAA' }
     ],
@@ -237,5 +239,6 @@ const newsDatabase = [
         2.Fixed system crash issues triggered by translation exceptions by optimizing exception capture mechanisms,ensuringstable operationinmulti-languageapplicationscenarios.`
     },
 ];
+
 
 
