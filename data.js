@@ -91,6 +91,7 @@ const firmwareDatabase = {
     'lt800': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DSTkp2YQtq_UCxjjyJUGIAA' } ],
     'lt800h': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DUlm69oQtq_UCxjkyJUGIAA' } ],
     'landstar': [
+        { version: 'LandStar-8.2.0.3.20260306', date: '2026-01-11', url: 'https://chcnavigation.jianguoyun.com/p/Ddjh87cQtq_UCxiU4J4GIAA' },
         { version: 'LandStar-8.2.0.3.20260111', date: '2026-01-11', url: 'https://chcnavigation.jianguoyun.com/p/DQecQMwQtq_UCxiOzJkGIAA' },
         { version: 'LandStar-8.2.0.1.20251211', date: '2025-12-12', url: 'https://chcnavigation.jianguoyun.com/p/DadrWnsQtq_UCxii7ZUGIAA' },
         { version: 'LandStar-8.2.0.1.20251117', date: '2025-11-17', url: 'https://chcnavigation.jianguoyun.com/p/DfkEdLsQtq_UCxjBtZMGIAA' },
@@ -229,6 +230,17 @@ const faqDatabase = {
 
 /* 5️⃣ 新闻公告数据库 (News Database) - 新增 */
 const newsDatabase = [
+           {
+        title: 'LandStar 8.2.0.3 Release Note',
+        date: '2026-03-09',
+        tag: 'Software', 
+        desc: `
+        1.Fixedthe issueofabnormal coordinate valuesintheTree Surveymethod.
+        <br></br>
+        2.Fixed the issue in Single Point Localization, the Base point's elevation obtained through measurement lacked theantenna heightvalue.
+        <br><br>
+        3.Fixed the issue that points from Sifix and ViLidar were not displayed when exported to DWG format.`
+    },
         {
         title: 'LandStar 8.2.0.2 Release Note',
         date: '2025-12-19',
@@ -239,6 +251,7 @@ const newsDatabase = [
         2.Fixed system crash issues triggered by translation exceptions by optimizing exception capture mechanisms,ensuringstable operationinmulti-languageapplicationscenarios.`
     },
 ];
+
 
 
 
