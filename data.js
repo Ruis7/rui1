@@ -179,6 +179,9 @@ const faqDatabase = {
     'i73':[
         { title :'I73 FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/DUWzeSUQtq_UCxijq5MGIAA'}
     ],
+    'ibase':[
+        { title :'IBase FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/DYVxl9gQtq_UCxiX74kGIAA'}
+    ],
     'lt60h':[
         { title :'LT60H FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/DR-iwC8Qtq_UCxiv9sAFIAA'}
     ],
@@ -230,7 +233,7 @@ const faqDatabase = {
 
 /* 5️⃣ 新闻公告数据库 (News Database) - 新增 */
 const newsDatabase = [
-           {
+    {
         title: 'LandStar 8.2.0.3 Release Note',
         date: '2026-03-09',
         tag: 'Software', 
@@ -241,7 +244,7 @@ const newsDatabase = [
         <br><br>
         3.Fixed the issue that points from Sifix and ViLidar were not displayed when exported to DWG format.`
     },
-        {
+    {
         title: 'LandStar 8.2.0.2 Release Note',
         date: '2025-12-19',
         tag: 'Software', 
@@ -250,10 +253,5 @@ const newsDatabase = [
         <br></br>
         2.Fixed system crash issues triggered by translation exceptions by optimizing exception capture mechanisms,ensuringstable operationinmulti-languageapplicationscenarios.`
     },
+
 ];
-
-
-
-
-
-
