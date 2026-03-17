@@ -121,6 +121,22 @@
         </div>
     </div>
 
+    <div id="newsDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="newsDetailTitle">NEWS DETAIL</h3>
+                <span class="close-btn" onclick="closeNewsDetailModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
+                    <span id="newsDetailTag" style="font-size:12px; padding:3px 8px; border-radius:4px; font-family:var(--font-tech); text-transform: uppercase;"></span>
+                    <span id="newsDetailDate" style="color:#888; font-size:13px;"></span>
+                </div>
+                <div id="newsDetailContent" style="color:#ddd; line-height:1.7; font-size:14px;"></div>
+            </div>
+        </div>
+    </div>
+
     <div id="searchChoiceModal" class="modal">
         <div class="modal-content" style="max-width: 400px;">
             <div class="modal-header">
