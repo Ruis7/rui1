@@ -427,24 +427,67 @@ function initUpdateToast() {
 window.closeUpdateToast = function() { document.getElementById('updateToast').classList.remove('show'); sessionStorage.setItem('rui_toast_closed', 'true'); };
 
 // ==========================================
-// 7. 新闻弹窗
+// 7. 新闻弹窗 (已升级支持详情对话框)
 // ==========================================
 window.openNewsModal = function() {
-    const modal = document.getElementById('firmwareModal'); const title = document.getElementById('modalTitle'); const list = document.getElementById('modalList');
+    const modal = document.getElementById('firmwareModal'); 
+    const title = document.getElementById('modalTitle'); 
+    const list = document.getElementById('modalList');
     title.textContent = 'LATEST NEWS & LOGS'; list.innerHTML = '';
-    if (typeof newsDatabase === 'undefined' || newsDatabase.length === 0) list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No news available.</p>';
-    else {
-        newsDatabase.forEach(item => {
-            const row = document.createElement('div'); row.className = 'firmware-item'; 
+    
+    if (typeof newsDatabase === 'undefined' || newsDatabase.length === 0) {
+        list.innerHTML = '<p style="text-align:center;color:#999;padding:20px;">📭 No news available.</p>';
+    } else {
+        newsDatabase.forEach((item, index) => {
+            const row = document.createElement('div'); 
+            row.className = 'firmware-item'; 
+            row.style.cursor = 'pointer'; // 鼠标变成小手
+            row.onclick = function() { showNewsDetail(index); }; // 点击触发详情
+            
             let tagColor = '#999'; let borderColor = 'rgba(153,153,153,0.3)';
             if(item.tag === 'Software') { tagColor = '#28a745'; borderColor = 'rgba(40, 167, 69, 0.3)'; }
             else if(item.tag === 'Firmware') { tagColor = '#17a2b8'; borderColor = 'rgba(23, 162, 184, 0.3)'; }
             else if(item.tag === 'Service') { tagColor = '#ffc107'; borderColor = 'rgba(255, 193, 7, 0.3)'; }
-            row.innerHTML = `<div class="fw-info" style="width: 100%;"><div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;"><span class="fw-version" style="font-size:15px; color:#fff;">${item.title}</span><span style="font-size:11px; color:${tagColor}; border:1px solid ${borderColor}; padding:1px 6px; border-radius:4px; font-family:var(--font-tech); text-transform: uppercase;">${item.tag}</span></div><div style="font-size:13px; color:#aaa; display:flex; justify-content:space-between;"><span style="max-width: 75%; opacity: 0.8;">${item.desc || ''}</span><span class="fw-date" style="color:#666;">📅 ${item.date}</span></div></div>`;
+            
+            // 提取纯文本作为预览，去掉HTML标签
+            let previewDesc = item.desc ? item.desc.replace(/<[^>]*>?/gm, '').substring(0, 45) + '...' : '';
+
+            row.innerHTML = `
+                <div class="fw-info" style="width: 100%;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span class="fw-version" style="font-size:15px; color:#fff;">${item.title}</span>
+                        <span style="font-size:11px; color:${tagColor}; border:1px solid ${borderColor}; padding:1px 6px; border-radius:4px; font-family:var(--font-tech); text-transform: uppercase;">${item.tag}</span>
+                    </div>
+                    <div style="font-size:13px; color:#aaa; display:flex; justify-content:space-between; align-items:center;">
+                        <span style="max-width: 70%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${previewDesc}</span>
+                        <span class="fw-date" style="color:#666; white-space: nowrap;">📅 ${item.date}</span>
+                    </div>
+                </div>`;
             list.appendChild(row);
         });
     }
     modal.style.display = 'block'; lockScroll();
+};
+
+window.showNewsDetail = function(index) {
+    const item = newsDatabase[index];
+    document.getElementById('newsDetailTitle').textContent = item.title;
+    
+    const tagEl = document.getElementById('newsDetailTag');
+    tagEl.textContent = item.tag;
+    if(item.tag === 'Software') { tagEl.style.color = '#28a745'; tagEl.style.border = '1px solid rgba(40, 167, 69, 0.3)'; }
+    else if(item.tag === 'Firmware') { tagEl.style.color = '#17a2b8'; tagEl.style.border = '1px solid rgba(23, 162, 184, 0.3)'; }
+    else if(item.tag === 'Service') { tagEl.style.color = '#ffc107'; tagEl.style.border = '1px solid rgba(255, 193, 7, 0.3)'; }
+    else { tagEl.style.color = '#999'; tagEl.style.border = '1px solid rgba(153,153,153,0.3)'; }
+    
+    document.getElementById('newsDetailDate').textContent = '📅 ' + item.date;
+    document.getElementById('newsDetailContent').innerHTML = item.desc;
+    
+    document.getElementById('newsDetailModal').style.display = 'block';
+};
+
+window.closeNewsDetailModal = function() {
+    document.getElementById('newsDetailModal').style.display = 'none';
 };
 
 // ==========================================
