@@ -266,3 +266,26 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid 
     .panel-dashboard { padding: 15px; }
     .modern-header { padding: 12px 15px; }
 }
+/* 新增：覆盖图专属大按钮样式 */
+.modern-btn-cover {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: #ffffff;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    text-decoration: none;
+    box-sizing: border-box;
+    margin-top: 15px; /* 与上方的开始计算按钮拉开间距 */
+    transition: all 0.3s ease;
+}
+
+.modern-btn-cover:hover {
+    background: rgba(243, 112, 33, 0.08); /* 悬浮时带一点主色调的浅背景 */
+    box-shadow: 0 4px 12px rgba(243, 112, 33, 0.2);
+    transform: translateY(-1px);
+}
