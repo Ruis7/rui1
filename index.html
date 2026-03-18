@@ -121,22 +121,6 @@
         </div>
     </div>
 
-    <div id="newsDetailModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="newsDetailTitle">NEWS DETAIL</h3>
-                <span class="close-btn" onclick="closeNewsDetailModal()">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 10px;">
-                    <span id="newsDetailTag" style="font-size:12px; padding:3px 8px; border-radius:4px; font-family:var(--font-tech); text-transform: uppercase;"></span>
-                    <span id="newsDetailDate" style="color:#888; font-size:13px;"></span>
-                </div>
-                <div id="newsDetailContent" style="color:#ddd; line-height:1.7; font-size:14px;"></div>
-            </div>
-        </div>
-    </div>
-
     <div id="searchChoiceModal" class="modal">
         <div class="modal-content" style="max-width: 400px;">
             <div class="modal-header">
@@ -182,7 +166,6 @@
                         <div class="section-block">
                             <label class="section-label" data-i18n="ps_label_sat">📡 卫星选择</label>
                             <select id="psSat" class="modern-select" onchange="updateSatInfo()">
-                                <option value="region_eu" data-i18n="ps_opt_eu">EMEA - 欧洲/非洲 (25°E)</option>
                                 <option value="region_as" data-i18n="ps_opt_as" selected>APAC - 亚太/俄罗斯 (83.5°E)</option>
                                 <option value="region_am" data-i18n="ps_opt_am">Americas - 美洲 (98°W)</option>
                             </select>
@@ -208,6 +191,7 @@
                         </div>
 
                         <button onclick="calculatePointSky()" class="modern-btn-main" data-i18n="ps_btn_calc">开始计算</button>
+                        <a href="https://passport-asia.chcnav.com/service-area/global-cover?industry=lawn-robot" target="_blank" class="modern-btn-cover" data-i18n="ps_btn_cover">🗺️ 覆盖图</a>
                     </div>
 
                     <div class="panel-dashboard">
