@@ -49,6 +49,7 @@ const firmwareDatabase = {
         { version: 'V1.2.13', date: '2025-09-23', url: 'https://chcnavigation.jianguoyun.com/p/DYoSKLcQtq_UCxiYkY8GIAA' }
     ],
     'i93': [
+        { version: 'V1.5.4', date: '2026-03-11', url: 'https://chcnavigation.jianguoyun.com/p/DdS72x0Qtq_UCxiX8Z8GIAA' },
         { version: 'V1.5.2', date: '2026-01-21', url: 'https://chcnavigation.jianguoyun.com/p/DUaypfUQtq_UCxj2jpsGIAA' },
         { version: 'V1.3.8.2', date: '2025-04-01', url: 'https://chcnavigation.jianguoyun.com/p/DeF3R4YQtq_UCxjKlfgFIAA' },
         { version: 'V1.3.7', date: '2024-12-12', url: 'https://chcnavigation.jianguoyun.com/p/DRpFc9AQtq_UCxi8pOUFIAA' },
@@ -81,6 +82,7 @@ const firmwareDatabase = {
         { version: 'V2.6.5', date: '2023-11-10', url: 'https://chcnavigation.jianguoyun.com/p/DcMlYS0Qtq_UCxiZx5UGIAA' }
     ],
     'ibase': [
+        { version: 'V3.0.4', date: '2026-02-04', url: 'https://chcnavigation.jianguoyun.com/p/DcH5BdYQtq_UCxiT7p0GIAA' },
         { version: 'V2.4.4.2', date: '2025-05-21', url: 'https://chcnavigation.jianguoyun.com/p/DVrwOREQtq_UCxjfnoEGIAA' },
         { version: 'V2.4.4', date: '2024-06-06', url: 'https://chcnavigation.jianguoyun.com/p/DVAyuNYQtq_UCxiwtdAFIAA' }
     ], 
