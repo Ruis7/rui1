@@ -63,6 +63,7 @@ const firmwareDatabase = {
         { version: 'Radio', date: '2025-02-28', url: 'https://chcnavigation.jianguoyun.com/p/DXDybjUQtq_UCxiDx5UGIAA'}
     ],
     'i85': [
+        { version: 'V1.1.6', date: '2026-03-27', url: 'https://chcnavigation.jianguoyun.com/p/Daz-6eEQtq_UCxi966AGIAA' },
         { version: 'V1.0.14', date: '2025-09-15', url: 'https://chcnavigation.jianguoyun.com/p/DVDEQUkQtq_UCxit3o4GIAA' },
         { version: 'V1.0.12', date: '2025-08-26', url: 'https://chcnavigation.jianguoyun.com/p/Ddf4fVIQtq_UCxizx5UGIAA' }
     ],
@@ -233,6 +234,17 @@ const faqDatabase = {
 
 /* 5️⃣ 新闻公告数据库 (News Database) - 新增 */
 const newsDatabase = [
+        {
+        title: 'i85 Firmware1.1.6 Release Note',
+        date: '2026-03-27',
+        tag: 'Software', 
+        desc: `
+        1. Addedcompatibility with DistLinkradio protocol andconventionalradio protocols.
+        <br></br>
+        2. Addedsupport for4800 baudrate forCHC\TT450\Transparent radio protocols.
+        <br><br>
+        3.Addedanew PPPmode --PointSky,whichcan beconfigured inPPP setting.`
+    },
     {
         title: 'LandStar 8.2.0.3 Release Note',
         date: '2026-03-09',
