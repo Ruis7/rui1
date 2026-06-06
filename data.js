@@ -64,7 +64,7 @@ const firmwareDatabase = {
         { version: 'Radio', date: '2025-02-28', url: 'https://chcnavigation.jianguoyun.com/p/DXDybjUQtq_UCxiDx5UGIAA'}
     ],
     'i85': [
-        { version: 'V1.1.6.4', date: '2026-05-18', url: 'https://chcnavigation.jianguoyun.com/p/DX3y-1QQtq_UCxjDvKQGIAA' },
+        { version: 'V1.1.6.4', date: '2026-03-27', url: 'https://chcnavigation.jianguoyun.com/p/DX3y-1QQtq_UCxjDvKQGIAA' },
         { version: 'V1.1.6', date: '2026-03-27', url: 'https://chcnavigation.jianguoyun.com/p/Daz-6eEQtq_UCxi966AGIAA' },
         { version: 'V1.0.14', date: '2025-09-15', url: 'https://chcnavigation.jianguoyun.com/p/DVDEQUkQtq_UCxit3o4GIAA' },
         { version: 'V1.0.12', date: '2025-08-26', url: 'https://chcnavigation.jianguoyun.com/p/Ddf4fVIQtq_UCxizx5UGIAA' }
