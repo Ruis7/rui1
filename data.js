@@ -95,7 +95,7 @@ const firmwareDatabase = {
     'lt800': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DSTkp2YQtq_UCxjjyJUGIAA' } ],
     'lt800h': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DUlm69oQtq_UCxjkyJUGIAA' } ],
     'landstar': [
-        { version: 'LandStar-8.3.0.20260616', date: '2026-06-16', url: 'https://chcnavigation.jianguoyun.com/p/Df19vB4Qtq_UCxj59aYGIAA' },
+       { version: 'LandStar-8.3.0.20260616', date: '2026-06-16', url: 'https://chcnavigation.jianguoyun.com/p/Df19vB4Qtq_UCxj59aYGIAA' },
         { version: 'LandStar-8.2.0.4.20260320', date: '2026-03-20', url: 'https://chcnavigation.jianguoyun.com/p/DSSt7oQQtq_UCxj55Z8GIAA' },
         { version: 'LandStar-8.2.0.3.20260306', date: '2026-03-09', url: 'https://chcnavigation.jianguoyun.com/p/Ddjh87cQtq_UCxiU4J4GIAA' },
         { version: 'LandStar-8.2.0.3.20260111', date: '2026-01-11', url: 'https://chcnavigation.jianguoyun.com/p/DQecQMwQtq_UCxiOzJkGIAA' },
