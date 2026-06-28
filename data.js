@@ -64,7 +64,7 @@ const firmwareDatabase = {
         { version: 'Radio', date: '2025-02-28', url: 'https://chcnavigation.jianguoyun.com/p/DXDybjUQtq_UCxiDx5UGIAA'}
     ],
     'i85': [
-        { version: 'V1.1.6.4', date: '2026-03-27', url: 'https://chcnavigation.jianguoyun.com/p/DX3y-1QQtq_UCxjDvKQGIAA' },
+        { version: 'V1.1.6.4', date: '2026-05-18', url: 'https://chcnavigation.jianguoyun.com/p/DX3y-1QQtq_UCxjDvKQGIAA' },
         { version: 'V1.1.6', date: '2026-03-27', url: 'https://chcnavigation.jianguoyun.com/p/Daz-6eEQtq_UCxi966AGIAA' },
         { version: 'V1.0.14', date: '2025-09-15', url: 'https://chcnavigation.jianguoyun.com/p/DVDEQUkQtq_UCxit3o4GIAA' },
         { version: 'V1.0.12', date: '2025-08-26', url: 'https://chcnavigation.jianguoyun.com/p/Ddf4fVIQtq_UCxizx5UGIAA' }
@@ -95,6 +95,7 @@ const firmwareDatabase = {
     'lt800': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DSTkp2YQtq_UCxjjyJUGIAA' } ],
     'lt800h': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DUlm69oQtq_UCxjkyJUGIAA' } ],
     'landstar': [
+        { version: 'LandStar-8.3.0.20260616', date: '2026-06-16', url: 'https://chcnavigation.jianguoyun.com/p/Df19vB4Qtq_UCxj59aYGIAA' },
         { version: 'LandStar-8.2.0.4.20260320', date: '2026-03-20', url: 'https://chcnavigation.jianguoyun.com/p/DSSt7oQQtq_UCxj55Z8GIAA' },
         { version: 'LandStar-8.2.0.3.20260306', date: '2026-03-09', url: 'https://chcnavigation.jianguoyun.com/p/Ddjh87cQtq_UCxiU4J4GIAA' },
         { version: 'LandStar-8.2.0.3.20260111', date: '2026-01-11', url: 'https://chcnavigation.jianguoyun.com/p/DQecQMwQtq_UCxiOzJkGIAA' },
