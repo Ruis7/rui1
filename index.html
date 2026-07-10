@@ -2,171 +2,175 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="RUI Support Center - Get firmware, manuals and technical support for GNSS, UAV, and Marine survey equipment.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="RUI Support Center provides firmware, manuals, FAQs and technical support resources for CHCNAV equipment in the CIS region.">
+    <meta name="theme-color" content="#021019">
     <title>RUI Support Center</title>
-    
-    <link rel="stylesheet" href="style.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <!-- ECharts 5 no longer ships map data; this script only registers the world map dataset. -->
+    <script defer src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
 </head>
 <body>
-    <div class="snow-container">
-        <div class="snow"></div>
-        <div class="snow"></div>
-        <div class="snow"></div>
+    <a class="skip-link" href="#mainContent">跳转到主要内容</a>
+
+    <div class="bg-decorations" aria-hidden="true">
+        <div id="global-map-bg"></div>
+        <div class="map-overlay"></div>
     </div>
 
-    <div class="bg-decorations">
-        <div id="global-map-bg" style="width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1;"></div>
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 16, 25, 0.3); z-index: 2; pointer-events: none;"></div>
-    </div>
-
-    <header>
+    <header class="site-header">
         <div class="top-bar">
-            <div class="lang-selector" onclick="toggleLanguage(event)">
-                <span class="current-lang" data-i18n="lang_select">语言 / Language ▾</span>
-                <ul class="lang-dropdown" id="langDropdown">
-                    <li><a href="#" onclick="changeLanguage('zh')">中文 (Chinese)</a></li>
-                    <li><a href="#" onclick="changeLanguage('en')">English</a></li>
-                    <li><a href="#" onclick="changeLanguage('ru')">Русский (Russian)</a></li>
-                    <li><a href="#" onclick="changeLanguage('kk')">Қазақ (Kazakh)</a></li>
-                    <li><a href="#" onclick="changeLanguage('uz')">Oʻzbek (Uzbek)</a></li>
-                    <li><a href="#" onclick="changeLanguage('mn')">Монгол (Mongolian)</a></li>
-                    <li><a href="#" onclick="changeLanguage('ua')">українська(Ukrainian)</a></li>
+            <div class="lang-selector">
+                <button id="languageButton" class="lang-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="langDropdown">
+                    <span class="current-lang" data-i18n="lang_select">语言 / Language</span>
+                    <span aria-hidden="true">▾</span>
+                </button>
+                <ul class="lang-dropdown" id="langDropdown" role="menu" aria-label="Language">
+                    <li><button type="button" role="menuitem" data-lang="zh">中文</button></li>
+                    <li><button type="button" role="menuitem" data-lang="en">English</button></li>
+                    <li><button type="button" role="menuitem" data-lang="ru">Русский</button></li>
+                    <li><button type="button" role="menuitem" data-lang="kk">Қазақша</button></li>
+                    <li><button type="button" role="menuitem" data-lang="uz">Oʻzbekcha</button></li>
+                    <li><button type="button" role="menuitem" data-lang="mn">Монгол</button></li>
+                    <li><button type="button" role="menuitem" data-lang="uk">Українська</button></li>
                 </ul>
             </div>
         </div>
 
         <div class="main-header">
-            <div class="logo">RUI <span>SUPPORT</span></div>
-            <div class="mobile-menu-toggle" onclick="toggleMenu()">☰</div>
-            <nav class="nav-menu" id="navMenu"></nav>
+            <a class="logo" href="#mainContent" aria-label="RUI Support Center">RUI <span>SUPPORT</span></a>
+            <button id="mobileMenuButton" class="mobile-menu-toggle" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="navMenu">☰</button>
+            <nav class="nav-menu" id="navMenu" aria-label="产品资料导航"></nav>
         </div>
     </header>
 
-    <div class="hero-section" id="heroSection">
-        <canvas id="particleCanvas"></canvas>
-        <h1 data-i18n="hero_title">欢迎来到 <span>RUI'S</span> 技术支持</h1>
-        <p data-i18n="hero_desc">您的说明书、固件和技术支持一站式中心。</p>
-        
-        <div class="search-container">
-            <input type="text" id="searchInput" class="search-input" placeholder="Search Model (e.g. i93, CGO)...">
-            <button class="search-btn" onclick="performSearch()">GO</button>
-        </div>
-    </div>
+    <main id="mainContent">
+        <section class="hero-section" id="heroSection" aria-labelledby="heroTitle">
+            <canvas id="particleCanvas" aria-hidden="true"></canvas>
+            <h1 id="heroTitle" data-i18n="hero_title">欢迎来到 <span>RUI</span> 技术支持</h1>
+            <p data-i18n="hero_desc">您的说明书、固件和技术支持一站式中心。</p>
 
-    <div class="content-container">
-        <div class="card">
-            <h3 data-i18n="ps_title" style="color: #fff;">📡 PointSKY</h3>
-            <p data-i18n="ps_desc_card" style="color: rgba(255,255,255,0.8);">专业 L-Band 卫星寻星计算工具。</p>
-            <a href="#" onclick="openToolModal(); return false;" data-i18n="btn_open_tool" style="color: var(--primary-color); font-weight:bold;">打开工具 ></a>
-        </div>
+            <form class="search-container" id="searchForm" role="search" novalidate>
+                <label class="sr-only" for="searchInput" data-i18n="search_label">搜索产品型号</label>
+                <input type="search" id="searchInput" class="search-input" autocomplete="off" data-i18n="search_placeholder" placeholder="搜索型号，例如 i93、CGO、LandStar">
+                <button class="search-btn" type="submit" data-i18n="search_go">搜索</button>
+            </form>
+            <p id="searchStatus" class="search-status" role="status" aria-live="polite"></p>
+        </section>
 
-        <div class="card">
-            <h3 data-i18n="card_doc_title">Latest News</h3>
-            <p data-i18n="card_doc_desc">Firmware changelogs, server maintenance, and updates.</p>
-            <a href="#" onclick="openNewsModal(); return false;" data-i18n="btn_browse">Browse ></a>
-        </div>
+        <section class="content-container" aria-label="快捷工具">
+            <article class="card">
+                <h2 data-i18n="ps_title">🛰️ PointSKY 寻星助手</h2>
+                <p data-i18n="ps_desc_card">专业 L-Band 卫星寻星计算工具。</p>
+                <button class="card-action" type="button" data-action="open-tool" data-i18n="btn_open_tool">打开工具</button>
+            </article>
 
-        <div class="card">
-            <h3 data-i18n="card_ticket_title">售后工单</h3>
-            <p data-i18n="card_ticket_desc">遇到技术难题？提交工单，我将为您解答。</p>
-            <a href="#" onclick="openContactModal(); return false;" data-i18n="btn_submit">提交 ></a>
-        </div>
-    </div>
+            <article class="card">
+                <h2 data-i18n="card_doc_title">最新公告</h2>
+                <p data-i18n="card_doc_desc">查看固件更新日志、服务器维护通知及重要新闻。</p>
+                <button class="card-action" type="button" data-action="open-news" data-i18n="btn_browse">浏览</button>
+            </article>
+
+            <article class="card">
+                <h2 data-i18n="card_ticket_title">联系技术支持</h2>
+                <p data-i18n="card_ticket_desc">遇到技术难题？请通过常用渠道联系我。</p>
+                <button class="card-action" type="button" data-action="open-contact" data-i18n="btn_submit">联系</button>
+            </article>
+        </section>
+    </main>
 
     <footer class="site-footer">
-        <p>&copy; 2025 RUI Support Center. All rights reserved.</p>
-        <p><a href="#">隐私政策</a> | <a href="#">服务条款</a> | <a href="https://chcnav.com" target="_blank">官方网站</a></p>
+        <p>&copy; <span id="currentYear">2026</span> RUI Support Center. All rights reserved.</p>
+        <p><span data-i18n="legal_pending">隐私政策与服务条款正在完善</span> · <a href="https://chcnav.com" target="_blank" rel="noopener noreferrer" data-i18n="official_site">CHCNAV 官方网站</a></p>
     </footer>
 
-    <div id="firmwareModal" class="modal">
-        <div class="modal-content">
+    <div id="resourceModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="resourceModalTitle" aria-hidden="true">
+        <div class="modal-content" tabindex="-1">
             <div class="modal-header">
-                <h3 id="modalTitle">DOWNLOADS</h3>
-                <span class="close-btn" onclick="closeModal()">&times;</span>
+                <h2 id="resourceModalTitle">Downloads</h2>
+                <button class="close-btn" type="button" data-close-modal="resourceModal" aria-label="关闭">&times;</button>
             </div>
-            <div class="modal-body" id="modalList"></div>
+            <div class="modal-body" id="resourceModalList"></div>
         </div>
     </div>
-    
-    <div id="contactModal" class="modal">
-        <div class="modal-content">
+
+    <div id="contactModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle" aria-hidden="true">
+        <div class="modal-content" tabindex="-1">
             <div class="modal-header">
-                <h3>CONTACT SUPPORT</h3>
-                <span class="close-btn" onclick="closeContactModal()">&times;</span>
+                <h2 id="contactModalTitle" data-i18n="contact_title">联系技术支持</h2>
+                <button class="close-btn" type="button" data-close-modal="contactModal" aria-label="关闭">&times;</button>
             </div>
             <div class="modal-body">
-                <p class="modal-subtitle">Choose a channel to start a conversation:</p>
+                <p class="modal-subtitle" data-i18n="contact_subtitle">请选择常用的联系方式：</p>
                 <div class="contact-grid">
-                    <a href="https://t.me/ccccrui" target="_blank" class="contact-card telegram">
-                        <span class="icon">✈️</span>
+                    <a href="https://t.me/ccccrui" target="_blank" rel="noopener noreferrer" class="contact-card telegram">
+                        <span class="icon" aria-hidden="true">✈️</span>
                         <strong>Telegram</strong>
                         <span>@ccccrui</span>
                     </a>
-                    <a href="https://wa.me/79895775258" target="_blank" class="contact-card whatsapp">
-                        <span class="icon">🟢</span>
+                    <a href="https://wa.me/79895775258" target="_blank" rel="noopener noreferrer" class="contact-card whatsapp">
+                        <span class="icon" aria-hidden="true">🟢</span>
                         <strong>WhatsApp</strong>
-                        <span>+79895775258</span>
+                        <span>+7 989 577-52-58</span>
                     </a>
                     <a href="mailto:rui_chen@chcnav.com" class="contact-card email">
-                        <span class="icon">📧</span>
+                        <span class="icon" aria-hidden="true">📧</span>
                         <strong>Email</strong>
-                        <span>Send Mail</span>
+                        <span data-i18n="send_email">发送邮件</span>
                     </a>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="searchChoiceModal" class="modal">
-        <div class="modal-content" style="max-width: 400px;">
+    <div id="searchResultModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="searchResultTitle" aria-hidden="true">
+        <div class="modal-content search-modal-content" tabindex="-1">
             <div class="modal-header">
-                <h3 id="searchResultTitle">SEARCH RESULT</h3>
-                <span class="close-btn" onclick="closeSearchChoiceModal()">&times;</span>
+                <h2 id="searchResultTitle" data-i18n="search_results">搜索结果</h2>
+                <button class="close-btn" type="button" data-close-modal="searchResultModal" aria-label="关闭">&times;</button>
             </div>
             <div class="modal-body">
-                <p>Select data type to access:</p>
-                <div id="searchResultBtns" class="search-actions"></div>
+                <p id="searchResultSummary" class="modal-subtitle"></p>
+                <div id="searchResultList" class="search-result-list"></div>
             </div>
         </div>
     </div>
 
-    <div id="updateToast" class="update-toast">
+    <aside id="updateToast" class="update-toast" role="status" aria-live="polite" aria-label="Latest release" aria-hidden="true">
         <div class="toast-header">
-            <span class="toast-title">🔔 LATEST RELEASE</span>
-            <span class="close-toast" onclick="closeUpdateToast()">&times;</span>
+            <span class="toast-title" data-i18n="latest_release">🔔 最新发布</span>
+            <button class="close-toast" id="closeToastButton" type="button" aria-label="关闭">&times;</button>
         </div>
         <div class="toast-body">
-            <div class="toast-model" id="toastModel">Model Name</div>
+            <div class="toast-model" id="toastModel">Model</div>
             <div class="toast-version">
                 <span id="toastVer">V1.0.0</span>
                 <span class="toast-tag">NEW</span>
             </div>
-            <div class="toast-date" id="toastDate">2025-12-28</div>
-            <a href="#" id="toastLink" class="toast-btn" target="_blank">Download Now</a>
+            <div class="toast-date" id="toastDate"></div>
+            <a id="toastLink" class="toast-btn" target="_blank" rel="noopener noreferrer" tabindex="-1" data-i18n="download_now">立即查看</a>
         </div>
-    </div>
+    </aside>
 
-    <div id="toolModal" class="modal">
-        <div class="modal-content modern-modal">
+    <div id="toolModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="toolModalTitle" aria-hidden="true">
+        <div class="modal-content modern-modal" tabindex="-1">
             <div class="modern-header">
                 <div class="header-title">
-                    <h3 data-i18n="ps_title">🛰️ PointSKY 寻星助手</h3>
-                    <span data-i18n="ps_subtitle">Pro v2.1</span>
+                    <h2 id="toolModalTitle" data-i18n="ps_title">🛰️ PointSKY 寻星助手</h2>
+                    <span data-i18n="ps_subtitle">专业版 v2.2</span>
                 </div>
-                <span class="close-btn modern-close" onclick="closeToolModal()">&times;</span>
+                <button class="close-btn modern-close" type="button" data-close-modal="toolModal" aria-label="关闭">&times;</button>
             </div>
 
             <div class="modern-body">
                 <div class="modern-grid">
-                    <div class="panel-settings">
+                    <section class="panel-settings" aria-label="PointSKY settings">
                         <div class="section-block">
-                            <label class="section-label" data-i18n="ps_label_sat">📡 卫星选择</label>
-                            <select id="psSat" class="modern-select" onchange="updateSatInfo()">
-                                <option value="region_as" data-i18n="ps_opt_as" selected>APAC - 亚太/俄罗斯 (83.5°E)</option>
+                            <label class="section-label" for="psSat" data-i18n="ps_label_sat">📡 卫星选择</label>
+                            <select id="psSat" class="modern-select">
+                                <option value="region_as" data-i18n="ps_opt_as">APAC - 亚太/俄罗斯 (83.5°E)</option>
                                 <option value="region_am" data-i18n="ps_opt_am">Americas - 美洲 (98°W)</option>
                             </select>
                             <div class="sat-info-display" id="satInfoDisplay">--</div>
@@ -174,50 +178,52 @@
 
                         <div class="section-block">
                             <div class="label-row">
-                                <label class="section-label" data-i18n="ps_label_loc">📍 地面站位置</label>
-                                <button onclick="getAutoLocation()" class="text-btn" data-i18n="ps_btn_auto">⌖ 自动定位</button>
+                                <span class="section-label" data-i18n="ps_label_loc">📍 地面站位置</span>
+                                <button id="autoLocationButton" type="button" class="text-btn" data-i18n="ps_btn_auto">⌖ 自动定位</button>
                             </div>
                             <div class="input-grid">
                                 <div class="input-group">
-                                    <input type="number" id="psLat" class="modern-input" data-i18n="ps_ph_lat" placeholder="纬度">
+                                    <label for="psLat" data-i18n="ps_ph_lat">纬度</label>
+                                    <input type="number" id="psLat" class="modern-input" min="-90" max="90" step="any" inputmode="decimal">
                                 </div>
                                 <div class="input-group">
-                                    <input type="number" id="psLon" class="modern-input" data-i18n="ps_ph_lon" placeholder="经度">
+                                    <label for="psLon" data-i18n="ps_ph_lon">经度</label>
+                                    <input type="number" id="psLon" class="modern-input" min="-180" max="180" step="any" inputmode="decimal">
                                 </div>
                                 <div class="input-group">
-                                    <input type="number" id="psAlt" class="modern-input" value="10" data-i18n="ps_ph_alt" placeholder="高度">
+                                    <label for="psAlt" data-i18n="ps_ph_alt">高度 (m)</label>
+                                    <input type="number" id="psAlt" class="modern-input" min="-500" max="10000" step="1" value="10" inputmode="decimal">
                                 </div>
                             </div>
                         </div>
 
-                        <button onclick="calculatePointSky()" class="modern-btn-main" data-i18n="ps_btn_calc">开始计算</button>
-                        <a href="https://passport-asia.chcnav.com/service-area/global-cover?industry=lawn-robot" target="_blank" class="modern-btn-cover" data-i18n="ps_btn_cover">🗺️ 覆盖图</a>
-                    </div>
+                        <p id="psFormError" class="form-error" role="alert" aria-live="assertive"></p>
+                        <button id="calculatePointSkyButton" type="button" class="modern-btn-main" data-i18n="ps_btn_calc">开始计算</button>
+                        <a href="https://passport-asia.chcnav.com/service-area/global-cover?industry=lawn-robot" target="_blank" rel="noopener noreferrer" class="modern-btn-cover" data-i18n="ps_btn_cover">🗺️ 覆盖图</a>
+                    </section>
 
-                    <div class="panel-dashboard">
+                    <section class="panel-dashboard" aria-label="PointSKY results">
                         <div class="result-cards">
                             <div class="res-card">
                                 <span class="res-label" data-i18n="ps_lbl_az">方位角</span>
-                                <span class="res-val" id="resAz">--°</span>
+                                <output class="res-val" id="resAz">--°</output>
                             </div>
                             <div class="res-card">
                                 <span class="res-label" data-i18n="ps_lbl_el">俯仰角</span>
-                                <span class="res-val" id="resEl">--°</span>
+                                <output class="res-val" id="resEl">--°</output>
                             </div>
                             <div class="res-card">
                                 <span class="res-label" data-i18n="ps_lbl_dist">直线距离</span>
-                                <span class="res-val highlight" id="resDist">-- km</span>
+                                <output class="res-val highlight" id="resDist">-- km</output>
                             </div>
                         </div>
 
                         <div class="compass-wrapper">
                             <div class="compass-header-row">
                                 <div class="compass-label" data-i18n="ps_lbl_compass">寻星指南针</div>
-                                <button id="btnCompass" class="compass-toggle" onclick="toggleCompass()" data-i18n="ps_btn_compass_on">
-                                    📱 启用罗盘
-                                </button>
+                                <button id="btnCompass" class="compass-toggle" type="button" data-i18n="ps_btn_compass_on">📱 启用罗盘</button>
                             </div>
-                            <div class="modern-compass">
+                            <div class="modern-compass" aria-hidden="true">
                                 <div class="compass-dial" id="compassDial">
                                     <span class="c-txt n">N</span><span class="c-txt e">E</span><span class="c-txt s">S</span><span class="c-txt w">W</span>
                                 </div>
@@ -225,15 +231,17 @@
                                     <div class="needle-body"></div><div class="needle-head"></div>
                                 </div>
                             </div>
-                            <p id="psWarn" class="status-badge error" style="display:none;" data-i18n="ps_warn_low">⚠️ 仰角过低</p>
-                            <p id="psOk" class="status-badge success" style="display:none;" data-i18n="ps_status_good">✅ 信号良好</p>
+                            <p id="psInvisible" class="status-badge unavailable" hidden data-i18n="ps_status_invisible">⛔ 卫星不可见</p>
+                            <p id="psWarn" class="status-badge error" hidden data-i18n="ps_warn_low">⚠️ 仰角过低</p>
+                            <p id="psOk" class="status-badge success" hidden data-i18n="ps_status_good">✅ 信号条件良好</p>
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </div>
     </div>
-      
+
+    <noscript><p class="noscript-message">This website requires JavaScript to display support resources.</p></noscript>
     <script src="data.js"></script>
     <script src="main.js"></script>
 </body>

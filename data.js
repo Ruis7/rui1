@@ -45,7 +45,8 @@ const firmwareDatabase = {
     'i100': [
         { version: 'v1.3.12', date: '2025-12-29', url:'https://chcnavigation.jianguoyun.com/p/DTm-gwsQtq_UCxiE-JgGIAA'},
         { version: 'v1.3.7', date: '2025-12-01', url: 'https://chcnavigation.jianguoyun.com/p/DYau6gcQtq_UCxjFtZMGIAA' },
-        { version: 'V1.3.5', date: '2025-11-10', url: 'https://chcnavigation.jianguoyun.com/p/DYau6gcQtq_UCxjFtZMGIAA' },
+        // 原链接与 V1.3.7 重复，核验前不向客户提供下载。
+        { version: 'V1.3.5', date: '2025-11-10', url: '', verified: false },
         { version: 'V1.2.13', date: '2025-09-23', url: 'https://chcnavigation.jianguoyun.com/p/DYoSKLcQtq_UCxiYkY8GIAA' }
     ],
     'i93': [
@@ -64,7 +65,7 @@ const firmwareDatabase = {
         { version: 'Radio', date: '2025-02-28', url: 'https://chcnavigation.jianguoyun.com/p/DXDybjUQtq_UCxiDx5UGIAA'}
     ],
     'i85': [
-        { version: 'V1.1.6.4', date: '2026-05-18', url: 'https://chcnavigation.jianguoyun.com/p/DX3y-1QQtq_UCxjDvKQGIAA' },
+        { version: 'V1.1.6.4', date: '2026-03-27', url: 'https://chcnavigation.jianguoyun.com/p/DX3y-1QQtq_UCxjDvKQGIAA' },
         { version: 'V1.1.6', date: '2026-03-27', url: 'https://chcnavigation.jianguoyun.com/p/Daz-6eEQtq_UCxi966AGIAA' },
         { version: 'V1.0.14', date: '2025-09-15', url: 'https://chcnavigation.jianguoyun.com/p/DVDEQUkQtq_UCxit3o4GIAA' },
         { version: 'V1.0.12', date: '2025-08-26', url: 'https://chcnavigation.jianguoyun.com/p/Ddf4fVIQtq_UCxizx5UGIAA' }
@@ -95,7 +96,7 @@ const firmwareDatabase = {
     'lt800': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DSTkp2YQtq_UCxjjyJUGIAA' } ],
     'lt800h': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DUlm69oQtq_UCxjkyJUGIAA' } ],
     'landstar': [
-       { version: 'LandStar-8.3.0.20260616', date: '2026-06-16', url: 'https://chcnavigation.jianguoyun.com/p/Df19vB4Qtq_UCxj59aYGIAA' },
+        { version: 'LandStar-8.3.0.20260616', date: '2026-06-16', url: 'https://chcnavigation.jianguoyun.com/p/Df19vB4Qtq_UCxj59aYGIAA' },
         { version: 'LandStar-8.2.0.4.20260320', date: '2026-03-20', url: 'https://chcnavigation.jianguoyun.com/p/DSSt7oQQtq_UCxj55Z8GIAA' },
         { version: 'LandStar-8.2.0.3.20260306', date: '2026-03-09', url: 'https://chcnavigation.jianguoyun.com/p/Ddjh87cQtq_UCxiU4J4GIAA' },
         { version: 'LandStar-8.2.0.3.20260111', date: '2026-01-11', url: 'https://chcnavigation.jianguoyun.com/p/DQecQMwQtq_UCxiOzJkGIAA' },
@@ -144,13 +145,14 @@ const manualDatabase = {
     'lt700h': [ { title: 'LT700H user manual', date: '', url: 'https://chcnavigation.jianguoyun.com/p/Dcvg258Qtq_UCxiAiIgGIAA' } ],
     'lt800': [ { title: 'LT800 user manual', date: '', url: 'https://chcnavigation.jianguoyun.com/p/DWX-XA4Qtq_UCxjAhdUFIAA' } ],
     'lt800h': [ { title: 'LT800H user manual', date: '', url: 'https://chcnavigation.jianguoyun.com/p/DV6ILx8Qtq_UCxjnhdMFIAA' } ],
-    'landstar': [ { title: 'LandStar8.2_User manual', date: '2025-12-10', url: 'https://chcnavigation.jianguoyun.com/p/DdM_hnIQtq_UCxiK64oGIAA' } ],
+    'landstar': [ { title: 'LandStar 8.2 User Manual', date: '2025-12-10', url: 'https://chcnavigation.jianguoyun.com/p/DdM_hnIQtq_UCxiK64oGIAA' } ],
     'nx510': [{ title: 'NX510_User manual', date: '2025-12-10', url:'https://chcnavigation.jianguoyun.com/p/DUBluY4Qtq_UCxjQ2MEFIAA'}],
     'apache3': [{ title: 'Apache3_User manual', date: '2025-07-16', url:'https://chcnavigation.jianguoyun.com/p/DaUmlfkQtq_UCxis3JUGIAA'}], 
-    'apache4': [{ title: 'Apache4_User manual', date: '2025-3-10', url:'https://chcnavigation.jianguoyun.com/p/DZaw7OUQtq_UCxiirYwGIAA'}], 
+    'apache4': [{ title: 'Apache4 User Manual', date: '2025-03-10', url:'https://chcnavigation.jianguoyun.com/p/DZaw7OUQtq_UCxiirYwGIAA'}], 
     'apache6': [{ title: 'Apache6_User manual', date: '2025-09-02', url:'https://chcnavigation.jianguoyun.com/p/DRiHkaAQtq_UCxiK6ogGIAA'}],
     'x500': [],
-    'cgo': [{ title: 'CGO 2_User manual', date: '2025-09-02', url:'https://chcnavigation.jianguoyun.com/p/DTjx4JUQtq_UCxi-5cUFIAA'}], 
+    'cgo': [{ title: 'CGO 2 User Manual', date: '2025-09-02', url:'https://chcnavigation.jianguoyun.com/p/DTjx4JUQtq_UCxi-5cUFIAA'}], 
+    'coprocess': [],
     'mapcloud': [{ title: 'MapCloud User Manual.pdf', date: '2024-09-02', url:'https://chcnavigation.jianguoyun.com/p/DVd6JjQQtq_UCxjEysMFIAA'}], 
     'gnsstool': [], 
     'sharelocation': [], 
@@ -196,10 +198,11 @@ const faqDatabase = {
         { title :'LT700H FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/DWmyZrsQtq_UCxiy-JgGIAA'}
     ],
     'lt800':[
-        { title :'I800 FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/DR-iwC8Qtq_UCxiv9sAFIAA'}
+        // 原链接与 LT60H FAQ 重复，核验前不向客户提供下载。
+        { title :'LT800 FAQ' ,  date:'2025-12-15', url:'', verified: false }
     ],
     'lt800h':[
-         { title :'I800H FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/Db0fusAQtq_UCxi2_vsFIAA'}
+         { title :'LT800H FAQ' ,  date:'2025-12-15', url:'https://chcnavigation.jianguoyun.com/p/Db0fusAQtq_UCxi2_vsFIAA'}
     ],
     'nx510':[
         { title:'NX510 FAQ', date:'2024-12-15',url:'https://chcnavigation.jianguoyun.com/p/DRFVOTkQtq_UCxi3-JgGIAA'}
@@ -231,8 +234,8 @@ const faqDatabase = {
     'p5e': [],
     'p5u':[
         { title:'FAQ-How to use OpenVPN function for P5.pdf',  date:'2023-10-25',url:'https://chcnavigation.jianguoyun.com/p/DTRz0m0Qtq_UCxjpsuwFIAA'},
-        { title:'How to login p5’s website by Lan cable.pdf',  date:'2024-12-5',url:'https://chcnavigation.jianguoyun.com/p/De1aJfIQtq_UCxily_cFIAA'},
-        { title:'how to remotely download static data from P5.pdf',  date:'2023-6-2',url:'https://chcnavigation.jianguoyun.com/p/DSVnTJkQtq_UCxiZoPUFIAA'},
+        { title:'How to log in to the P5 web interface by LAN cable.pdf',  date:'2024-12-05',url:'https://chcnavigation.jianguoyun.com/p/De1aJfIQtq_UCxily_cFIAA'},
+        { title:'How to remotely download static data from P5.pdf',  date:'2023-06-02',url:'https://chcnavigation.jianguoyun.com/p/DSVnTJkQtq_UCxiZoPUFIAA'},
         { title:'How to share one antenna between P5U and P5S.mp4',  date:'2024-10-25',url:'https://chcnavigation.jianguoyun.com/p/DdUgAWMQtq_UCxjcxeMFIAA'},
     ]
 };
@@ -240,35 +243,33 @@ const faqDatabase = {
 /* 5️⃣ 新闻公告数据库 (News Database) - 新增 */
 const newsDatabase = [
         {
-        title: 'i85 Firmware1.1.6 Release Note',
+        title: 'i85 Firmware V1.1.6 Release Notes',
         date: '2026-03-27',
-        tag: 'Software', 
-        desc: `
-        1. Addedcompatibility with DistLinkradio protocol andconventionalradio protocols.
-        <br></br>
-        2. Addedsupport for4800 baudrate forCHC\TT450\Transparent radio protocols.
-        <br><br>
-        3.Addedanew PPPmode --PointSky,whichcan beconfigured inPPP setting.`
+        tag: 'Firmware',
+        changes: [
+            'Added compatibility with the DistLink radio protocol and conventional radio protocols.',
+            'Added support for a 4800 baud rate for CHC, TT450 and Transparent radio protocols.',
+            'Added the PointSKY PPP mode, configurable in PPP settings.'
+        ]
     },
     {
         title: 'LandStar 8.2.0.3 Release Note',
         date: '2026-03-09',
-        tag: 'Software', 
-        desc: `
-        1.Fixedthe issueofabnormal coordinate valuesintheTree Surveymethod.
-        <br></br>
-        2.Fixed the issue in Single Point Localization, the Base point's elevation obtained through measurement lacked theantenna heightvalue.
-        <br><br>
-        3.Fixed the issue that points from Sifix and ViLidar were not displayed when exported to DWG format.`
+        tag: 'Software',
+        changes: [
+            'Fixed abnormal coordinate values in the Tree Survey method.',
+            'Fixed missing antenna height in the measured base-point elevation for Single Point Localization.',
+            'Fixed Sifix and ViLidar points not appearing in exported DWG files.'
+        ]
     },
     {
         title: 'LandStar 8.2.0.2 Release Note',
         date: '2025-12-19',
-        tag: 'Software', 
-        desc: `
-        1.Resolved the survey line switching function failure by adjusting module data interaction logic, realizingstable andaccurateswitching between multiplesurveylines.
-        <br></br>
-        2.Fixed system crash issues triggered by translation exceptions by optimizing exception capture mechanisms,ensuringstable operationinmulti-languageapplicationscenarios.`
+        tag: 'Software',
+        changes: [
+            'Improved survey-line switching by correcting module data interaction logic.',
+            'Fixed crashes caused by translation exceptions in multilingual environments.'
+        ]
     },
 
 ];
