@@ -7,7 +7,7 @@
 
 const translations = {
     zh: {
-        lang_select: '语言 / Language',
+        lang_select: '语言 / Language', mobile_menu_title: '产品与资料',
         menu_gnss: 'GNSS 接收机', menu_mobile: '移动测绘', menu_ag: '农业导航', menu_marine: '海洋测量', menu_uav: '无人机系统', menu_software: '软件',
         link_manual: '说明书', link_firmware: '固件', link_software: '软件', link_faq: 'FAQ',
         hero_title: '欢迎来到 <span>RUI</span> 技术支持', hero_desc: '您的说明书、固件和技术支持一站式中心。',
@@ -32,7 +32,7 @@ const translations = {
         compass_denied: '罗盘权限未授予。', compass_unavailable: '此设备不支持浏览器罗盘。'
     },
     en: {
-        lang_select: 'Language',
+        lang_select: 'Language', mobile_menu_title: 'Products & Resources',
         menu_gnss: 'GNSS Receivers', menu_mobile: 'Mobile Mapping', menu_ag: 'Agriculture', menu_marine: 'Marine Survey', menu_uav: 'UAV Systems', menu_software: 'Software',
         link_manual: 'Manual', link_firmware: 'Firmware', link_software: 'Software', link_faq: 'FAQ',
         hero_title: 'Welcome to <span>RUI</span> Support', hero_desc: 'Your one-stop center for manuals, firmware and technical assistance.',
@@ -57,7 +57,7 @@ const translations = {
         compass_denied: 'Compass permission was not granted.', compass_unavailable: 'Browser compass is not supported on this device.'
     },
     ru: {
-        lang_select: 'Язык',
+        lang_select: 'Язык', mobile_menu_title: 'Продукты и материалы',
         menu_gnss: 'ГНСС-приёмники', menu_mobile: 'Мобильное картографирование', menu_ag: 'Агронавигация', menu_marine: 'Гидрография', menu_uav: 'БПЛА', menu_software: 'Программы',
         link_manual: 'Инструкция', link_firmware: 'Прошивка', link_software: 'Программа', link_faq: 'FAQ',
         hero_title: 'Добро пожаловать в поддержку <span>RUI</span>', hero_desc: 'Единый центр инструкций, прошивок и технической поддержки.',
@@ -138,19 +138,15 @@ function isMobileNavigation() {
     return window.matchMedia('(max-width: 1200px)').matches;
 }
 
-function updateMobileMenuTop() {
-    const nav = document.getElementById('navMenu');
-    if (!nav?.classList.contains('active')) return;
-    const headerBottom = document.querySelector('.main-header').getBoundingClientRect().bottom;
-    nav.style.setProperty('--mobile-menu-top', `${Math.max(0, Math.round(headerBottom))}px`);
-}
-
 function closeMobileMenu(restoreFocus = false) {
     const nav = document.getElementById('navMenu');
     const button = document.getElementById('mobileMenuButton');
+    const backdrop = document.getElementById('mobileMenuBackdrop');
     if (!nav || !button) return;
     nav.classList.remove('active');
-    nav.style.removeProperty('--mobile-menu-top');
+    nav.setAttribute('aria-hidden', String(isMobileNavigation()));
+    backdrop.classList.remove('active');
+    backdrop.setAttribute('aria-hidden', 'true');
     button.setAttribute('aria-expanded', 'false');
     document.body.classList.remove('mobile-menu-open');
     document.querySelectorAll('.nav-item.open').forEach((item) => {
@@ -198,6 +194,8 @@ function changeLanguage(langCode, persist = true) {
     document.querySelectorAll('[data-close-modal]').forEach((button) => {
         button.setAttribute('aria-label', currentLang === 'zh' ? '关闭' : currentLang === 'ru' ? 'Закрыть' : 'Close');
     });
+    const mobileCloseButton = document.getElementById('mobileMenuCloseButton');
+    if (mobileCloseButton) mobileCloseButton.setAttribute('aria-label', currentLang === 'zh' ? '关闭菜单' : currentLang === 'ru' ? 'Закрыть меню' : 'Close menu');
     updateSatInfo();
     updateCompassButton();
     updateToastLanguage();
@@ -258,6 +256,20 @@ function initMenu() {
     const navMenu = document.getElementById('navMenu');
     navMenu.replaceChildren();
 
+    const drawerHeader = document.createElement('div');
+    drawerHeader.className = 'mobile-menu-header';
+    const drawerTitle = document.createElement('strong');
+    drawerTitle.dataset.i18n = 'mobile_menu_title';
+    drawerTitle.textContent = getI18n('mobile_menu_title');
+    const drawerClose = createButton('×', 'mobile-menu-close', () => closeMobileMenu(true));
+    drawerClose.id = 'mobileMenuCloseButton';
+    drawerClose.setAttribute('aria-label', '关闭菜单');
+    drawerHeader.append(drawerTitle, drawerClose);
+
+    const navItems = document.createElement('div');
+    navItems.className = 'nav-items';
+    navMenu.append(drawerHeader, navItems);
+
     menuConfig.forEach((category) => {
         const navItem = document.createElement('div');
         navItem.className = 'nav-item';
@@ -311,13 +323,13 @@ function initMenu() {
             navLink.setAttribute('aria-expanded', String(willOpen));
             if (willOpen && isMobileNavigation()) {
                 requestAnimationFrame(() => {
-                    navMenu.scrollTo({ top: Math.max(0, navItem.offsetTop - 1), behavior: 'smooth' });
+                    navItems.scrollTo({ top: Math.max(0, navItem.offsetTop - 1), behavior: 'smooth' });
                 });
             }
         });
 
         navItem.appendChild(dropdown);
-        navMenu.appendChild(navItem);
+        navItems.appendChild(navItem);
     });
 }
 
@@ -898,23 +910,26 @@ function bindEvents() {
     const mobileButton = document.getElementById('mobileMenuButton');
     mobileButton.addEventListener('click', () => {
         const nav = document.getElementById('navMenu');
+        const backdrop = document.getElementById('mobileMenuBackdrop');
         const willOpen = !nav.classList.contains('active');
         if (!willOpen) {
             closeMobileMenu();
             return;
         }
         nav.classList.add('active');
+        nav.setAttribute('aria-hidden', 'false');
+        backdrop.classList.add('active');
+        backdrop.setAttribute('aria-hidden', 'false');
         mobileButton.setAttribute('aria-expanded', 'true');
         document.body.classList.add('mobile-menu-open');
-        updateMobileMenuTop();
-        nav.scrollTop = 0;
+        nav.querySelector('.nav-items').scrollTop = 0;
+        requestAnimationFrame(() => document.getElementById('mobileMenuCloseButton')?.focus());
     });
+    document.getElementById('mobileMenuBackdrop').addEventListener('click', () => closeMobileMenu(true));
 
     window.addEventListener('resize', () => {
         if (!isMobileNavigation()) closeMobileMenu();
-        else updateMobileMenuTop();
     }, { passive: true });
-    window.visualViewport?.addEventListener('resize', updateMobileMenuTop, { passive: true });
 
     document.getElementById('searchForm').addEventListener('submit', (event) => {
         event.preventDefault();
@@ -947,6 +962,7 @@ function bindEvents() {
 async function init() {
     document.getElementById('currentYear').textContent = String(new Date().getFullYear());
     initMenu();
+    document.getElementById('navMenu').setAttribute('aria-hidden', String(isMobileNavigation()));
     bindEvents();
     changeLanguage(await resolveInitialLanguage(), false);
     initParticles();
