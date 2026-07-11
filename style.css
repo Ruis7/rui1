@@ -38,6 +38,10 @@ body.modal-open {
     overflow: hidden;
 }
 
+body.mobile-menu-open {
+    overflow: hidden;
+}
+
 button, input, select {
     font: inherit;
 }
@@ -128,7 +132,7 @@ select:focus-visible,
 
 .map-overlay {
     z-index: 2;
-    background: rgba(2, 16, 25, 0.32);
+    background: rgba(2, 16, 25, 0.2);
 }
 
 .site-header,
@@ -576,6 +580,13 @@ main,
 
 .site-footer a:hover {
     color: var(--primary-color);
+}
+
+.build-version {
+    color: rgba(196, 205, 210, 0.48);
+    font-family: var(--font-tech);
+    font-size: 10px;
+    letter-spacing: 0.4px;
 }
 
 .modal {
@@ -1345,19 +1356,25 @@ main,
 
     .nav-menu {
         display: none;
-        position: absolute;
-        top: 70px;
+        position: fixed;
+        top: var(--mobile-menu-top, 104px);
         right: 0;
+        bottom: 0;
         left: 0;
         z-index: 1050;
-        max-height: calc(100vh - 104px);
+        height: auto;
+        max-height: none;
         overflow-y: auto;
+        overscroll-behavior: contain;
+        -webkit-overflow-scrolling: touch;
         flex-direction: column;
         gap: 0;
+        padding-bottom: max(18px, env(safe-area-inset-bottom));
         border-top: 1px solid #e8ecef;
         background: rgba(255, 255, 255, 0.99);
         box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
         transform: none;
+        touch-action: pan-y;
     }
 
     .nav-menu.active {
@@ -1370,10 +1387,14 @@ main,
     }
 
     .nav-link {
+        position: sticky;
+        top: 0;
+        z-index: 2;
         width: 100%;
         min-height: 52px;
         padding: 12px 21px;
         justify-content: space-between;
+        background: rgba(255, 255, 255, 0.99);
         text-align: left;
     }
 
@@ -1412,6 +1433,11 @@ main,
     .nav-item.open .dropdown-menu {
         display: block;
         animation: none;
+    }
+
+    .nav-item.open .nav-link {
+        border-bottom: 1px solid #e2e7ea;
+        box-shadow: 0 3px 9px rgba(0, 0, 0, 0.05);
     }
 
     .product-group {
@@ -1461,6 +1487,10 @@ main,
 }
 
 @media (max-width: 560px) {
+    .map-overlay {
+        background: rgba(2, 16, 25, 0.12);
+    }
+
     .top-bar {
         padding-right: 10px;
     }

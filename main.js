@@ -116,6 +116,11 @@ const translations = {
 };
 
 const languageTags = { zh: 'zh-CN', en: 'en', ru: 'ru', kk: 'kk', uz: 'uz', mn: 'mn', uk: 'uk' };
+const countryLanguageMap = {
+    CN: 'zh', HK: 'zh', MO: 'zh', TW: 'zh',
+    RU: 'ru', BY: 'ru', AM: 'ru', AZ: 'ru', GE: 'ru', KG: 'ru', TJ: 'ru', TM: 'ru', MD: 'ru',
+    KZ: 'kk', UZ: 'uz', MN: 'mn', UA: 'uk'
+};
 const productDisplayNames = {
     ibase: 'iBase', landstar: 'LandStar', coprocess: 'CoProcess', mapcloud: 'MapCloud',
     gnsstool: 'GNSSTool', sharelocation: 'ShareLocation', rinex: 'RINEX Converter', cgbas: 'CGBAS'
@@ -128,6 +133,32 @@ let currentAzimuth = 0;
 let compassActive = false;
 let toastRelease = null;
 const modalReturnFocus = new WeakMap();
+
+function isMobileNavigation() {
+    return window.matchMedia('(max-width: 1200px)').matches;
+}
+
+function updateMobileMenuTop() {
+    const nav = document.getElementById('navMenu');
+    if (!nav?.classList.contains('active')) return;
+    const headerBottom = document.querySelector('.main-header').getBoundingClientRect().bottom;
+    nav.style.setProperty('--mobile-menu-top', `${Math.max(0, Math.round(headerBottom))}px`);
+}
+
+function closeMobileMenu(restoreFocus = false) {
+    const nav = document.getElementById('navMenu');
+    const button = document.getElementById('mobileMenuButton');
+    if (!nav || !button) return;
+    nav.classList.remove('active');
+    nav.style.removeProperty('--mobile-menu-top');
+    button.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('mobile-menu-open');
+    document.querySelectorAll('.nav-item.open').forEach((item) => {
+        item.classList.remove('open');
+        item.querySelector('.nav-link')?.setAttribute('aria-expanded', 'false');
+    });
+    if (restoreFocus) button.focus();
+}
 
 function getI18n(key) {
     return translations[currentLang]?.[key] ?? translations.en[key] ?? key;
@@ -175,6 +206,38 @@ function changeLanguage(langCode, persist = true) {
     if (document.getElementById('searchResultModal').classList.contains('is-open') && lastSearchQuery) renderSearchResults(lastSearchQuery);
     if (persist) localStorage.setItem('rui_language', currentLang);
     setLanguageDropdown(false);
+}
+
+async function detectCountryLanguage() {
+    const controller = new AbortController();
+    const timeout = window.setTimeout(() => controller.abort(), 1800);
+    try {
+        const response = await fetch('/cdn-cgi/trace', { cache: 'no-store', signal: controller.signal });
+        if (!response.ok) return null;
+        const trace = await response.text();
+        const country = trace.match(/^loc=([A-Z]{2})$/m)?.[1];
+        return countryLanguageMap[country] || null;
+    } catch {
+        return null;
+    } finally {
+        window.clearTimeout(timeout);
+    }
+}
+
+function detectBrowserLanguage() {
+    const candidates = navigator.languages?.length ? navigator.languages : [navigator.language];
+    for (const language of candidates) {
+        const code = String(language || '').toLowerCase().split('-')[0];
+        const normalized = code === 'ua' ? 'uk' : code;
+        if (translations[normalized]) return normalized;
+    }
+    return 'en';
+}
+
+async function resolveInitialLanguage() {
+    const savedLanguage = localStorage.getItem('rui_language');
+    if (savedLanguage && translations[savedLanguage === 'ua' ? 'uk' : savedLanguage]) return savedLanguage;
+    return await detectCountryLanguage() || detectBrowserLanguage();
 }
 
 function createButton(text, className, onClick, disabled = false) {
@@ -225,7 +288,10 @@ function initMenu() {
 
             types.forEach(({ type, key }) => {
                 const data = getResourceData(type, model);
-                const button = createButton(key, 'product-link', () => openResourceModal(type, model), !data.length);
+                const button = createButton(key, 'product-link', () => {
+                    closeMobileMenu();
+                    openResourceModal(type, model);
+                }, !data.length);
                 button.dataset.i18n = key;
                 if (!data.length) button.title = getI18n('resource_unavailable');
                 links.appendChild(button);
@@ -243,6 +309,11 @@ function initMenu() {
             });
             navItem.classList.toggle('open', willOpen);
             navLink.setAttribute('aria-expanded', String(willOpen));
+            if (willOpen && isMobileNavigation()) {
+                requestAnimationFrame(() => {
+                    navMenu.scrollTo({ top: Math.max(0, navItem.offsetTop - 1), behavior: 'smooth' });
+                });
+            }
         });
 
         navItem.appendChild(dropdown);
@@ -607,20 +678,21 @@ function initMap() {
                 });
             });
         });
+        const mobileMap = window.innerWidth <= 600;
         chart.setOption({
             animation: !reducedMotion,
             backgroundColor: 'transparent',
-            geo: { map: 'world', roam: false, zoom: 2.6, center: [70, 45], label: { show: false }, itemStyle: { areaColor: '#092838', borderColor: '#154e6b' }, emphasis: { itemStyle: { areaColor: '#0b354d' } } },
+            geo: { map: 'world', roam: false, zoom: mobileMap ? 1.55 : 2.6, center: [70, 45], label: { show: false }, itemStyle: { areaColor: '#092838', borderColor: '#1d6381' }, emphasis: { itemStyle: { areaColor: '#0b354d' } } },
             series: [
                 {
                     name: 'Service nodes',
                     type: reducedMotion ? 'scatter' : 'effectScatter',
                     coordinateSystem: 'geo',
                     data,
-                    symbolSize: (value) => value[2],
+                    symbolSize: (value) => mobileMap ? Math.max(6, value[2] * 0.78) : value[2],
                     showEffectOn: 'render',
                     rippleEffect: { brushType: 'stroke', scale: 3, period: 4 },
-                    label: { show: true, formatter: '{b}', position: 'right', color: '#8dcfff', fontSize: 11, textBorderColor: '#021019', textBorderWidth: 2 },
+                    label: { show: true, formatter: '{b}', position: 'right', color: '#a9e3ff', fontSize: mobileMap ? 9 : 11, textBorderColor: '#021019', textBorderWidth: 2 },
                     itemStyle: { color: '#00eaff', shadowBlur: 9, shadowColor: '#00eaff' },
                     zlevel: 3
                 },
@@ -630,8 +702,8 @@ function initMap() {
                     coordinateSystem: 'geo',
                     data: streamLines,
                     zlevel: 2,
-                    effect: { show: !reducedMotion, period: 4.5, trailLength: 0.28, color: '#ff8b45', symbol: 'circle', symbolSize: 4 },
-                    lineStyle: { color: '#f37021', width: 0.8, opacity: 0.2, curveness: 0.22 }
+                    effect: { show: !reducedMotion, period: mobileMap ? 3.2 : 4.2, trailLength: 0.42, color: '#ff9b5f', symbol: 'circle', symbolSize: mobileMap ? 5 : 4 },
+                    lineStyle: { color: '#f37021', width: mobileMap ? 1.35 : 1, opacity: mobileMap ? 0.46 : 0.34, curveness: 0.22 }
                 },
                 {
                     name: 'Data paths',
@@ -639,11 +711,14 @@ function initMap() {
                     coordinateSystem: 'geo',
                     data: streamLines,
                     zlevel: 1,
-                    lineStyle: { color: '#56c7ff', width: 0.5, opacity: 0.11, curveness: 0.22 }
+                    lineStyle: { color: '#56c7ff', width: mobileMap ? 0.9 : 0.6, opacity: mobileMap ? 0.26 : 0.17, curveness: 0.22 }
                 }
             ]
         });
-        window.addEventListener('resize', () => chart.resize(), { passive: true });
+        window.addEventListener('resize', () => {
+            chart.resize();
+            chart.setOption({ geo: { zoom: window.innerWidth <= 600 ? 1.55 : 2.6, center: [70, 45] } });
+        }, { passive: true });
     } catch (error) {
         container.classList.add('map-fallback');
         console.warn('Background map could not be initialized.', error);
@@ -807,6 +882,11 @@ function bindEvents() {
     document.querySelectorAll('[data-lang]').forEach((button) => button.addEventListener('click', () => changeLanguage(button.dataset.lang)));
     document.addEventListener('click', (event) => {
         if (!event.target.closest('.lang-selector')) setLanguageDropdown(false);
+        if (document.getElementById('navMenu').classList.contains('active') &&
+            !event.target.closest('#navMenu') &&
+            !event.target.closest('#mobileMenuButton')) {
+            closeMobileMenu();
+        }
         if (!event.target.closest('.nav-item')) {
             document.querySelectorAll('.nav-item.open').forEach((item) => {
                 item.classList.remove('open');
@@ -818,9 +898,23 @@ function bindEvents() {
     const mobileButton = document.getElementById('mobileMenuButton');
     mobileButton.addEventListener('click', () => {
         const nav = document.getElementById('navMenu');
-        const open = nav.classList.toggle('active');
-        mobileButton.setAttribute('aria-expanded', String(open));
+        const willOpen = !nav.classList.contains('active');
+        if (!willOpen) {
+            closeMobileMenu();
+            return;
+        }
+        nav.classList.add('active');
+        mobileButton.setAttribute('aria-expanded', 'true');
+        document.body.classList.add('mobile-menu-open');
+        updateMobileMenuTop();
+        nav.scrollTop = 0;
     });
+
+    window.addEventListener('resize', () => {
+        if (!isMobileNavigation()) closeMobileMenu();
+        else updateMobileMenuTop();
+    }, { passive: true });
+    window.visualViewport?.addEventListener('resize', updateMobileMenuTop, { passive: true });
 
     document.getElementById('searchForm').addEventListener('submit', (event) => {
         event.preventDefault();
@@ -835,7 +929,10 @@ function bindEvents() {
     }));
     document.addEventListener('keydown', (event) => {
         const modal = [...document.querySelectorAll('.modal.is-open')].at(-1);
-        if (!modal) return;
+        if (!modal) {
+            if (event.key === 'Escape' && document.getElementById('navMenu').classList.contains('active')) closeMobileMenu(true);
+            return;
+        }
         if (event.key === 'Escape') closeModal(modal.id);
         if (event.key === 'Tab') trapModalFocus(event, modal);
     });
@@ -847,13 +944,11 @@ function bindEvents() {
     document.getElementById('btnCompass').addEventListener('click', toggleCompass);
 }
 
-function init() {
+async function init() {
     document.getElementById('currentYear').textContent = String(new Date().getFullYear());
     initMenu();
     bindEvents();
-    const savedLanguage = localStorage.getItem('rui_language');
-    const browserLanguage = navigator.language?.split('-')[0];
-    changeLanguage(savedLanguage || (translations[browserLanguage] ? browserLanguage : 'zh'), false);
+    changeLanguage(await resolveInitialLanguage(), false);
     initParticles();
     initMap();
     initUpdateToast();
