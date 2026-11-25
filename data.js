@@ -65,6 +65,7 @@ const firmwareDatabase = {
         { version: 'Radio', date: '2025-02-28', url: 'https://chcnavigation.jianguoyun.com/p/DXDybjUQtq_UCxiDx5UGIAA'}
     ],
     'i85': [
+        { version: 'V1.3.2', date: '2026-08-27', url: 'https://chcnavigation.jianguoyun.com/p/DWQxG1gQtq_UCxishqwGIAA' },
         { version: 'V1.1.6.4', date: '2026-03-27', url: 'https://chcnavigation.jianguoyun.com/p/DX3y-1QQtq_UCxjDvKQGIAA' },
         { version: 'V1.1.6', date: '2026-03-27', url: 'https://chcnavigation.jianguoyun.com/p/Daz-6eEQtq_UCxi966AGIAA' },
         { version: 'V1.0.14', date: '2025-09-15', url: 'https://chcnavigation.jianguoyun.com/p/DVDEQUkQtq_UCxit3o4GIAA' },
@@ -96,6 +97,7 @@ const firmwareDatabase = {
     'lt800': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DSTkp2YQtq_UCxjjyJUGIAA' } ],
     'lt800h': [ { version: 'OS and Update tool', url: 'https://chcnavigation.jianguoyun.com/p/DUlm69oQtq_UCxjkyJUGIAA' } ],
     'landstar': [
+        { version: 'LandStar-8.3.2.20261119', date: '2026-12-07', url: 'https://chcnavigation.jianguoyun.com/p/DTzj5yUQtq_UCxi8y7EGIAA' },
         { version: 'LandStar-8.3.0.20260616', date: '2026-06-16', url: 'https://chcnavigation.jianguoyun.com/p/Df19vB4Qtq_UCxj59aYGIAA' },
         { version: 'LandStar-8.2.0.4.20260320', date: '2026-03-20', url: 'https://chcnavigation.jianguoyun.com/p/DSSt7oQQtq_UCxj55Z8GIAA' },
         { version: 'LandStar-8.2.0.3.20260306', date: '2026-03-09', url: 'https://chcnavigation.jianguoyun.com/p/Ddjh87cQtq_UCxiU4J4GIAA' },
@@ -242,6 +244,42 @@ const faqDatabase = {
 
 /* 5️⃣ 新闻公告数据库 (News Database) - 新增 */
 const newsDatabase = [
+    {
+        title: 'LandStar 8.3.2.20261119',
+        date: '2026-12-07',
+        tag: 'Software',
+        changesZh: [
+            '激光放样：用支持激光的 RTK 做点、线和面放样。',
+            '界面可自定义：把常用工具分组，按自己的作业习惯排列。',
+            '地图和文件更好用：支持 WFS 2.0 在线地图、调节地图透明度，并新增 GC3、FLD、SDR 等导出格式。',
+            '外业操作更顺：视觉测量处理图片更快，改进了道路放样、图层查找、DWG/DXF 图层编辑、CAD 浏览和全站仪操作。',
+            '新增两点旋转校准、三角形计算和测量参考线，支持带断链桩号的路线和自定义面积分块数量。'
+        ],
+        changes: [
+            'Use a compatible laser RTK receiver to stake out points, lines and surfaces.',
+            'Group your frequent tools and arrange the interface around your workflow.',
+            'Use WFS 2.0 online maps, adjust map transparency and export to additional formats including GC3, FLD and SDR.',
+            'Process Visual Survey images faster, with improvements to road stakeout, layer search, DWG/DXF layer editing, CAD viewing and total station workflows.',
+            'Use two-point rotation calibration, triangle calculations and measurement reference lines. Alignments support station equations, and area division supports a custom block count.'
+        ]
+    },
+    {
+        title: 'i85 Firmware V1.3.2',
+        date: '2026-08-27',
+        tag: 'Firmware',
+        changesZh: [
+            '修复同频率输出的 NMEA 数据时间戳不一致的问题。',
+            '恢复出厂设置后，北斗 B1C 和 B2A 频段默认启用。',
+            '新增访客模式和 IMU 改正后的 GGA 输出。接收机网页可切换 GGA 标识（GP/GN）。',
+            '升级前备份接收机数据，电量保持在 50% 以上，升级期间请勿关机。'
+        ],
+        changes: [
+            'Fixed inconsistent timestamps in NMEA data output at the same rate.',
+            'BeiDou B1C and B2A are enabled by default after a factory reset.',
+            'Added guest mode and IMU-corrected GGA output. Switch the GGA talker ID (GP/GN) from the receiver web interface.',
+            'Back up receiver data before upgrading, keep the battery above 50%, and leave the receiver powered on during the upgrade.'
+        ]
+    },
         {
         title: 'i85 Firmware V1.1.6 Release Notes',
         date: '2026-03-27',

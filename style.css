@@ -1920,3 +1920,7 @@ html{scroll-behavior:smooth}body{background:#f4f6f8}.site-header{background:#fff
     .hero-section[data-background="uav"] .hero-art { width: 100%; opacity: .66; }
     .hero-section[data-background="uav"] .survey-model { display: none; }
 }
+
+.resource-tabs[hidden] { display: none; }
+.modal .news-item h3, .modal .news-date, .modal .release-notes { color: #16384e; }
+.modal .news-item { background: #f7f9fb; border-color: #dce6ed; }

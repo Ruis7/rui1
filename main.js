@@ -348,6 +348,13 @@ function parseDate(dateString) {
     return Number.isNaN(date.getTime()) ? new Date(0) : date;
 }
 
+function releaseDateLabel(date) {
+    if (!date) return getI18n('date_unknown');
+    const localToday = new Date().toLocaleDateString('en-CA');
+    if (date <= localToday) return date;
+    return currentLang === 'zh' ? `计划发布：${date}` : `Scheduled for ${date}`;
+}
+
 function sortedResources(items) {
     return [...items].sort((a, b) => parseDate(b.date) - parseDate(a.date));
 }
@@ -365,6 +372,8 @@ function renderResourceModal(type, model) {
     const tabs = document.getElementById('resourceTabs');
     const types = ['firmware', 'manual', 'faq'];
     title.textContent = productName(model);
+    tabs.hidden = false;
+    list.setAttribute('role', 'tabpanel');
     tabs.setAttribute('aria-labelledby', title.id);
     tabs.replaceChildren(...types.map((tabType, index) => {
         const activate = (nextType) => {
@@ -420,7 +429,7 @@ function renderResourceModal(type, model) {
         name.textContent = item.version || item.title || productName(model);
         const date = document.createElement('span');
         date.className = 'fw-date';
-        date.textContent = item.date || getI18n('date_unknown');
+        date.textContent = releaseDateLabel(item.date);
         if (item === latest) {
             row.classList.add('is-latest');
             const badge = document.createElement('span');
@@ -579,6 +588,9 @@ function openNewsModal() {
     const title = document.getElementById('resourceModalTitle');
     const list = document.getElementById('resourceModalList');
     title.textContent = getI18n('news_title');
+    document.getElementById('resourceTabs').hidden = true;
+    list.removeAttribute('role');
+    list.removeAttribute('aria-labelledby');
     list.replaceChildren();
 
     if (!Array.isArray(newsDatabase) || !newsDatabase.length) {
@@ -601,10 +613,11 @@ function openNewsModal() {
             const date = document.createElement('time');
             date.className = 'news-date';
             date.dateTime = item.date || '';
-            date.textContent = item.date || getI18n('date_unknown');
+            date.textContent = releaseDateLabel(item.date);
             const changes = document.createElement('ul');
             changes.className = 'release-notes';
-            const entries = Array.isArray(item.changes) ? item.changes : [String(item.desc || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()];
+            const localizedChanges = currentLang === 'zh' && item.changesZh ? item.changesZh : item.changes;
+            const entries = Array.isArray(localizedChanges) ? localizedChanges : [String(item.desc || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()];
             entries.filter(Boolean).forEach((change) => {
                 const line = document.createElement('li');
                 line.textContent = change;
