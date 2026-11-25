@@ -451,7 +451,12 @@ function renderResourceModal(type, model) {
             link.target = '_blank';
             link.rel = 'noopener noreferrer';
             link.textContent = getI18n(type === 'firmware' ? 'resource_download' : 'resource_view');
-            row.append(info, link);
+            const actions = document.createElement('div');
+            actions.className = 'release-row-actions';
+            const notes = type === 'firmware' && releaseNotesButton(model, item);
+            if (notes) actions.append(notes);
+            actions.append(link);
+            row.append(info, actions);
         }
         list.appendChild(row);
     });
@@ -559,6 +564,7 @@ function closeModal(id, restoreFocus = true) {
     modal.setAttribute('aria-hidden', 'true');
     if (id === 'toolModal') stopCompass();
     if (id === 'resourceModal') activeResource = null;
+    if (id === 'releaseNotesModal') document.getElementById('resourceModal').inert = false;
     if (!document.querySelector('.modal.is-open')) document.body.classList.remove('modal-open');
     updateBackgroundControls();
     if (restoreFocus) modalReturnFocus.get(modal)?.focus?.();

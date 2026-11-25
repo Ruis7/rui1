@@ -1924,3 +1924,33 @@ html{scroll-behavior:smooth}body{background:#f4f6f8}.site-header{background:#fff
 .resource-tabs[hidden] { display: none; }
 .modal .news-item h3, .modal .news-date, .modal .release-notes { color: #16384e; }
 .modal .news-item { background: #f7f9fb; border-color: #dce6ed; }
+
+.release-row-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+.release-notes-button {
+    border: 1px solid #cbdae5;
+    border-radius: 6px;
+    background: #fff;
+    color: #16384e;
+    padding: 7px 11px;
+    font-size: .82rem;
+    font-weight: 650;
+}
+.release-notes-button:hover { background: #eaf1f5; border-color: #92aabd; }
+#releaseNotesModal { z-index: 10001; }
+#releaseNotesModal .modal-content { width: min(100%, 610px); }
+#releaseNotesVersion { margin: 5px 0 0; color: #526777; overflow-wrap: anywhere; }
+.notes-language { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.notes-language select { padding: 8px 12px; border: 1px solid #cbdae5; border-radius: 6px; color: #16384e; background: #fff; }
+#releaseNotesEntries { padding-inline-start: 22px; line-height: 1.55; }
+#releaseNotesEntries li + li { margin-top: 12px; }
+@media (max-width: 780px) {
+    .release-row > .release-row-actions { grid-column: 2; grid-row: 2 / 4; }
+    .release-row-actions .release-download { padding: 7px 3px; }
+    .firmware-item .release-row-actions { flex: 0 1 auto; }
+}

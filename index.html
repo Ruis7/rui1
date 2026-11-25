@@ -8,7 +8,7 @@
     <meta name="application-version" content="20261124.2">
     <title>RUI Support Center</title>
 
-    <link rel="stylesheet" href="style.css?v=20261125.1">
+    <link rel="stylesheet" href="style.css?v=preview1">
 
     <!-- ECharts 5 no longer ships map data; this script only registers the world map dataset. -->
 
@@ -270,10 +270,26 @@
       <a href="#releases"><b aria-hidden="true">↓</b><span data-i18n="hub_releases">Releases</span></a>
       <a href="#tools"><b aria-hidden="true">⚙</b><span data-i18n="hub_tools">Tools</span></a>
     </nav>
+    <div id="releaseNotesModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="releaseNotesTitle" aria-hidden="true">
+        <div class="modal-content" tabindex="-1">
+            <div class="modal-header">
+                <div><h2 id="releaseNotesTitle"></h2><p id="releaseNotesVersion"></p></div>
+                <button type="button" class="close-btn" data-close-modal="releaseNotesModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="notes-language">
+                    <label id="releaseNotesLanguageLabel" for="releaseNotesLanguage"></label>
+                    <select id="releaseNotesLanguage"></select>
+                </div>
+                <ul id="releaseNotesEntries"></ul>
+            </div>
+        </div>
+    </div>
     <noscript><p class="noscript-message">This website requires JavaScript to display support resources.</p></noscript>
     <script src="data.js?v=20261125.1"></script>
-    <script src="main.js?v=20261125.1"></script>
+    <script src="main.js?v=preview1"></script>
     <script src="visual.js?v=2.3"></script>
-    <script src="hub.js?v=20261125.1"></script>
+    <script src="release-notes.js?v=preview1"></script>
+    <script src="hub.js?v=preview1"></script>
 </body>
 </html>
