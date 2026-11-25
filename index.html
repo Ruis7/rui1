@@ -8,7 +8,7 @@
     <meta name="application-version" content="20261124.2">
     <title>RUI Support Center</title>
 
-    <link rel="stylesheet" href="style.css?v=preview1">
+    <link rel="stylesheet" href="style.css?v=preview2">
 
     <!-- ECharts 5 no longer ships map data; this script only registers the world map dataset. -->
 
@@ -76,7 +76,7 @@
             </div>
         </section>
         <div class="hub-wrap">
-          <div id="hubStats" class="hub-stats"></div>
+          <section id="recentUpdates" class="hub-section recent-updates" hidden></section>
           <section id="catalog" class="hub-section"><div class="section-head"><div><span class="eyebrow">01 / RESOURCE LIBRARY</span><h2 data-i18n="hub_products">Products</h2><p data-i18n="hub_catalog_desc">Find the right resources for your equipment.</p></div><button id="savedToggle" class="secondary-btn" type="button" aria-pressed="false" data-i18n="hub_saved">Saved products</button></div><div id="categoryFilters" class="category-filters"></div><label class="sr-only" for="catalogSearch" data-i18n="search_label">Search</label><input id="catalogSearch" class="catalog-search" type="search" data-i18n="search_placeholder" placeholder="Search model"><div id="productGrid" class="product-grid"></div></section>
           <section id="releases" class="hub-section"><div class="section-head"><div><span class="eyebrow">02 / VERSION HISTORY</span><h2 data-i18n="hub_releases">Release center</h2><p data-i18n="hub_release_desc">Latest dated releases from the resource library.</p></div></div><div id="releaseList" class="release-list"></div></section>
           <section id="tools" class="hub-section"><div class="section-head"><div><span class="eyebrow">03 / FIELD WORKSPACE</span><h2 data-i18n="hub_tools">Tools & support</h2></div></div>
@@ -287,9 +287,10 @@
     </div>
     <noscript><p class="noscript-message">This website requires JavaScript to display support resources.</p></noscript>
     <script src="data.js?v=20261125.1"></script>
-    <script src="main.js?v=preview1"></script>
+    <script src="main.js?v=preview2"></script>
     <script src="visual.js?v=2.3"></script>
     <script src="release-notes.js?v=preview1"></script>
-    <script src="hub.js?v=preview1"></script>
+    <script src="product-links.js?v=preview2"></script>
+    <script src="hub.js?v=preview2"></script>
 </body>
 </html>

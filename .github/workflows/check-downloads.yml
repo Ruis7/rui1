@@ -1,0 +1,29 @@
+name: Check support download links
+on:
+  schedule:
+    - cron: '23 5 * * 1'
+  workflow_dispatch:
+permissions:
+  contents: read
+  issues: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - id: links
+        run: node scripts/check-downloads.mjs link-report.md
+      - run: cat link-report.md >> "$GITHUB_STEP_SUMMARY"
+      - if: steps.links.outputs.confirmed != '0'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          issue=$(gh issue list --state open --search '"Support download links need attention" in:title' --json number,title --jq 'map(select(.title == "Support download links need attention")) | first | .number // empty')
+          if [ -n "$issue" ]; then
+            gh issue edit "$issue" --body-file link-report.md
+          else
+            gh issue create --title "Support download links need attention" --body-file link-report.md
+          fi

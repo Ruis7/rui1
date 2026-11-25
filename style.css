@@ -1954,3 +1954,16 @@ html{scroll-behavior:smooth}body{background:#f4f6f8}.site-header{background:#fff
     .release-row-actions .release-download { padding: 7px 3px; }
     .firmware-item .release-row-actions { flex: 0 1 auto; }
 }
+
+.recent-updates { margin-top: 16px; }
+.recent-updates[hidden] { display: none; }
+.recent-update { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border-inline-start: 3px solid #e96500; background: #fff7ef; border-radius: 6px; }
+.recent-update + .recent-update { margin-top: 8px; }
+.product-shortcuts { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 8px; grid-column: 1 / -1; }
+.product-shortcuts .secondary-btn { font-size: .75rem; padding: 6px 8px; }
+.product-latest { grid-column: 1 / -1; margin-top: 10px; padding-top: 9px; border-top: 1px solid #dce6ed; overflow-wrap: anywhere; font-size: .82rem; }
+.latest-download { color: #fff; background: #ad4309; border-color: #ad4309; }
+.latest-download:hover { background: #873404; }
+@media (max-width: 560px) {
+    .recent-update { align-items: flex-start; flex-direction: column; }
+}

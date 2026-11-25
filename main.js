@@ -350,7 +350,7 @@ function parseDate(dateString) {
 
 function releaseDateLabel(date) {
     if (!date) return getI18n('date_unknown');
-    const localToday = new Date().toLocaleDateString('en-CA');
+    const localToday = releaseToday();
     if (date <= localToday) return date;
     return currentLang === 'zh' ? `计划发布：${date}` : `Scheduled for ${date}`;
 }
@@ -409,11 +409,13 @@ function renderResourceModal(type, model) {
     }
 
     const latest = type === 'firmware'
-        ? data.find(item => item.verified !== false && item.url && parseDate(item.date).getTime() > 0)
+        ? data.find(availableRelease)
         : null;
-    const ordered = latest ? [latest, ...data.filter(item => item !== latest)] : data;
+    const upcoming = type === 'firmware' ? data.filter(item => item.date > releaseToday()) : [];
+    const older = data.filter(item => item !== latest && !upcoming.includes(item));
+    const ordered = [...(latest ? [latest] : []), ...upcoming, ...older];
     ordered.forEach((item, index) => {
-        if (latest && index === 1) {
+        if (latest && index === 1 + upcoming.length) {
             const heading = document.createElement('h3');
             heading.className = 'resource-history';
             heading.textContent = visualWords[currentLang][5];
@@ -455,7 +457,7 @@ function renderResourceModal(type, model) {
             actions.className = 'release-row-actions';
             const notes = type === 'firmware' && releaseNotesButton(model, item);
             if (notes) actions.append(notes);
-            actions.append(link);
+            if (type !== 'firmware' || !item.date || availableRelease(item)) actions.append(link);
             row.append(info, actions);
         }
         list.appendChild(row);
@@ -478,7 +480,7 @@ function allModels() {
 }
 
 function findModels(query) {
-    const normalizedQuery = normalizeModel(query);
+    const normalizedQuery = normalizeModel(query).replace(/^chcnav(?:igation)?/, '');
     if (!normalizedQuery) return [];
     if (normalizedQuery === 'aa6') return ['x500'];
     const models = allModels();
@@ -511,6 +513,11 @@ function renderSearchResults(query) {
 
     if (!matches.length) {
         summary.textContent = getI18n('no_search_results');
+        appendModelSuggestions(list, query, model => {
+            selectBackground(backgroundForModel(model));
+            renderSearchResults(productName(model));
+            document.getElementById('searchResultModal').querySelector('.modal-content').focus();
+        });
         return false;
     }
 
