@@ -4,22 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="RUI Support Center provides firmware, manuals, FAQs and technical support resources for CHCNAV equipment in the CIS region.">
-    <meta name="theme-color" content="#021019">
-    <meta name="application-version" content="20260711.1">
+    <meta name="theme-color" content="#f4f6f8">
+    <meta name="application-version" content="20261124.2">
     <title>RUI Support Center</title>
 
-    <link rel="stylesheet" href="style.css?v=20260711.1">
-    <script defer src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="style.css?v=2.3">
+
     <!-- ECharts 5 no longer ships map data; this script only registers the world map dataset. -->
-    <script defer src="https://cdn.jsdelivr.net/npm/echarts@4.9.0/map/js/world.js"></script>
+
 </head>
 <body>
     <a class="skip-link" href="#mainContent">跳转到主要内容</a>
 
-    <div class="bg-decorations" aria-hidden="true">
-        <div id="global-map-bg"></div>
-        <div class="map-overlay"></div>
-    </div>
+    
 
     <header class="site-header">
         <div class="top-bar">
@@ -41,16 +38,24 @@
         </div>
 
         <div class="main-header">
-            <a class="logo" href="#mainContent" aria-label="RUI Support Center">RUI <span>SUPPORT</span></a>
+            <a class="logo" href="#mainContent" aria-label="RUI Support Center">RUI<span>S</span> | Support Center</a>
             <button id="mobileMenuButton" class="mobile-menu-toggle" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="navMenu">☰</button>
-            <nav class="nav-menu" id="navMenu" aria-label="产品资料导航"></nav>
+            <div class="header-links"><a href="#catalog" data-i18n="hub_products">Products</a><a href="#releases" data-i18n="hub_releases">Release center</a><a href="#tools" data-i18n="hub_tools">Tools</a></div>
         </div>
     </header>
     <div id="mobileMenuBackdrop" class="mobile-menu-backdrop" aria-hidden="true"></div>
 
+    <nav class="nav-menu" id="navMenu" aria-label="产品资料导航"></nav>
     <main id="mainContent">
         <section class="hero-section" id="heroSection" aria-labelledby="heroTitle">
-            <canvas id="particleCanvas" aria-hidden="true"></canvas>
+            <div class="hero-art" aria-hidden="true">
+                <img class="drone-photo" src="assets/x500-aa6-original.jpg" alt="" width="3000" height="1998">
+                <div class="survey-grid"></div>
+                <div class="survey-route"></div>
+                <span class="survey-model survey-x500">X500</span>
+                <span class="survey-model survey-aa6">AA6</span>
+            </div>
+            <div class="hero-kicker">RUIS / TECHNICAL KNOWLEDGE BASE</div>
             <h1 id="heroTitle" data-i18n="hero_title">欢迎来到 <span>RUI</span> 技术支持</h1>
             <p data-i18n="hero_desc">您的说明书、固件和技术支持一站式中心。</p>
 
@@ -60,8 +65,21 @@
                 <button class="search-btn" type="submit" data-i18n="search_go">搜索</button>
             </form>
             <p id="searchStatus" class="search-status" role="status" aria-live="polite"></p>
+            <div id="quickModels" class="quick-models"></div>
+            <div id="uavQuickModels" class="quick-models">
+                <button type="button" class="quick-model" data-uav-model="X500">X500</button>
+                <button type="button" class="quick-model" data-uav-model="AA6">AA6</button>
+            </div>
+            <div class="background-picker">
+                <button id="backgroundToggle" type="button"></button>
+                <div id="backgroundControls" role="group"></div>
+            </div>
         </section>
-
+        <div class="hub-wrap">
+          <div id="hubStats" class="hub-stats"></div>
+          <section id="catalog" class="hub-section"><div class="section-head"><div><span class="eyebrow">01 / RESOURCE LIBRARY</span><h2 data-i18n="hub_products">Products</h2><p data-i18n="hub_catalog_desc">Find the right resources for your equipment.</p></div><button id="savedToggle" class="secondary-btn" type="button" aria-pressed="false" data-i18n="hub_saved">Saved products</button></div><div id="categoryFilters" class="category-filters"></div><label class="sr-only" for="catalogSearch" data-i18n="search_label">Search</label><input id="catalogSearch" class="catalog-search" type="search" data-i18n="search_placeholder" placeholder="Search model"><div id="productGrid" class="product-grid"></div></section>
+          <section id="releases" class="hub-section"><div class="section-head"><div><span class="eyebrow">02 / VERSION HISTORY</span><h2 data-i18n="hub_releases">Release center</h2><p data-i18n="hub_release_desc">Latest dated releases from the resource library.</p></div></div><div id="releaseList" class="release-list"></div></section>
+          <section id="tools" class="hub-section"><div class="section-head"><div><span class="eyebrow">03 / FIELD WORKSPACE</span><h2 data-i18n="hub_tools">Tools & support</h2></div></div>
         <section class="content-container" aria-label="快捷工具">
             <article class="card">
                 <h2 data-i18n="ps_title">🛰️ PointSKY 寻星助手</h2>
@@ -81,12 +99,13 @@
                 <button class="card-action" type="button" data-action="open-contact" data-i18n="btn_submit">联系</button>
             </article>
         </section>
+        </section></div>
     </main>
 
     <footer class="site-footer">
         <p>&copy; <span id="currentYear">2026</span> RUI Support Center. All rights reserved.</p>
         <p><span data-i18n="legal_pending">隐私政策与服务条款正在完善</span> · <a href="https://chcnav.com" target="_blank" rel="noopener noreferrer" data-i18n="official_site">CHCNAV 官方网站</a></p>
-        <p class="build-version">Build 20260711.1</p>
+        <p class="build-version">Build V2.3</p>
     </footer>
 
     <div id="resourceModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="resourceModalTitle" aria-hidden="true">
@@ -95,7 +114,8 @@
                 <h2 id="resourceModalTitle">Downloads</h2>
                 <button class="close-btn" type="button" data-close-modal="resourceModal" aria-label="关闭">&times;</button>
             </div>
-            <div class="modal-body" id="resourceModalList"></div>
+            <div class="resource-tabs" id="resourceTabs" role="tablist"></div>
+            <div class="modal-body" id="resourceModalList" role="tabpanel" tabindex="0"></div>
         </div>
     </div>
 
@@ -244,8 +264,16 @@
         </div>
     </div>
 
+    <nav class="bottom-nav" aria-label="Quick navigation">
+      <a href="#mainContent"><b aria-hidden="true">⌂</b><span>Home</span></a>
+      <a href="#catalog"><b aria-hidden="true">▦</b><span data-i18n="hub_products">Products</span></a>
+      <a href="#releases"><b aria-hidden="true">↓</b><span data-i18n="hub_releases">Releases</span></a>
+      <a href="#tools"><b aria-hidden="true">⚙</b><span data-i18n="hub_tools">Tools</span></a>
+    </nav>
     <noscript><p class="noscript-message">This website requires JavaScript to display support resources.</p></noscript>
-    <script src="data.js?v=20260711.1"></script>
-    <script src="main.js?v=20260711.1"></script>
+    <script src="data.js?v=20261124.2"></script>
+    <script src="main.js?v=2"></script>
+    <script src="visual.js?v=2.3"></script>
+    <script src="hub.js?v=2"></script>
 </body>
 </html>

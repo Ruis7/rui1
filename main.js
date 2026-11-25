@@ -199,9 +199,11 @@ function changeLanguage(langCode, persist = true) {
     updateSatInfo();
     updateCompassButton();
     updateToastLanguage();
+    updateBackgroundControls();
 
     if (activeResource) renderResourceModal(activeResource.type, activeResource.model);
     if (document.getElementById('searchResultModal').classList.contains('is-open') && lastSearchQuery) renderSearchResults(lastSearchQuery);
+    if (typeof renderHub === 'function') renderHub();
     if (persist) localStorage.setItem('rui_language', currentLang);
     setLanguageDropdown(false);
 }
@@ -321,6 +323,7 @@ function initMenu() {
             });
             navItem.classList.toggle('open', willOpen);
             navLink.setAttribute('aria-expanded', String(willOpen));
+            if (willOpen) selectBackground(category.categoryId);
             if (willOpen && isMobileNavigation()) {
                 requestAnimationFrame(() => {
                     navItems.scrollTo({ top: Math.max(0, navItem.offsetTop - 1), behavior: 'smooth' });
@@ -359,8 +362,34 @@ function renderResourceModal(type, model) {
     const title = document.getElementById('resourceModalTitle');
     const list = document.getElementById('resourceModalList');
     const data = sortedResources(getResourceData(type, model));
-    title.textContent = `${productName(model)} · ${resourceTypeLabel(type, model)}`;
+    const tabs = document.getElementById('resourceTabs');
+    const types = ['firmware', 'manual', 'faq'];
+    title.textContent = productName(model);
+    tabs.setAttribute('aria-labelledby', title.id);
+    tabs.replaceChildren(...types.map((tabType, index) => {
+        const activate = (nextType) => {
+            renderResourceModal(nextType, model);
+            document.getElementById(`resource-tab-${nextType}`).focus();
+        };
+        const count = getResourceData(tabType, model).length;
+        const tab = createButton(`${resourceTypeLabel(tabType, model)} · ${count}`, 'resource-tab', () => activate(tabType));
+        tab.id = `resource-tab-${tabType}`;
+        tab.setAttribute('role', 'tab');
+        tab.setAttribute('aria-selected', String(type === tabType));
+        tab.setAttribute('aria-controls', list.id);
+        tab.tabIndex = type === tabType ? 0 : -1;
+        tab.addEventListener('keydown', (event) => {
+            const shortcuts = { ArrowLeft: (index + 2) % 3, ArrowRight: (index + 1) % 3, Home: 0, End: 2 };
+            const next = shortcuts[event.key];
+            if (!Number.isInteger(next)) return;
+            event.preventDefault();
+            activate(types[next]);
+        });
+        return tab;
+    }));
+    list.setAttribute('aria-labelledby', `resource-tab-${type}`);
     list.replaceChildren();
+    list.scrollTop = 0;
 
     if (!data.length) {
         const empty = document.createElement('p');
@@ -370,7 +399,17 @@ function renderResourceModal(type, model) {
         return;
     }
 
-    data.forEach((item) => {
+    const latest = type === 'firmware'
+        ? data.find(item => item.verified !== false && item.url && parseDate(item.date).getTime() > 0)
+        : null;
+    const ordered = latest ? [latest, ...data.filter(item => item !== latest)] : data;
+    ordered.forEach((item, index) => {
+        if (latest && index === 1) {
+            const heading = document.createElement('h3');
+            heading.className = 'resource-history';
+            heading.textContent = visualWords[currentLang][5];
+            list.append(heading);
+        }
         const row = document.createElement('article');
         row.className = 'firmware-item';
 
@@ -382,6 +421,13 @@ function renderResourceModal(type, model) {
         const date = document.createElement('span');
         date.className = 'fw-date';
         date.textContent = item.date || getI18n('date_unknown');
+        if (item === latest) {
+            row.classList.add('is-latest');
+            const badge = document.createElement('span');
+            badge.className = 'latest-version';
+            badge.textContent = visualWords[currentLang][4];
+            info.append(badge);
+        }
         info.append(name, date);
 
         if (item.verified === false) {
@@ -402,9 +448,11 @@ function renderResourceModal(type, model) {
     });
 }
 
-function openResourceModal(type, model) {
+function openResourceModal(type, model, returnFocus) {
+    selectBackground(backgroundForModel(model));
     renderResourceModal(type, model);
     openModal('resourceModal');
+    if (returnFocus) modalReturnFocus.set(document.getElementById('resourceModal'), returnFocus);
 }
 
 function normalizeModel(value) {
@@ -417,6 +465,8 @@ function allModels() {
 
 function findModels(query) {
     const normalizedQuery = normalizeModel(query);
+    if (!normalizedQuery) return [];
+    if (normalizedQuery === 'aa6') return ['x500'];
     const models = allModels();
     const exact = models.find((model) => normalizeModel(model) === normalizedQuery);
     if (exact) return [exact];
@@ -431,8 +481,9 @@ function addSearchResourceButton(container, type, model) {
     const data = getResourceData(type, model);
     const label = `${resourceTypeLabel(type, model)} (${data.length})`;
     const button = createButton(label, 'resource-choice-btn', () => {
+        const trigger = modalReturnFocus.get(document.getElementById('searchResultModal'));
         closeModal('searchResultModal', false);
-        openResourceModal(type, model);
+        openResourceModal(type, model, trigger);
     }, data.length === 0);
     container.appendChild(button);
 }
@@ -476,6 +527,7 @@ function performSearch() {
         input.focus();
         return;
     }
+    linkSearchBackground(query, findModels(query)[0]);
     renderSearchResults(query);
     openModal('searchResultModal');
 }
@@ -487,6 +539,7 @@ function openModal(id) {
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     document.body.classList.add('modal-open');
+    updateBackgroundControls();
     requestAnimationFrame(() => modal.querySelector('.modal-content')?.focus());
 }
 
@@ -498,6 +551,7 @@ function closeModal(id, restoreFocus = true) {
     if (id === 'toolModal') stopCompass();
     if (id === 'resourceModal') activeResource = null;
     if (!document.querySelector('.modal.is-open')) document.body.classList.remove('modal-open');
+    updateBackgroundControls();
     if (restoreFocus) modalReturnFocus.get(modal)?.focus?.();
 }
 
@@ -882,6 +936,7 @@ function updateCompassUI(heading) {
 }
 
 function openToolModal() {
+    selectBackground('gnss');
     openModal('toolModal');
     updateSatInfo();
 }
@@ -965,9 +1020,7 @@ async function init() {
     document.getElementById('navMenu').setAttribute('aria-hidden', String(isMobileNavigation()));
     bindEvents();
     changeLanguage(await resolveInitialLanguage(), false);
-    initParticles();
-    initMap();
-    initUpdateToast();
+    // Releases are displayed persistently in the new release center.
 }
 
 document.addEventListener('DOMContentLoaded', init);
