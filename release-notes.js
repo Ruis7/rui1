@@ -12,6 +12,20 @@ const releaseNoteLanguages = {
     uz: 'Oʻzbekcha', mn: 'Монгол', uk: 'Українська'
 };
 const localizedReleaseChanges = {
+    i83: {
+        ru: ['Исправлены формат GGA с поправкой IMU и временные метки NMEA. Добавлены гостевой режим и переключение GP/GN. После сброса включаются BeiDou B1C и B2A.'],
+        kk: ['IMU түзетілген GGA пішімі мен NMEA уақыт белгілері түзетілді. Қонақ режимі және GP/GN ауыстыру қосылды. Зауыттық қалпына келтіруден кейін BeiDou B1C және B2A қосылады.'],
+        uz: ['IMU tuzatishli GGA formati va NMEA vaqt belgilari tuzatildi. Mehmon rejimi hamda GP/GN almashtirish qo‘shildi. Zavod sozlamalari tiklangach, BeiDou B1C va B2A yoqiladi.'],
+        mn: ['IMU засвартай GGA формат болон NMEA цагийн тэмдгийг зассан. Зочны горим, GP/GN сэлгэлт нэмэгдсэн. Үйлдвэрийн тохиргоо сэргээхэд BeiDou B1C, B2A идэвхжинэ.'],
+        uk: ['Виправлено формат GGA з поправкою IMU та часові мітки NMEA. Додано гостьовий режим і перемикання GP/GN. Після скидання активуються BeiDou B1C і B2A.']
+    },
+    i76: {
+        ru: ['Исправлены задержки Bluetooth на некоторых планшетах и временные метки NMEA. Добавлены гостевой режим, GGA с поправкой IMU, переключение GP/GN и управление статическими файлами через веб-интерфейс. Для i76 DistLink 110102009N.'],
+        kk: ['Кейбір планшеттердегі Bluetooth кідірісі және NMEA уақыт белгілері түзетілді. Қонақ режимі, IMU түзетілген GGA, GP/GN ауыстыру және веб-интерфейсте статикалық файлдарды басқару қосылды. i76 DistLink 110102009N үшін.'],
+        uz: ['Ayrim planshetlarda Bluetooth kechikishi va NMEA vaqt belgilari tuzatildi. Mehmon rejimi, IMU tuzatishli GGA, GP/GN almashtirish va veb-interfeysda statik fayllarni boshqarish qo‘shildi. i76 DistLink 110102009N uchun.'],
+        mn: ['Зарим таблетын Bluetooth саатал болон NMEA цагийн тэмдгийг зассан. Зочны горим, IMU засвартай GGA, GP/GN сэлгэлт, вебээр статик файл удирдах боломж нэмэгдсэн. i76 DistLink 110102009N-д зориулсан.'],
+        uk: ['Усунено затримки Bluetooth на деяких планшетах і виправлено часові мітки NMEA. Додано гостьовий режим, GGA з поправкою IMU, перемикання GP/GN і керування статичними файлами через вебінтерфейс. Для i76 DistLink 110102009N.']
+    },
     i93: {
         ru: ['Добавлены гостевой режим и ID виртуальной базовой станции VRS.', 'После сброса включаются BeiDou B1C и B2A. Веб-интерфейс контроллера открывается в настольном режиме.', 'Артикулы A11611980901070507 и 110102003Y. Обновляйте через веб-интерфейс приёмника или LandStar. Сделайте резервную копию, зарядите батарею выше 50% и не выключайте приёмник.'],
         kk: ['Қонақ режимі және VRS виртуалды базалық станциясының идентификаторы қосылды.', 'Зауыттық қалпына келтіруден кейін BeiDou B1C және B2A қосылады. Контроллердің веб-интерфейсі компьютерлік режимде ашылады.', 'Артикулдар A11611980901070507 және 110102003Y. Қабылдағыш веб-интерфейсі немесе LandStar арқылы жаңартыңыз. Деректерді сақтық көшірмелеп, зарядты 50%-дан жоғары ұстаңыз және қабылдағышты өшірмеңіз.'],
@@ -36,6 +50,8 @@ const localizedReleaseChanges = {
 };
 
 const releaseNotesByVersion = {
+    'V1.7.1': { source: newsDatabase.find(entry => entry.title === 'i76 Firmware V1.7.1'), languages: localizedReleaseChanges.i76 },
+    'V1.5.2': { source: newsDatabase.find(entry => entry.title === 'i83 Firmware V1.5.2'), languages: localizedReleaseChanges.i83 },
     'LandStar-8.3.2.20261119': { source: newsDatabase.find(entry => entry.title === 'LandStar 8.3.2.20261119'), languages: localizedReleaseChanges.landstar },
     'V1.6.3': { source: newsDatabase.find(entry => entry.title === 'i93 Firmware V1.6.3'), languages: localizedReleaseChanges.i93 },
     'V1.3.2': { source: newsDatabase.find(entry => entry.title === 'i85 Firmware V1.3.2'), languages: localizedReleaseChanges.i85 }
@@ -43,9 +59,20 @@ const releaseNotesByVersion = {
 
 function releaseNotesButton(model, item) {
     const notes = (model === 'landstar' && item.version === 'LandStar-8.3.2.20261119')
+        || (model === 'i83' && item.version === 'V1.5.2')
+        || (model === 'i76' && item.version === 'V1.7.1')
         || (model === 'i93' && item.version === 'V1.6.3')
         || (model === 'i85' && item.version === 'V1.3.2')
         ? releaseNotesByVersion[item.version] : null;
+    if (!notes?.source && item.notesUrl) {
+        const link = document.createElement('a');
+        link.className = 'release-notes-button';
+        link.textContent = releaseNoteLabels[currentLang][0] + ' · PDF';
+        link.href = item.notesUrl;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+        return link;
+    }
     if (!notes?.source) return null;
     return createButton(releaseNoteLabels[currentLang][0], 'release-notes-button', () => {
         const modal = document.getElementById('releaseNotesModal');

@@ -73,10 +73,12 @@ const firmwareDatabase = {
         { version: 'V1.0.12', date: '2025-08-26', url: 'https://chcnavigation.jianguoyun.com/p/Ddf4fVIQtq_UCxizx5UGIAA' }
     ],
     'i83': [
+        {"version": "V1.5.2", "date": "2026-08-03", "url": "https://chcnavigation.jianguoyun.com/p/DSyvVQwQtq_UCxjfoKsGIAA"},
         { version: 'V1.3.11.2', date: '2025-04-03', url: 'https://chcnavigation.jianguoyun.com/p/DYr_2AQQtq_UCxjvvvoFIAA' },
         { version: 'V1.3.10', date: '2025-01-23', url: 'https://chcnavigation.jianguoyun.com/p/DdjPGVgQtq_UCxif0esFIAA' }
     ],
     'i76': [
+        {"version": "V1.7.1", "date": "2026-07-27", "url": "https://chcnavigation.jianguoyun.com/p/DQD0FMQQtq_UCxj5oKsGIAA"},
         { version: 'V1.5.1', date: '2026-01-21', url: 'https://chcnavigation.jianguoyun.com/p/Dda06AEQtq_UCxj-jJsGIAA' },
         { version: 'V1.4.3.3', date: '2025-09-26', url: 'https://chcnavigation.jianguoyun.com/p/DaWjPlgQtq_UCxjZlpIGIAA' },
         { version: 'V1.4.3', date: '2025-03-27', url: 'https://chcnavigation.jianguoyun.com/p/DQi4BBcQtq_UCxj_mYUGIAA' }
@@ -86,6 +88,7 @@ const firmwareDatabase = {
         { version: 'V2.6.5', date: '2023-11-10', url: 'https://chcnavigation.jianguoyun.com/p/DcMlYS0Qtq_UCxiZx5UGIAA' }
     ],
     'ibase': [
+        {"version": "V3.1.2", "date": "2026-06-10", "url": "https://chcnavigation.jianguoyun.com/p/DWLSFKAQtq_UCxingKoGIAA", "notesUrl": "https://chcnavigation.jianguoyun.com/p/DWL6yUQQtq_UCxjUm6oGIAA"},
         { version: 'V3.0.4', date: '2026-02-04', url: 'https://chcnavigation.jianguoyun.com/p/DcH5BdYQtq_UCxiT7p0GIAA' },
         { version: 'V2.4.4.2', date: '2025-05-21', url: 'https://chcnavigation.jianguoyun.com/p/DVrwOREQtq_UCxjfnoEGIAA' },
         { version: 'V2.4.4', date: '2024-06-06', url: 'https://chcnavigation.jianguoyun.com/p/DVAyuNYQtq_UCxiwtdAFIAA' }
@@ -245,6 +248,8 @@ const faqDatabase = {
 
 /* 5️⃣ 新闻公告数据库 (News Database) - 新增 */
 const newsDatabase = [
+    {"title": "i83 Firmware V1.5.2", "date": "2026-08-03", "tag": "Firmware", "sourceUrl": "https://chcnavigation.jianguoyun.com/p/DWGTI2QQtq_UCxi9uqsGIAA", "changesZh": ["修复 IMU 改正 GGA 的格式错误，以及同频率输出时 NMEA 时间戳不一致的问题。", "新增访客模式，可在接收机设置网页切换 GGA 标识（GP/GN）。恢复出厂设置后，北斗 B1C 和 B2A 默认开启。", "适用料号 A19318430901060002、A19318980901070002。升级前请备份数据，确保电量高于 50%，升级期间不要关机。"], "changes": ["Fixed the IMU-corrected GGA format and inconsistent timestamps in NMEA output at the same rate.", "Added guest mode and GP/GN switching in receiver web settings. BeiDou B1C and B2A are enabled after a factory reset.", "Supported part numbers: A19318430901060002 and A19318980901070002. Back up data, keep the battery above 50%, and leave the receiver powered on during the update."]},
+    {"title": "i76 Firmware V1.7.1", "date": "2026-07-27", "tag": "Firmware", "sourceUrl": "https://chcnavigation.jianguoyun.com/p/DQue0D0Qtq_UCxjAuqsGIAA", "changesZh": ["修复与部分平板配对时的蓝牙传输延迟，以及同频率输出时 NMEA 时间戳不一致的问题。", "新增访客模式和 IMU 改正 GGA 输出，可在网页切换 GP/GN，并下载或删除静态文件。恢复出厂设置后，北斗 B1C 和 B2A 默认开启。", "适用 i76 DistLink，料号 110102009N。升级前请备份数据，确保电量高于 50%，升级期间不要关机。"], "changes": ["Fixed Bluetooth delays when paired with some tablets and inconsistent timestamps in NMEA output at the same rate.", "Added guest mode, IMU-corrected GGA, GP/GN switching, and static-file download and deletion in the web interface. BeiDou B1C and B2A are enabled after a factory reset.", "For i76 DistLink, part number 110102009N. Back up data, keep the battery above 50%, and leave the receiver powered on during the update."]},
     {
         title: 'i93 Firmware V1.6.3',
         date: '2026-07-27',
