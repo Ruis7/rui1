@@ -12,6 +12,13 @@ const releaseNoteLanguages = {
     uz: 'Oʻzbekcha', mn: 'Монгол', uk: 'Українська'
 };
 const localizedReleaseChanges = {
+    ibase: {
+        ru: ['После сброса к заводским настройкам включаются BeiDou B1C и B2A. Исправлены известные проблемы.'],
+        kk: ['Зауыттық баптаулар қалпына келтірілгенде BeiDou B1C және B2A қосылады. Белгілі ақаулар түзетілді.'],
+        uz: ['Zavod sozlamalari tiklangach, BeiDou B1C va B2A yoqiladi. Ma’lum muammolar tuzatildi.'],
+        mn: ['Үйлдвэрийн тохиргоог сэргээхэд BeiDou B1C ба B2A идэвхжинэ. Мэдэгдэж байсан асуудлуудыг зассан.'],
+        uk: ['Після скидання до заводських налаштувань вмикаються BeiDou B1C і B2A. Виправлено відомі проблеми.']
+    },
     i83: {
         ru: ['Исправлены формат GGA с поправкой IMU и временные метки NMEA. Добавлены гостевой режим и переключение GP/GN. После сброса включаются BeiDou B1C и B2A.'],
         kk: ['IMU түзетілген GGA пішімі мен NMEA уақыт белгілері түзетілді. Қонақ режимі және GP/GN ауыстыру қосылды. Зауыттық қалпына келтіруден кейін BeiDou B1C және B2A қосылады.'],
@@ -50,6 +57,7 @@ const localizedReleaseChanges = {
 };
 
 const releaseNotesByVersion = {
+    'V3.1.2': { source: newsDatabase.find(entry => entry.title === 'iBase Firmware V3.1.2'), languages: localizedReleaseChanges.ibase },
     'V1.7.1': { source: newsDatabase.find(entry => entry.title === 'i76 Firmware V1.7.1'), languages: localizedReleaseChanges.i76 },
     'V1.5.2': { source: newsDatabase.find(entry => entry.title === 'i83 Firmware V1.5.2'), languages: localizedReleaseChanges.i83 },
     'LandStar-8.3.2.20261119': { source: newsDatabase.find(entry => entry.title === 'LandStar 8.3.2.20261119'), languages: localizedReleaseChanges.landstar },
@@ -59,20 +67,12 @@ const releaseNotesByVersion = {
 
 function releaseNotesButton(model, item) {
     const notes = (model === 'landstar' && item.version === 'LandStar-8.3.2.20261119')
+        || (model === 'ibase' && item.version === 'V3.1.2')
         || (model === 'i83' && item.version === 'V1.5.2')
         || (model === 'i76' && item.version === 'V1.7.1')
         || (model === 'i93' && item.version === 'V1.6.3')
         || (model === 'i85' && item.version === 'V1.3.2')
         ? releaseNotesByVersion[item.version] : null;
-    if (!notes?.source && item.notesUrl) {
-        const link = document.createElement('a');
-        link.className = 'release-notes-button';
-        link.textContent = releaseNoteLabels[currentLang][0] + ' · PDF';
-        link.href = item.notesUrl;
-        link.target = '_blank';
-        link.rel = 'noopener noreferrer';
-        return link;
-    }
     if (!notes?.source) return null;
     return createButton(releaseNoteLabels[currentLang][0], 'release-notes-button', () => {
         const modal = document.getElementById('releaseNotesModal');
