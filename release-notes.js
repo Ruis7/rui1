@@ -12,6 +12,13 @@ const releaseNoteLanguages = {
     uz: 'Oʻzbekcha', mn: 'Монгол', uk: 'Українська'
 };
 const localizedReleaseChanges = {
+    i93: {
+        ru: ['Добавлены гостевой режим и ID виртуальной базовой станции VRS.', 'После сброса включаются BeiDou B1C и B2A. Веб-интерфейс контроллера открывается в настольном режиме.', 'Артикулы A11611980901070507 и 110102003Y. Обновляйте через веб-интерфейс приёмника или LandStar. Сделайте резервную копию, зарядите батарею выше 50% и не выключайте приёмник.'],
+        kk: ['Қонақ режимі және VRS виртуалды базалық станциясының идентификаторы қосылды.', 'Зауыттық қалпына келтіруден кейін BeiDou B1C және B2A қосылады. Контроллердің веб-интерфейсі компьютерлік режимде ашылады.', 'Артикулдар A11611980901070507 және 110102003Y. Қабылдағыш веб-интерфейсі немесе LandStar арқылы жаңартыңыз. Деректерді сақтық көшірмелеп, зарядты 50%-дан жоғары ұстаңыз және қабылдағышты өшірмеңіз.'],
+        uz: ['Mehmon rejimi va VRS virtual baza stansiyasi identifikatori qo‘shildi.', 'Zavod sozlamalari tiklangach, BeiDou B1C va B2A yoqiladi. Kontroller veb-interfeysi kompyuter rejimida ochiladi.', 'Artikullar A11611980901070507 va 110102003Y. Qabul qilgich veb-interfeysi yoki LandStar orqali yangilang. Ma’lumotlarni zaxiralang, zaryad 50% dan yuqori bo‘lsin va qurilmani o‘chirmang.'],
+        mn: ['Зочны горим болон VRS виртуал суурь станцын ID нэмэгдсэн.', 'Үйлдвэрийн тохиргоог сэргээхэд BeiDou B1C ба B2A идэвхжинэ. Удирдлагын вэб интерфэйс компьютерийн горимоор нээгдэнэ.', 'A11611980901070507 болон 110102003Y дугаартай загварт тохирно. Хүлээн авагчийн вэб эсвэл LandStar-аар шинэчилнэ. Өгөгдлөө нөөцөлж, цэнэгийг 50%-аас дээш байлгаж, төхөөрөмжийг унтраахгүй.'],
+        uk: ['Додано гостьовий режим та ID віртуальної базової станції VRS.', 'Після скидання активуються BeiDou B1C і B2A. Вебінтерфейс контролера за замовчуванням відкривається у версії для ПК.', 'Артикули A11611980901070507 і 110102003Y. Оновлюйте через вебінтерфейс приймача або LandStar. Зробіть резервну копію, заряд має перевищувати 50%, не вимикайте приймач.']
+    },
     landstar: {
         ru: ['Лазерная разбивка точек, линий и поверхностей с совместимым RTK-приёмником.', 'Группируйте часто используемые инструменты и настраивайте интерфейс.', 'Добавлены карты WFS 2.0, настройка прозрачности и экспорт в GC3, FLD и SDR.', 'Ускорена обработка снимков при визуальной съёмке. Улучшены дорожная разбивка, работа со слоями DWG/DXF, просмотр CAD и работа с тахеометром.', 'Добавлены калибровка поворота по двум точкам, расчёт треугольника, опорные линии, уравнения пикетажа и выбор числа участков.'],
         kk: ['Үйлесімді лазерлік RTK қабылдағышымен нүктелерді, сызықтар мен беттерді жерге шығару.', 'Жиі қолданылатын құралдарды топтастырып, интерфейсті өзіңізге бейімдеңіз.', 'WFS 2.0 карталары, мөлдірлікті реттеу және GC3, FLD, SDR форматтарына экспорт қосылды.', 'Визуалды түсірілім суреттері жылдамырақ өңделеді. Жолды жерге шығару, DWG/DXF қабаттары, CAD көрінісі және тахеометрмен жұмыс жақсарды.', 'Екі нүктелі бұрылыс калибрлеуі, үшбұрыш есептеуі, тірек сызықтар, пикетаж теңдеулері және аудан бөліктерінің санын таңдау қосылды.'],
@@ -30,11 +37,13 @@ const localizedReleaseChanges = {
 
 const releaseNotesByVersion = {
     'LandStar-8.3.2.20261119': { source: newsDatabase.find(entry => entry.title === 'LandStar 8.3.2.20261119'), languages: localizedReleaseChanges.landstar },
+    'V1.6.3': { source: newsDatabase.find(entry => entry.title === 'i93 Firmware V1.6.3'), languages: localizedReleaseChanges.i93 },
     'V1.3.2': { source: newsDatabase.find(entry => entry.title === 'i85 Firmware V1.3.2'), languages: localizedReleaseChanges.i85 }
 };
 
 function releaseNotesButton(model, item) {
     const notes = (model === 'landstar' && item.version === 'LandStar-8.3.2.20261119')
+        || (model === 'i93' && item.version === 'V1.6.3')
         || (model === 'i85' && item.version === 'V1.3.2')
         ? releaseNotesByVersion[item.version] : null;
     if (!notes?.source) return null;
@@ -44,6 +53,10 @@ function releaseNotesButton(model, item) {
         const language = document.getElementById('releaseNotesLanguage');
         if (resource.classList.contains('is-open')) resource.inert = true;
         language.value = currentLang;
+        const source = document.getElementById('releaseNotesSource');
+        source.hidden = !notes.source.sourceUrl;
+        if (notes.source.sourceUrl) source.href = notes.source.sourceUrl;
+        else source.removeAttribute('href');
         const render = () => {
             const lang = language.value;
             const [label, languageLabel, close] = releaseNoteLabels[lang];

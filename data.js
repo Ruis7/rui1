@@ -50,6 +50,7 @@ const firmwareDatabase = {
         { version: 'V1.2.13', date: '2025-09-23', url: 'https://chcnavigation.jianguoyun.com/p/DYoSKLcQtq_UCxiYkY8GIAA' }
     ],
     'i93': [
+        { version: 'V1.6.3', date: '2026-07-27', url: 'https://chcnavigation.jianguoyun.com/p/DSrFXYsQtq_UCxinoasGIAA' },
         { version: 'V1.5.4', date: '2026-03-11', url: 'https://chcnavigation.jianguoyun.com/p/DdS72x0Qtq_UCxiX8Z8GIAA' },
         { version: 'V1.5.2', date: '2026-01-21', url: 'https://chcnavigation.jianguoyun.com/p/DUaypfUQtq_UCxj2jpsGIAA' },
         { version: 'V1.3.8.2', date: '2025-04-01', url: 'https://chcnavigation.jianguoyun.com/p/DeF3R4YQtq_UCxjKlfgFIAA' },
@@ -244,6 +245,22 @@ const faqDatabase = {
 
 /* 5️⃣ 新闻公告数据库 (News Database) - 新增 */
 const newsDatabase = [
+    {
+        title: 'i93 Firmware V1.6.3',
+        date: '2026-07-27',
+        tag: 'Firmware',
+        sourceUrl: 'https://chcnavigation.jianguoyun.com/p/DWaiL3kQtq_UCxi5uqsGIAA',
+        changesZh: [
+            '新增访客模式和 VRS 虚拟基站 ID。',
+            '恢复出厂设置后，北斗 B1C 和 B2A 默认开启。手簿网页默认使用电脑版。',
+            '适用料号 A11611980901070507、110102003Y。可通过接收机网页或手簿上的 LandStar 升级。升级前请备份，确保电量高于 50%，升级期间不要关机。'
+        ],
+        changes: [
+            'Added guest mode and a VRS virtual base station ID.',
+            'BeiDou B1C and B2A are enabled after a factory reset. The controller web interface defaults to desktop view.',
+            'Supported part numbers: A11611980901070507 and 110102003Y. Upgrade via the receiver web interface or LandStar on your controller. Back up your data, keep the battery above 50%, and leave the receiver powered on.'
+        ]
+    },
     {
         title: 'LandStar 8.3.2.20261119', availableNow: true,
         date: '2026-12-07',
