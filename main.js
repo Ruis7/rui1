@@ -593,7 +593,20 @@ function trapModalFocus(event, modal) {
     }
 }
 
-function openContactModal() {
+function openContactModal(context) {
+    const modal = document.getElementById('contactModal');
+    for (const link of modal.querySelectorAll('.contact-card')) {
+        const base = link.dataset.contactBase || link.getAttribute('href');
+        link.dataset.contactBase = base;
+        if (!context?.draft) {
+            link.setAttribute('href', base);
+            continue;
+        }
+        const params = base.startsWith('mailto:')
+            ? 'subject=' + encodeURIComponent(context.subject) + '&body=' + encodeURIComponent(context.draft)
+            : 'text=' + encodeURIComponent(context.draft);
+        link.setAttribute('href', base + '?' + params);
+    }
     openModal('contactModal');
 }
 

@@ -71,11 +71,10 @@ function addProductShortcuts(card, model) {
             window.prompt(words[2], url);
         }
     });
-    const support = el('a', 'secondary-btn', words[3]);
-    const draft = [words[8], productName(model), latest?.version, productPermalink(model)].filter(Boolean).join('\n');
-    support.href = 'https://wa.me/79895775258?' + new URLSearchParams({ text: draft });
-    support.target = '_blank';
-    support.rel = 'noopener noreferrer';
+    const support = hubButton(words[3], 'secondary-btn', () => {
+        const draft = [words[8], productName(model), latest?.version, productPermalink(model)].filter(Boolean).join('\n');
+        openContactModal({ subject: words[3] + ' · ' + productName(model), draft });
+    });
     shortcuts.append(share, support);
     card.append(shortcuts);
 }
