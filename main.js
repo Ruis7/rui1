@@ -348,10 +348,11 @@ function parseDate(dateString) {
     return Number.isNaN(date.getTime()) ? new Date(0) : date;
 }
 
-function releaseDateLabel(date) {
+function releaseDateLabel(date, availableNow = false) {
     if (!date) return getI18n('date_unknown');
     const localToday = releaseToday();
     if (date <= localToday) return date;
+    if (availableNow) return '';
     return currentLang === 'zh' ? `计划发布：${date}` : `Scheduled for ${date}`;
 }
 
@@ -411,7 +412,7 @@ function renderResourceModal(type, model) {
     const latest = type === 'firmware'
         ? data.find(availableRelease)
         : null;
-    const upcoming = type === 'firmware' ? data.filter(item => item.date > releaseToday()) : [];
+    const upcoming = type === 'firmware' ? data.filter(item => !item.availableNow && item.date > releaseToday()) : [];
     const older = data.filter(item => item !== latest && !upcoming.includes(item));
     const ordered = [...(latest ? [latest] : []), ...upcoming, ...older];
     ordered.forEach((item, index) => {
@@ -431,7 +432,7 @@ function renderResourceModal(type, model) {
         name.textContent = item.version || item.title || productName(model);
         const date = document.createElement('span');
         date.className = 'fw-date';
-        date.textContent = releaseDateLabel(item.date);
+        date.textContent = releaseDateLabel(item.date, item.availableNow);
         if (item === latest) {
             row.classList.add('is-latest');
             const badge = document.createElement('span');
@@ -626,7 +627,7 @@ function openNewsModal() {
             const date = document.createElement('time');
             date.className = 'news-date';
             date.dateTime = item.date || '';
-            date.textContent = releaseDateLabel(item.date);
+            date.textContent = releaseDateLabel(item.date, item.availableNow);
             const changes = document.createElement('ul');
             changes.className = 'release-notes';
             const localizedChanges = currentLang === 'zh' && item.changesZh ? item.changesZh : item.changes;

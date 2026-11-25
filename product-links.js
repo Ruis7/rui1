@@ -13,7 +13,7 @@ function releaseToday() {
 }
 
 function availableRelease(item) {
-    return Boolean(item.url && item.verified !== false && item.date && item.date <= releaseToday());
+    return Boolean(item.url && item.verified !== false && item.date && (item.availableNow || item.date <= releaseToday()));
 }
 
 function latestProductRelease(model) {
@@ -89,7 +89,7 @@ function renderRecentUpdates() {
     const recent = Object.entries(firmwareDatabase).flatMap(([model, items]) =>
         items.filter(item => item.url && item.verified !== false && item.date >= cutoff.toISOString().slice(0, 10))
             .map(item => ({ ...item, model }))
-    ).sort((a, b) => Number(a.date > today) - Number(b.date > today)
+    ).sort((a, b) => Number(!availableRelease(a)) - Number(!availableRelease(b))
         || (a.date > today ? a.date.localeCompare(b.date) : b.date.localeCompare(a.date))).slice(0, 2);
     section.hidden = !recent.length;
     section.replaceChildren();
@@ -102,9 +102,9 @@ function renderRecentUpdates() {
     for (const item of recent) {
         const row = el('article', 'recent-update');
         const info = el('div', 'release-info');
-        const upcoming = item.date > today;
+        const upcoming = !availableRelease(item);
         info.append(el('strong', '', productName(item.model) + ' · ' + item.version),
-            el('span', '', resourceTypeLabel('firmware', item.model) + ' · ' + (upcoming ? words[5] + ' · ' : '') + item.date));
+            el('span', '', [resourceTypeLabel('firmware', item.model), upcoming && words[5], upcoming ? item.date : releaseDateLabel(item.date, item.availableNow)].filter(Boolean).join(' · ')));
         const entry = releaseNotesByVersion[item.version];
         if (entry?.source) {
             const summary = currentLang === 'zh' ? entry.source.changesZh : entry.languages[currentLang] || entry.source.changes;

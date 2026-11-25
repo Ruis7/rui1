@@ -8,7 +8,7 @@ const today = new Date().toLocaleDateString('sv-SE', { timeZone: 'Europe/Moscow'
 databases.forEach((database, index) => {
     for (const [model, entries] of Object.entries(database)) {
         for (const entry of entries) {
-            if (!entry.url || entry.verified === false || (index === 0 && entry.date > today)) continue;
+            if (!entry.url || entry.verified === false || (index === 0 && !entry.availableNow && entry.date > today)) continue;
             const label = model + ' · ' + (entry.version || entry.title || '');
             urls.set(entry.url, [...new Set([...(urls.get(entry.url) || []), label])]);
         }
